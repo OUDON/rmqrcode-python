@@ -46,41 +46,7 @@ def compute_version_info(height, width, error_collection_level):
     return version_information_data
 
 
-def put_pattern_information_finder_pattern_side(qr, data):
-    mask = 0b011111101010110010
-    data ^= mask
-
-    si, sj = 1, 8
-    for n in range(18):
-        di = n % 5
-        dj = n // 5
-        qr[si+di][sj+dj] = Color.BLACK if data>>n & 1 else Color.WHITE
-
-
-def put_pattern_information_finder_sub_pattern_side(qr, height, width, data):
-    mask = 0b100000101001111011
-    data ^= mask
-
-    si, sj = height - 1 - 5, width - 1 - 7
-    for n in range(15):
-        di = n % 5
-        dj = n // 5
-        qr[si+di][sj+dj] = Color.BLACK if data>>n & 1 else Color.WHITE
-    qr[height-1-5][width-1-4] = Color.BLACK if data>>n & 15 else Color.WHITE
-    qr[height-1-5][width-1-3] = Color.BLACK if data>>n & 16 else Color.WHITE
-    qr[height-1-5][width-1-2] = Color.BLACK if data>>n & 17 else Color.WHITE
-
-
-
-def put_pattern_information(qr, height, width, error_collection_level):
-    version_information = compute_version_info(height, width, error_collection_level)
-    put_pattern_information_finder_pattern_side(qr, version_information)
-    put_pattern_information_finder_sub_pattern_side(qr, height, width, version_information)
-
-
-def make_qr(height, width, error_collection_level):
-    qr = [[Color.UNDEFINED for i in range(width)] for j in range(height)]
-
+def put_finder_pattern(qr, height, width):
     # Finder pattern
     # 周囲
     for i in range(7):
@@ -113,6 +79,8 @@ def make_qr(height, width, error_collection_level):
     # 真ん中
     qr[height-1-2][width-1-2] = Color.BLACK
 
+
+def put_corner_finder_pattern(qr, height, width):
     # Corner finder pattern
     # 左下
     qr[height-1][0] = Color.BLACK
@@ -125,6 +93,8 @@ def make_qr(height, width, error_collection_level):
     qr[1][width-1] = Color.BLACK
     qr[1][width-2] = Color.WHITE
 
+
+def put_alignment_pattern(qr, height, width):
     # Alignment pattern
     for i in range(3):
         for j in range(3):
@@ -132,6 +102,8 @@ def make_qr(height, width, error_collection_level):
             qr[i][width//2+j] = color
             qr[height-1-i][width//2+j] = color
 
+
+def put_timing_pattern(qr, height, width):
     # Timing pattern
     # 横
     for j in range(width):
@@ -147,6 +119,45 @@ def make_qr(height, width, error_collection_level):
             if qr[i][j] == Color.UNDEFINED:
                 qr[i][j] = color
 
+
+def put_pattern_information(qr, height, width, error_collection_level):
+    version_information = compute_version_info(height, width, error_collection_level)
+    put_pattern_information_finder_pattern_side(qr, version_information)
+    put_pattern_information_finder_sub_pattern_side(qr, height, width, version_information)
+
+
+def put_pattern_information_finder_pattern_side(qr, data):
+    mask = 0b011111101010110010
+    data ^= mask
+
+    si, sj = 1, 8
+    for n in range(18):
+        di = n % 5
+        dj = n // 5
+        qr[si+di][sj+dj] = Color.BLACK if data>>n & 1 else Color.WHITE
+
+
+def put_pattern_information_finder_sub_pattern_side(qr, height, width, data):
+    mask = 0b100000101001111011
+    data ^= mask
+
+    si, sj = height - 1 - 5, width - 1 - 7
+    for n in range(15):
+        di = n % 5
+        dj = n // 5
+        qr[si+di][sj+dj] = Color.BLACK if data>>n & 1 else Color.WHITE
+    qr[height-1-5][width-1-4] = Color.BLACK if data>>n & 15 else Color.WHITE
+    qr[height-1-5][width-1-3] = Color.BLACK if data>>n & 16 else Color.WHITE
+    qr[height-1-5][width-1-2] = Color.BLACK if data>>n & 17 else Color.WHITE
+
+
+def make_qr(height, width, error_collection_level):
+    qr = [[Color.UNDEFINED for i in range(width)] for j in range(height)]
+
+    put_finder_pattern(qr, height, width)
+    put_corner_finder_pattern(qr, height, width)
+    put_alignment_pattern(qr, height, width)
+    put_timing_pattern(qr, height, width)
     put_pattern_information(qr, height, width, error_collection_level)
     return qr
 
