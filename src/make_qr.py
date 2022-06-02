@@ -120,13 +120,13 @@ def put_timing_pattern(qr, height, width):
                 qr[i][j] = color
 
 
-def put_pattern_information(qr, height, width, error_collection_level):
+def put_version_information(qr, height, width, error_collection_level):
     version_information = compute_version_info(height, width, error_collection_level)
-    put_pattern_information_finder_pattern_side(qr, version_information)
-    put_pattern_information_finder_sub_pattern_side(qr, height, width, version_information)
+    put_version_information_finder_pattern_side(qr, version_information)
+    put_version_information_finder_sub_pattern_side(qr, height, width, version_information)
 
 
-def put_pattern_information_finder_pattern_side(qr, data):
+def put_version_information_finder_pattern_side(qr, data):
     mask = 0b011111101010110010
     data ^= mask
 
@@ -137,7 +137,7 @@ def put_pattern_information_finder_pattern_side(qr, data):
         qr[si+di][sj+dj] = Color.BLACK if data>>n & 1 else Color.WHITE
 
 
-def put_pattern_information_finder_sub_pattern_side(qr, height, width, data):
+def put_version_information_finder_sub_pattern_side(qr, height, width, data):
     mask = 0b100000101001111011
     data ^= mask
 
@@ -158,7 +158,7 @@ def make_qr(height, width, error_collection_level):
     put_corner_finder_pattern(qr, height, width)
     put_alignment_pattern(qr, height, width)
     put_timing_pattern(qr, height, width)
-    put_pattern_information(qr, height, width, error_collection_level)
+    put_version_information(qr, height, width, error_collection_level)
     return qr
 
 
