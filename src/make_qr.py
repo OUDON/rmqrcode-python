@@ -1,6 +1,7 @@
 from enums.color import Color
 from enums.error_collection_level import ErrorCollectionLevel
 from enums.generator_polynomials import GeneratorPolynomials
+from enums.alignment_pattern_coordinates import AlignmentPatternCoordinates
 from qr_versions import qr_versions
 from math import compute_bch, compute_reed_solomon
 from encoder.byte_encoder import ByteEncoder
@@ -13,10 +14,13 @@ def print_qr(qr):
     show[Color.WHITE] = "_"
     show[Color.BLACK] = "X"
     show[Color.UNDEFINED] = "?"
-    print("QRコード:")
+    print(f"QRコード R{h}x{w}:")
     for i in range(h):
         for j in range(w):
-            print(show[qr[i][j]], end="")
+            if qr[i][j] in show:
+                print(show[qr[i][j]], end="")
+            else:
+                print(qr[i][j], end="")
         print("")
 
 
@@ -74,6 +78,10 @@ def put_corner_finder_pattern(qr, height, width):
     qr[height-1][1] = Color.BLACK
     qr[height-1][2] = Color.BLACK
 
+    if height >= 11:
+        qr[height-2][0] = Color.BLACK
+        qr[height-2][1] = Color.WHITE
+
     # 右上
     qr[0][width-1] = Color.BLACK
     qr[0][width-2] = Color.BLACK
@@ -83,11 +91,15 @@ def put_corner_finder_pattern(qr, height, width):
 
 def put_alignment_pattern(qr, height, width):
     # Alignment pattern
-    for i in range(3):
-        for j in range(3):
-            color = Color.BLACK if i == 0 or i == 2 or j == 0 or j == 2 else Color.WHITE
-            qr[i][width//2+j] = color
-            qr[height-1-i][width//2+j] = color
+    center_xs = AlignmentPatternCoordinates[width]
+    for center_x in center_xs:
+        for i in range(3):
+            for j in range(3):
+                color = Color.BLACK if i == 0 or i == 2 or j == 0 or j == 2 else Color.WHITE
+                # 上側
+                qr[i][center_x + j - 1] = color
+                # 下側
+                qr[height-1-i][center_x + j - 1] = color
 
 
 def put_timing_pattern(qr, height, width):
@@ -100,9 +112,11 @@ def put_timing_pattern(qr, height, width):
                 qr[i][j] = color
 
     # 縦
+    center_xs = [0, width - 1]
+    center_xs.extend(AlignmentPatternCoordinates[width])
     for i in range(height):
         color = Color.BLACK if (i + 1) % 2 else Color.WHITE
-        for j in [0, width//2+1, width-1]:
+        for j in center_xs:
             if qr[i][j] == Color.UNDEFINED:
                 qr[i][j] = color
 
@@ -230,6 +244,33 @@ def put_data(qr, height, width, error_collection_level, data):
             print(f"Put RS data codewords {i} : {rs_codewords[i]}")
 
     # 配置
+    dy = -1 # 最初は上方向
+    current_codeword_idx = 0
+    current_bit_idx = 0
+    cx, cy = width - 2, height - 6
+    while True:
+        for x in [cx, cx-1]:
+            if qr[cy][x] == Color.UNDEFINED:
+                qr[cy][x] = Color.BLACK if final_codewords[current_codeword_idx][current_bit_idx] == '1' else Color.WHITE
+                # qr[cy][x] = chr(ord('A') + current_codeword_idx)
+                current_bit_idx += 1
+                if current_bit_idx == 8:
+                    current_bit_idx = 0
+                    current_codeword_idx += 1
+                    if current_codeword_idx == len(final_codewords):
+                        break
+        if current_codeword_idx == len(final_codewords):
+            break
+        if dy < 0 and cy == 1:
+            cx -= 2
+            dy = 1
+        elif dy > 0 and cy == height - 1 - 1:
+            cx -= 2
+            dy = -1
+        else:
+            cy += dy
+
+
 
 def make_qr(height, width, error_collection_level):
     qr = [[Color.UNDEFINED for i in range(width)] for j in range(height)]
@@ -244,6 +285,10 @@ def make_qr(height, width, error_collection_level):
 
 def main():
     qr = make_qr(13, 99, ErrorCollectionLevel.H)
+    print_qr(qr)
+    qr = make_qr(7, 59, ErrorCollectionLevel.H)
+    print_qr(qr)
+    qr = make_qr(13, 59, ErrorCollectionLevel.H)
     print_qr(qr)
 
 
