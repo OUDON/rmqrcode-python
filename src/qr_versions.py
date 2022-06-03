@@ -5,6 +5,8 @@ qr_versions = {
         'version_indicator': 0b00000,
         'height': 7,
         'width': 43,
+        'character_count_length': 3,
+        'codewords_total': 13,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -26,6 +28,8 @@ qr_versions = {
         'version_indicator': 0b00001,
         'height': 7,
         'width': 59,
+        'character_count_length': 4,
+        'codewords_total': 21,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -47,6 +51,8 @@ qr_versions = {
         'version_indicator': 0b00010,
         'height': 7,
         'width': 77,
+        'character_count_length': 5,
+        'codewords_total': 32,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -68,6 +74,8 @@ qr_versions = {
         'version_indicator': 0b00011,
         'height': 7,
         'width': 99,
+        'character_count_length': 5,
+        'codewords_total': 44,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -89,6 +97,8 @@ qr_versions = {
         'version_indicator': 0b00100,
         'height': 7,
         'width': 139,
+        'character_count_length': 6,
+        'codewords_total': 68,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -110,6 +120,8 @@ qr_versions = {
         'version_indicator': 0b00101,
         'height': 9,
         'width': 43,
+        'character_count_length': 4,
+        'codewords_total': 21,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -131,6 +143,8 @@ qr_versions = {
         'version_indicator': 0b00110,
         'height': 9,
         'width': 59,
+        'character_count_length': 5,
+        'codewords_total': 33,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -152,6 +166,8 @@ qr_versions = {
         'version_indicator': 0b00111,
         'height': 9,
         'width': 77,
+        'character_count_length': 5,
+        'codewords_total': 49,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -178,6 +194,8 @@ qr_versions = {
         'version_indicator': 0b01000,
         'height': 9,
         'width': 99,
+        'character_count_length': 6,
+        'codewords_total': 66,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -199,6 +217,8 @@ qr_versions = {
         'version_indicator': 0b01001,
         'height': 9,
         'width': 139,
+        'character_count_length': 6,
+        'codewords_total': 99,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -225,6 +245,8 @@ qr_versions = {
         'version_indicator': 0b01010,
         'height': 11,
         'width': 27,
+        'character_count_length': 3,
+        'codewords_total': 15,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -246,7 +268,9 @@ qr_versions = {
         'version_indicator': 0b01011,
         'height': 11,
         'width': 43,
-                'blocks': {
+        'character_count_length': 5,
+        'codewords_total': 31,
+        'blocks': {
             ErrorCollectionLevel.M: [
                 {
                     'num': 1,
@@ -267,6 +291,8 @@ qr_versions = {
         'version_indicator': 0b01100,
         'height': 11,
         'width': 59,
+        'character_count_length': 5,
+        'codewords_total': 47,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -293,6 +319,8 @@ qr_versions = {
         'version_indicator': 0b01101,
         'height': 11,
         'width': 77,
+        'character_count_length': 6,
+        'codewords_total': 67,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -319,6 +347,8 @@ qr_versions = {
         'version_indicator': 0b01110,
         'height': 11,
         'width': 99,
+        'character_count_length': 6,
+        'codewords_total': 89,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -350,6 +380,8 @@ qr_versions = {
         'version_indicator': 0b01111,
         'height': 11,
         'width': 139,
+        'character_count_length': 7,
+        'codewords_total': 132,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -371,6 +403,8 @@ qr_versions = {
         'version_indicator': 0b10000,
         'height': 13,
         'width': 27,
+        'character_count_length': 4,
+        'codewords_total': 21,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -392,6 +426,8 @@ qr_versions = {
         'version_indicator': 0b10001,
         'height': 13,
         'width': 43,
+        'character_count_length': 5,
+        'codewords_total': 41,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -413,6 +449,8 @@ qr_versions = {
         'version_indicator': 0b10010,
         'height': 13,
         'width': 59,
+        'character_count_length': 6,
+        'codewords_total': 60,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -434,6 +472,8 @@ qr_versions = {
         'version_indicator': 0b10011,
         'height': 13,
         'width': 77,
+        'character_count_length': 6,
+        'codewords_total': 85,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -465,6 +505,8 @@ qr_versions = {
         'version_indicator': 0b10100,
         'height': 13,
         'width': 99,
+        'character_count_length': 7,
+        'codewords_total': 113,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -496,6 +538,8 @@ qr_versions = {
         'version_indicator': 0b10101,
         'height': 13,
         'width': 139,
+        'character_count_length': 7,
+        'codewords_total': 166,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -527,6 +571,8 @@ qr_versions = {
         'version_indicator': 0b10110,
         'height': 15,
         'width': 43,
+        'character_count_length': 6,
+        'codewords_total': 51,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -553,6 +599,8 @@ qr_versions = {
         'version_indicator': 0b10111,
         'height': 15,
         'width': 59,
+        'character_count_length': 6,
+        'codewords_total': 74,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -574,6 +622,8 @@ qr_versions = {
         'version_indicator': 0b11000,
         'height': 15,
         'width': 77,
+        'character_count_length': 7,
+        'codewords_total': 103,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -605,6 +655,8 @@ qr_versions = {
         'version_indicator': 0b11001,
         'height': 15,
         'width': 99,
+        'character_count_length': 7,
+        'codewords_total': 136,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -626,6 +678,8 @@ qr_versions = {
         'version_indicator': 0b11010,
         'height': 15,
         'width': 139,
+        'character_count_length': 7,
+        'codewords_total': 199,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -657,6 +711,8 @@ qr_versions = {
         'version_indicator': 0b11011,
         'height': 17,
         'width': 43,
+        'character_count_length': 6,
+        'codewords_total': 61,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -683,6 +739,8 @@ qr_versions = {
         'version_indicator': 0b11100,
         'height': 17,
         'width': 59,
+        'character_count_length': 6,
+        'codewords_total': 88,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -704,6 +762,8 @@ qr_versions = {
         'version_indicator': 0b11101,
         'height': 17,
         'width': 77,
+        'character_count_length': 7,
+        'codewords_total': 122,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -730,6 +790,8 @@ qr_versions = {
         'version_indicator': 0b11110,
         'height': 17,
         'width': 99,
+        'character_count_length': 7,
+        'codewords_total': 160,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
@@ -756,6 +818,8 @@ qr_versions = {
         'version_indicator': 0b11111,
         'height': 17,
         'width': 139,
+        'character_count_length': 8,
+        'codewords_total': 232,
         'blocks': {
             ErrorCollectionLevel.M: [
                 {
