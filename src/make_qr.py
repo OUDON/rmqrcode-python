@@ -248,19 +248,36 @@ def put_data(qr, height, width, error_collection_level, data):
     current_codeword_idx = 0
     current_bit_idx = 0
     cx, cy = width - 2, height - 6
+    remainder_bits = qr_version['remainder_bits']
+
     while True:
         for x in [cx, cx-1]:
             if qr[cy][x] == Color.UNDEFINED:
+                continue
+
+            # 空白のセルのみ処理する
+            if current_codeword_idx == len(final_codewords):
+                # codewordsを配置しきった場合はremainder_bitsがあれば配置する
+                qr[cy][x] = Color.WHITE
+                remainder_bits -= 1
+            else:
+                # codewordsを配置する
                 qr[cy][x] = Color.BLACK if final_codewords[current_codeword_idx][current_bit_idx] == '1' else Color.WHITE
                 # qr[cy][x] = chr(ord('A') + current_codeword_idx)
                 current_bit_idx += 1
                 if current_bit_idx == 8:
                     current_bit_idx = 0
                     current_codeword_idx += 1
-                    if current_codeword_idx == len(final_codewords):
-                        break
-        if current_codeword_idx == len(final_codewords):
+
+            # codewordsの配置が終わりremainder_bitsも残っていなければ終了
+            if current_codeword_idx == len(final_codewords) and remainder_bits == 0:
+                break
+
+        # codewordsの配置が終わりremainder_bitsも残っていなければ終了
+        if current_codeword_idx == len(final_codewords) and remainder_bits == 0:
             break
+
+        # 座標の更新
         if dy < 0 and cy == 1:
             cx -= 2
             dy = 1
@@ -269,7 +286,6 @@ def put_data(qr, height, width, error_collection_level, data):
             dy = -1
         else:
             cy += dy
-
 
 
 def make_qr(height, width, error_collection_level):
