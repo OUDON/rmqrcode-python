@@ -5,6 +5,7 @@ qr_versions = {
         'version_indicator': 0b00000,
         'height': 7,
         'width': 43,
+        'reminder_bits': 0,
         'character_count_length': 3,
         'codewords_total': 13,
         'blocks': {
@@ -28,6 +29,7 @@ qr_versions = {
         'version_indicator': 0b00001,
         'height': 7,
         'width': 59,
+        'reminder_bits': 3,
         'character_count_length': 4,
         'codewords_total': 21,
         'blocks': {
@@ -51,6 +53,7 @@ qr_versions = {
         'version_indicator': 0b00010,
         'height': 7,
         'width': 77,
+        'reminder_bits': 5,
         'character_count_length': 5,
         'codewords_total': 32,
         'blocks': {
@@ -74,6 +77,7 @@ qr_versions = {
         'version_indicator': 0b00011,
         'height': 7,
         'width': 99,
+        'reminder_bits': 6,
         'character_count_length': 5,
         'codewords_total': 44,
         'blocks': {
@@ -97,6 +101,7 @@ qr_versions = {
         'version_indicator': 0b00100,
         'height': 7,
         'width': 139,
+        'reminder_bits': 1,
         'character_count_length': 6,
         'codewords_total': 68,
         'blocks': {
@@ -120,6 +125,7 @@ qr_versions = {
         'version_indicator': 0b00101,
         'height': 9,
         'width': 43,
+        'reminder_bits': 2,
         'character_count_length': 4,
         'codewords_total': 21,
         'blocks': {
@@ -143,6 +149,7 @@ qr_versions = {
         'version_indicator': 0b00110,
         'height': 9,
         'width': 59,
+        'reminder_bits': 3,
         'character_count_length': 5,
         'codewords_total': 33,
         'blocks': {
@@ -166,6 +173,7 @@ qr_versions = {
         'version_indicator': 0b00111,
         'height': 9,
         'width': 77,
+        'reminder_bits': 1,
         'character_count_length': 5,
         'codewords_total': 49,
         'blocks': {
@@ -194,6 +202,7 @@ qr_versions = {
         'version_indicator': 0b01000,
         'height': 9,
         'width': 99,
+        'reminder_bits': 4,
         'character_count_length': 6,
         'codewords_total': 66,
         'blocks': {
@@ -217,6 +226,7 @@ qr_versions = {
         'version_indicator': 0b01001,
         'height': 9,
         'width': 139,
+        'reminder_bits': 5,
         'character_count_length': 6,
         'codewords_total': 99,
         'blocks': {
@@ -245,6 +255,7 @@ qr_versions = {
         'version_indicator': 0b01010,
         'height': 11,
         'width': 27,
+        'reminder_bits': 2,
         'character_count_length': 3,
         'codewords_total': 15,
         'blocks': {
@@ -268,6 +279,7 @@ qr_versions = {
         'version_indicator': 0b01011,
         'height': 11,
         'width': 43,
+        'reminder_bits': 1,
         'character_count_length': 5,
         'codewords_total': 31,
         'blocks': {
@@ -291,6 +303,7 @@ qr_versions = {
         'version_indicator': 0b01100,
         'height': 11,
         'width': 59,
+        'reminder_bits': 0,
         'character_count_length': 5,
         'codewords_total': 47,
         'blocks': {
@@ -319,6 +332,7 @@ qr_versions = {
         'version_indicator': 0b01101,
         'height': 11,
         'width': 77,
+        'reminder_bits': 2,
         'character_count_length': 6,
         'codewords_total': 67,
         'blocks': {
@@ -347,6 +361,7 @@ qr_versions = {
         'version_indicator': 0b01110,
         'height': 11,
         'width': 99,
+        'reminder_bits': 7,
         'character_count_length': 6,
         'codewords_total': 89,
         'blocks': {
@@ -380,6 +395,7 @@ qr_versions = {
         'version_indicator': 0b01111,
         'height': 11,
         'width': 139,
+        'reminder_bits': 6,
         'character_count_length': 7,
         'codewords_total': 132,
         'blocks': {
@@ -404,6 +420,7 @@ qr_versions = {
         'height': 13,
         'width': 27,
         'character_count_length': 4,
+        'reminder_bits': 4,
         'codewords_total': 21,
         'blocks': {
             ErrorCollectionLevel.M: [
@@ -426,6 +443,7 @@ qr_versions = {
         'version_indicator': 0b10001,
         'height': 13,
         'width': 43,
+        'reminder_bits': 1,
         'character_count_length': 5,
         'codewords_total': 41,
         'blocks': {
@@ -449,6 +467,7 @@ qr_versions = {
         'version_indicator': 0b10010,
         'height': 13,
         'width': 59,
+        'reminder_bits': 6,
         'character_count_length': 6,
         'codewords_total': 60,
         'blocks': {
@@ -472,6 +491,7 @@ qr_versions = {
         'version_indicator': 0b10011,
         'height': 13,
         'width': 77,
+        'reminder_bits': 4,
         'character_count_length': 6,
         'codewords_total': 85,
         'blocks': {
@@ -505,6 +525,7 @@ qr_versions = {
         'version_indicator': 0b10100,
         'height': 13,
         'width': 99,
+        'reminder_bits': 3,
         'character_count_length': 7,
         'codewords_total': 113,
         'blocks': {
@@ -538,6 +559,7 @@ qr_versions = {
         'version_indicator': 0b10101,
         'height': 13,
         'width': 139,
+        'reminder_bits': 0,
         'character_count_length': 7,
         'codewords_total': 166,
         'blocks': {
@@ -571,6 +593,7 @@ qr_versions = {
         'version_indicator': 0b10110,
         'height': 15,
         'width': 43,
+        'reminder_bits': 1,
         'character_count_length': 6,
         'codewords_total': 51,
         'blocks': {
@@ -599,6 +622,7 @@ qr_versions = {
         'version_indicator': 0b10111,
         'height': 15,
         'width': 59,
+        'reminder_bits': 4,
         'character_count_length': 6,
         'codewords_total': 74,
         'blocks': {
@@ -622,6 +646,7 @@ qr_versions = {
         'version_indicator': 0b11000,
         'height': 15,
         'width': 77,
+        'reminder_bits': 6,
         'character_count_length': 7,
         'codewords_total': 103,
         'blocks': {
@@ -655,6 +680,7 @@ qr_versions = {
         'version_indicator': 0b11001,
         'height': 15,
         'width': 99,
+        'reminder_bits': 7,
         'character_count_length': 7,
         'codewords_total': 136,
         'blocks': {
@@ -678,6 +704,7 @@ qr_versions = {
         'version_indicator': 0b11010,
         'height': 15,
         'width': 139,
+        'reminder_bits': 2,
         'character_count_length': 7,
         'codewords_total': 199,
         'blocks': {
@@ -711,6 +738,7 @@ qr_versions = {
         'version_indicator': 0b11011,
         'height': 17,
         'width': 43,
+        'reminder_bits': 1,
         'character_count_length': 6,
         'codewords_total': 61,
         'blocks': {
@@ -739,6 +767,7 @@ qr_versions = {
         'version_indicator': 0b11100,
         'height': 17,
         'width': 59,
+        'reminder_bits': 2,
         'character_count_length': 6,
         'codewords_total': 88,
         'blocks': {
@@ -762,6 +791,7 @@ qr_versions = {
         'version_indicator': 0b11101,
         'height': 17,
         'width': 77,
+        'reminder_bits': 0,
         'character_count_length': 7,
         'codewords_total': 122,
         'blocks': {
@@ -790,6 +820,7 @@ qr_versions = {
         'version_indicator': 0b11110,
         'height': 17,
         'width': 99,
+        'reminder_bits': 3,
         'character_count_length': 7,
         'codewords_total': 160,
         'blocks': {
@@ -818,6 +849,7 @@ qr_versions = {
         'version_indicator': 0b11111,
         'height': 17,
         'width': 139,
+        'reminder_bits': 4,
         'character_count_length': 8,
         'codewords_total': 232,
         'blocks': {
