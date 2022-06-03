@@ -1,6 +1,9 @@
 from enums.color import Color
 from enums.error_collection_level import ErrorCollectionLevel
+from enums.generator_polynomials import GeneratorPolynomials
 from qr_versions import qr_versions
+from math import compute_bch, compute_reed_solomon
+from encoder.byte_encoder import ByteEncoder
 
 def print_qr(qr):
     h = len(qr)
@@ -19,22 +22,6 @@ def print_qr(qr):
 
 def version_name(height, width):
     return f"R{height}x{width}"
-
-
-def msb(n):
-    return len(bin(n)) - 2
-
-
-def compute_bch(data):
-    data <<= 12
-    g = 1<<12 | 1<<11 | 1<<10 | 1<<9 | 1<<8 | 1<<5 | 1<<2 | 1<<0
-
-    tmp_data = data
-    while (msb(tmp_data) >= 13):
-        multiple = msb(tmp_data) - 13
-        tmp_g = g << multiple
-        tmp_data ^= tmp_g
-    return tmp_data
 
 
 def compute_version_info(height, width, error_collection_level):
@@ -151,19 +138,112 @@ def put_version_information_finder_sub_pattern_side(qr, height, width, data):
     qr[height-1-5][width-1-2] = Color.BLACK if data>>n & 17 else Color.WHITE
 
 
+def convert_to_bites_data(data, character_count_length, codewords_total):
+    encoded_data = ByteEncoder().encode(data, character_count_length)
+
+    # 付加できるなら終端文字を付け加える
+    if len(encoded_data) + 3 <= codewords_total * 8:
+        encoded_data += "000"
+
+    return encoded_data
+
+
+def split_into_8bits(data):
+    codewords = []
+    while (len(data) >= 8):
+        codewords.append(data[:8])
+        data = data[8:]
+    if data != "":
+        codewords.append(data.ljust(8, '0'))
+    return codewords
+
+
+def split_into_blocks(codewords, blocks_definition):
+    data_idx, error_idx = 0, 0
+    data_codewords_per_block = []
+    rs_codewords_per_block = []
+    for block_definition in blocks_definition:
+        for i in range(block_definition['num']):
+            data_codewords_num = block_definition['k']
+            rs_codewords_num = block_definition['c'] - block_definition['k']
+            g = GeneratorPolynomials[rs_codewords_num]
+
+            # print('----------')
+            # print(f"D{data_idx} to D{data_idx + data_codewords_num - 1}")
+            # print(f"E{error_idx} to D{error_idx + rs_codewords_num - 1}")
+
+            codewords_in_block = codewords[data_idx : data_idx + data_codewords_num]
+            rs_codewords_in_block = compute_reed_solomon(codewords_in_block, g, rs_codewords_num)
+
+            data_codewords_per_block.append(codewords_in_block)
+            rs_codewords_per_block.append(rs_codewords_in_block)
+
+            data_idx += data_codewords_num
+            error_idx += rs_codewords_num
+
+            # print(f"codewords in block = {codewords_in_block}, len = {len(codewords_in_block)}")
+            # print(f"rs_codewords in block = {rs_codewords_in_block}, len = {len(rs_codewords_in_block)}")
+    return data_codewords_per_block, rs_codewords_per_block
+
+
+def put_data(qr, height, width, error_collection_level, data):
+    qr_version = qr_versions[version_name(height, width)]
+
+    character_count_length = qr_version['character_count_length']
+    codewords_total = qr_version['codewords_total']
+    encoded_data = convert_to_bites_data(data, character_count_length, codewords_total)
+    codewords = split_into_8bits(encoded_data)
+
+    # codeword数に満たない場合は規定の文字列を付与する
+    while True:
+        if len(codewords) >= codewords_total:
+            break
+        codewords.append("11101100")
+        if len(codewords) >= codewords_total:
+            break
+        codewords.append("00010001")
+
+    data_codewords_per_block, rs_codewords_per_block = split_into_blocks(
+        codewords,
+        qr_version['blocks'][error_collection_level]
+    )
+    # print("==============")
+    # print(f"data_codewords_per_block = {data_codewords_per_block}")
+    # print(f"rs_codewords_per_block = {rs_codewords_per_block}")
+
+    # データの並び替え
+    # Data codewords
+    final_codewords = []
+    for i in range(len(data_codewords_per_block[-1])):
+        for data_codewords in data_codewords_per_block:
+            if i >= len(data_codewords):
+                continue
+            final_codewords.append(data_codewords[i])
+            print(f"Put QR data codeword {i} : {data_codewords[i]}")
+
+    # RS Codewords
+    for i in range(len(rs_codewords_per_block[-1])):
+        for rs_codewords in rs_codewords_per_block:
+            if i >= len(rs_codewords):
+                continue
+            final_codewords.append(rs_codewords[i])
+            print(f"Put RS data codewords {i} : {rs_codewords[i]}")
+
+    # 配置
+
 def make_qr(height, width, error_collection_level):
     qr = [[Color.UNDEFINED for i in range(width)] for j in range(height)]
-
     put_finder_pattern(qr, height, width)
     put_corner_finder_pattern(qr, height, width)
     put_alignment_pattern(qr, height, width)
     put_timing_pattern(qr, height, width)
     put_version_information(qr, height, width, error_collection_level)
+    put_data(qr, height, width, error_collection_level, "HelloWorld");
     return qr
 
 
 def main():
-    qr = make_qr(17, 77, ErrorCollectionLevel.M)
+    qr = make_qr(13, 99, ErrorCollectionLevel.H)
     print_qr(qr)
 
 
