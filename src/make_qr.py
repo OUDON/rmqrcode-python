@@ -14,6 +14,8 @@ def print_qr(qr):
     show[Color.WHITE] = "_"
     show[Color.BLACK] = "X"
     show[Color.UNDEFINED] = "?"
+    show[True] = "X"
+    show[False] = "_"
     print(f"QRコード R{h}x{w}:")
     for i in range(h):
         for j in range(w):
@@ -233,7 +235,7 @@ def put_data(qr, height, width, error_collection_level, data):
             if i >= len(data_codewords):
                 continue
             final_codewords.append(data_codewords[i])
-            print(f"Put QR data codeword {i} : {data_codewords[i]}")
+            # print(f"Put QR data codeword {i} : {data_codewords[i]}")
 
     # RS Codewords
     for i in range(len(rs_codewords_per_block[-1])):
@@ -241,7 +243,7 @@ def put_data(qr, height, width, error_collection_level, data):
             if i >= len(rs_codewords):
                 continue
             final_codewords.append(rs_codewords[i])
-            print(f"Put RS data codewords {i} : {rs_codewords[i]}")
+            # print(f"Put RS data codewords {i} : {rs_codewords[i]}")
 
     # 配置
     dy = -1 # 最初は上方向
@@ -249,29 +251,30 @@ def put_data(qr, height, width, error_collection_level, data):
     current_bit_idx = 0
     cx, cy = width - 2, height - 6
     remainder_bits = qr_version['remainder_bits']
+    mask_area = [[False for i in range(width)] for j in range(height)]
 
     while True:
         for x in [cx, cx-1]:
             if qr[cy][x] == Color.UNDEFINED:
-                continue
+                # 空白のセルのみ処理する
+                if current_codeword_idx == len(final_codewords):
+                    # codewordsを配置しきった場合はremainder_bitsがあれば配置する
+                    qr[cy][x] = Color.WHITE
+                    mask_area[cy][x] = True
+                    remainder_bits -= 1
+                else:
+                    # codewordsを配置する
+                    qr[cy][x] = Color.BLACK if final_codewords[current_codeword_idx][current_bit_idx] == '1' else Color.WHITE
+                    mask_area[cy][x] = True
+                    # qr[cy][x] = chr(ord('A') + current_codeword_idx)
+                    current_bit_idx += 1
+                    if current_bit_idx == 8:
+                        current_bit_idx = 0
+                        current_codeword_idx += 1
 
-            # 空白のセルのみ処理する
-            if current_codeword_idx == len(final_codewords):
-                # codewordsを配置しきった場合はremainder_bitsがあれば配置する
-                qr[cy][x] = Color.WHITE
-                remainder_bits -= 1
-            else:
-                # codewordsを配置する
-                qr[cy][x] = Color.BLACK if final_codewords[current_codeword_idx][current_bit_idx] == '1' else Color.WHITE
-                # qr[cy][x] = chr(ord('A') + current_codeword_idx)
-                current_bit_idx += 1
-                if current_bit_idx == 8:
-                    current_bit_idx = 0
-                    current_codeword_idx += 1
-
-            # codewordsの配置が終わりremainder_bitsも残っていなければ終了
-            if current_codeword_idx == len(final_codewords) and remainder_bits == 0:
-                break
+                # codewordsの配置が終わりremainder_bitsも残っていなければ終了
+                if current_codeword_idx == len(final_codewords) and remainder_bits == 0:
+                    break
 
         # codewordsの配置が終わりremainder_bitsも残っていなければ終了
         if current_codeword_idx == len(final_codewords) and remainder_bits == 0:
@@ -287,6 +290,24 @@ def put_data(qr, height, width, error_collection_level, data):
         else:
             cy += dy
 
+    return mask_area
+
+
+def mask(x, y):
+    return (y//2 + x//3) % 2 == 0
+
+
+def apply_mask(qr, mask_area, height, width):
+    for y in range(height):
+        for x in range(width):
+            if not mask_area[y][x]:
+                continue
+            if mask(x, y):
+                if qr[y][x] == Color.BLACK:
+                    qr[y][x] = Color.WHITE
+                elif qr[y][x] == Color.WHITE:
+                    qr[y][x] = Color.BLACK;
+
 
 def make_qr(height, width, error_collection_level):
     qr = [[Color.UNDEFINED for i in range(width)] for j in range(height)]
@@ -295,7 +316,9 @@ def make_qr(height, width, error_collection_level):
     put_alignment_pattern(qr, height, width)
     put_timing_pattern(qr, height, width)
     put_version_information(qr, height, width, error_collection_level)
-    put_data(qr, height, width, error_collection_level, "HelloWorld");
+    mask_area = put_data(qr, height, width, error_collection_level, "HelloWorld");
+    print_qr(mask_area)
+    apply_mask(qr, mask_area, height, width)
     return qr
 
 
@@ -306,7 +329,8 @@ def main():
     print_qr(qr)
     qr = make_qr(13, 59, ErrorCollectionLevel.H)
     print_qr(qr)
-
+    qr = make_qr(17, 43, ErrorCollectionLevel.H)
+    print_qr(qr)
 
 if __name__ == '__main__':
     main()
