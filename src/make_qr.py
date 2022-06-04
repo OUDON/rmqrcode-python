@@ -1,20 +1,40 @@
 from enums.color import Color
-from enums.alignment_pattern_coordinates import AlignmentPatternCoordinates
 from enums.error_collection_level import ErrorCollectionLevel
 from rmqr import rMQR
 from qr_image import QRImage
+from data_capacities import data_capacities
 
 
-def make_qr(data, height, width, error_collection_level):
-    qr = rMQR(height, width, error_collection_level)
+def select_version(data, error_collection_level):
+    data_length = len(data)
+    ok_versions = []
+    for qr_version, capacity in data_capacities.items():
+        if data_length <= capacity['Byte'][error_collection_level]:
+            ok_versions.append({
+                'version': qr_version,
+                'diff': capacity['Byte'][error_collection_level] - data_length
+            })
+            print(f"ok: {qr_version}")
+
+    # とりあえず容量のあまりが最も少なくなるものを選ぶ
+    # TODO: 選び方をパラメータで変えられるようにしたい
+    selected = sorted(ok_versions, key=lambda x: x['diff'])[0]
+    return selected['version']
+
+
+def make_qr(data, version, error_collection_level):
+    qr = rMQR(version, error_collection_level)
     qr.make(data)
     return qr
 
 
 def main():
-    height, width = 15, 139
-    data = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
-    qr = make_qr(data, height, width, ErrorCollectionLevel.M)
+    data = "123Abc456deF"
+
+    error_collection_level = ErrorCollectionLevel.M
+    version = select_version(data, error_collection_level)
+    print(f"selected: {version}")
+    qr = make_qr(data, version, error_collection_level)
     qr.dump()
 
     image = QRImage(qr)

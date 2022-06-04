@@ -10,6 +10,7 @@ class GaloisFields:
         self.e2i[0] = 1
         self.e2i[255] = 1
         self.i2e[0] = -1
+        self.i2e[1] = 0
 
         tmp = 1
         for e in range(1, 255):

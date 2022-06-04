@@ -1,5 +1,6 @@
 from enums.error_collection_level import ErrorCollectionLevel
 
+
 qr_versions = {
     'R7x43': {
         'version_indicator': 0b00000,

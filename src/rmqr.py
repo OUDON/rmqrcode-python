@@ -12,11 +12,12 @@ from utilities import split_into_8bits
 
 
 class rMQR:
-    def __init__(self, height, width, error_collection_level):
-        self._height = height
-        self._width = width
+    def __init__(self, version, error_collection_level):
+        qr_version = qr_versions[version]
+        self._height = qr_version['height']
+        self._width = qr_version['width']
         self._error_collection_level = error_collection_level
-        self._qr = [[Color.UNDEFINED for x in range(width)] for y in range(height)]
+        self._qr = [[Color.UNDEFINED for x in range(self._width)] for y in range(self._height)]
 
 
     def make(self, data):
