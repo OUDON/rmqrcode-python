@@ -3,10 +3,11 @@ from enums.error_collection_level import ErrorCollectionLevel
 from rmqr import rMQR
 from qr_image import QRImage
 from data_capacities import data_capacities
+from encoder.byte_encoder import ByteEncoder
 
 
 def select_version(data, error_collection_level):
-    data_length = len(data)
+    data_length = ByteEncoder.length(data)
     ok_versions = []
     for qr_version, capacity in data_capacities.items():
         if data_length <= capacity['Byte'][error_collection_level]:
@@ -29,8 +30,7 @@ def make_qr(data, version, error_collection_level):
 
 
 def main():
-    data = "123Abc456deF"
-
+    data = "123漢字ABC"
     error_collection_level = ErrorCollectionLevel.M
     version = select_version(data, error_collection_level)
     print(f"selected: {version}")

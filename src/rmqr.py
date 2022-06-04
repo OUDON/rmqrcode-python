@@ -313,7 +313,7 @@ class rMQR:
 
 
     def _convert_to_bites_data(self, data, character_count_length, codewords_total):
-        encoded_data = ByteEncoder().encode(data, character_count_length)
+        encoded_data = ByteEncoder.encode(data, character_count_length)
 
         # 付加できるなら終端文字を付け加える
         if len(encoded_data) + 3 <= codewords_total * 8:
