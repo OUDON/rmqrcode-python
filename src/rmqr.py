@@ -33,6 +33,22 @@ class rMQR:
         return f"R{self._height}x{self._width}"
 
 
+    def size(self):
+        return (self.width(), self.height())
+
+
+    def height(self):
+        return self._height
+
+
+    def width(self):
+        return self._width
+
+
+    def value_at(self, x, y):
+        return self._qr[y][x]
+
+
     def dump(self):
         show = {}
         show[Color.WHITE] = "_"
