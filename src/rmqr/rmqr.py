@@ -333,3 +333,7 @@ class rMQR:
                     elif self._qr[y][x] == Color.WHITE:
                         self._qr[y][x] = Color.BLACK
                 # qr[y][x] = 'B' if mask(x, y) else 'W'
+
+
+class DataTooLongError(ValueError):
+    pass

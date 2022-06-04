@@ -1,6 +1,7 @@
 from enums.color import Color
 from enums.error_collection_level import ErrorCollectionLevel
 from rmqr.rmqr import rMQR
+from rmqr.rmqr import DataTooLongError
 from rmqr.data_capacities import data_capacities
 from encoder.byte_encoder import ByteEncoder
 from qr_image import QRImage
@@ -17,6 +18,9 @@ def select_version(data, error_collection_level):
             })
             print(f"ok: {qr_version}")
 
+    if len(ok_versions) == 0:
+        raise DataTooLongError("The data is too long.")
+
     # とりあえず容量のあまりが最も少なくなるものを選ぶ
     # TODO: 選び方をパラメータで変えられるようにしたい
     selected = sorted(ok_versions, key=lambda x: x['diff'])[0]
@@ -30,7 +34,7 @@ def make_qr(data, version, error_collection_level):
 
 
 def main():
-    data = "123漢字ABC"
+    data = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. orem ipsum dolor sit amet, consectetur adipi"
     error_collection_level = ErrorCollectionLevel.M
     version = select_version(data, error_collection_level)
     print(f"selected: {version}")
