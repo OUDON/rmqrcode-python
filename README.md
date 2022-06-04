@@ -1,2 +1,3 @@
 # rMQR Generator
-![R15x139](https://user-images.githubusercontent.com/14174940/171989350-ecdd5694-f323-448b-aa89-d9dda5f69a5b.png)
+
+![Lorem_ipsum](https://user-images.githubusercontent.com/14174940/171996025-833fca59-749f-4cf3-bce8-7b9d0f1352a4.png)
