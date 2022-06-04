@@ -4,10 +4,10 @@ from enums.alignment_pattern_coordinates import AlignmentPatternCoordinates
 from enums.generator_polynomials import GeneratorPolynomials
 from enums.error_collection_level import ErrorCollectionLevel
 
-from qr_versions import qr_versions
+from .qr_versions import qr_versions
+from .mask import mask
 from error_correction import compute_bch, compute_reed_solomon
 from encoder.byte_encoder import ByteEncoder
-from mask import mask
 from utilities import split_into_8bits
 
 
