@@ -1,3 +1,3 @@
 # rMQR Generator
 
-![Lorem_ipsum](https://user-images.githubusercontent.com/14174940/171996025-833fca59-749f-4cf3-bce8-7b9d0f1352a4.png)
+![Lorem_ipsum](https://user-images.githubusercontent.com/14174940/171996095-4707be09-506e-4ef2-ab90-9942d6efc2ed.png)
