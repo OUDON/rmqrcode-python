@@ -9,6 +9,17 @@ class ByteEncoder:
         elif '0' <= s and s <= '9':
             return ord(s) - ord('0') + 0x30;
 
+        character_code = {
+            ' ': 0x20,
+            ',': 0x2C,
+            '.': 0x2E
+        }
+
+        if s in character_code:
+            return character_code[s]
+
+        raise Exception()
+
     def encode(self, data, character_count_length):
         res = ByteEncoder.MODE_INDICATOR
         res += bin(len(data))[2:].zfill(character_count_length)

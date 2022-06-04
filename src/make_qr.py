@@ -3,8 +3,9 @@ from enums.error_collection_level import ErrorCollectionLevel
 from enums.generator_polynomials import GeneratorPolynomials
 from enums.alignment_pattern_coordinates import AlignmentPatternCoordinates
 from qr_versions import qr_versions
-from math import compute_bch, compute_reed_solomon
+from error_correction import compute_bch, compute_reed_solomon
 from encoder.byte_encoder import ByteEncoder
+from mask import apply_mask
 
 def print_qr(qr):
     h = len(qr)
@@ -149,9 +150,9 @@ def put_version_information_finder_sub_pattern_side(qr, height, width, data):
         di = n % 5
         dj = n // 5
         qr[si+di][sj+dj] = Color.BLACK if data>>n & 1 else Color.WHITE
-    qr[height-1-5][width-1-4] = Color.BLACK if data>>n & 15 else Color.WHITE
-    qr[height-1-5][width-1-3] = Color.BLACK if data>>n & 16 else Color.WHITE
-    qr[height-1-5][width-1-2] = Color.BLACK if data>>n & 17 else Color.WHITE
+    qr[height-1-5][width-1-4] = Color.BLACK if data>>15 & 1 else Color.WHITE
+    qr[height-1-5][width-1-3] = Color.BLACK if data>>16 & 1 else Color.WHITE
+    qr[height-1-5][width-1-2] = Color.BLACK if data>>17 & 1 else Color.WHITE
 
 
 def convert_to_bites_data(data, character_count_length, codewords_total):
@@ -235,7 +236,7 @@ def put_data(qr, height, width, error_collection_level, data):
             if i >= len(data_codewords):
                 continue
             final_codewords.append(data_codewords[i])
-            # print(f"Put QR data codeword {i} : {data_codewords[i]}")
+            print(f"Put QR data codeword {i} : {data_codewords[i]}")
 
     # RS Codewords
     for i in range(len(rs_codewords_per_block[-1])):
@@ -243,7 +244,7 @@ def put_data(qr, height, width, error_collection_level, data):
             if i >= len(rs_codewords):
                 continue
             final_codewords.append(rs_codewords[i])
-            # print(f"Put RS data codewords {i} : {rs_codewords[i]}")
+            print(f"Put RS data codewords {i} : {rs_codewords[i]}")
 
     # 配置
     dy = -1 # 最初は上方向
@@ -256,6 +257,7 @@ def put_data(qr, height, width, error_collection_level, data):
     while True:
         for x in [cx, cx-1]:
             if qr[cy][x] == Color.UNDEFINED:
+                # print(f"(x, y) = ({x}, {cy}), dir = {dy}, codewords[{current_codeword_idx}][{current_bit_idx}] = {final_codewords[current_codeword_idx][current_bit_idx]}")
                 # 空白のセルのみ処理する
                 if current_codeword_idx == len(final_codewords):
                     # codewordsを配置しきった場合はremainder_bitsがあれば配置する
@@ -293,44 +295,37 @@ def put_data(qr, height, width, error_collection_level, data):
     return mask_area
 
 
-def mask(x, y):
-    return (y//2 + x//3) % 2 == 0
-
-
-def apply_mask(qr, mask_area, height, width):
-    for y in range(height):
-        for x in range(width):
-            if not mask_area[y][x]:
-                continue
-            if mask(x, y):
-                if qr[y][x] == Color.BLACK:
-                    qr[y][x] = Color.WHITE
-                elif qr[y][x] == Color.WHITE:
-                    qr[y][x] = Color.BLACK;
-
-
-def make_qr(height, width, error_collection_level):
+def make_qr(data, height, width, error_collection_level):
     qr = [[Color.UNDEFINED for i in range(width)] for j in range(height)]
     put_finder_pattern(qr, height, width)
     put_corner_finder_pattern(qr, height, width)
     put_alignment_pattern(qr, height, width)
     put_timing_pattern(qr, height, width)
     put_version_information(qr, height, width, error_collection_level)
-    mask_area = put_data(qr, height, width, error_collection_level, "HelloWorld");
-    print_qr(mask_area)
+    mask_area = put_data(qr, height, width, error_collection_level, data);
     apply_mask(qr, mask_area, height, width)
     return qr
 
 
 def main():
-    qr = make_qr(13, 99, ErrorCollectionLevel.H)
+    height, width = 15, 139
+    data = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
+    qr = make_qr(data, height, width, ErrorCollectionLevel.M)
     print_qr(qr)
-    qr = make_qr(7, 59, ErrorCollectionLevel.H)
-    print_qr(qr)
-    qr = make_qr(13, 59, ErrorCollectionLevel.H)
-    print_qr(qr)
-    qr = make_qr(17, 43, ErrorCollectionLevel.H)
-    print_qr(qr)
+
+    # 画像へ変換
+    from PIL import Image
+    qr_img = Image.new('RGB', (width+4, height+4), (255, 255, 255))
+    for y in range(height):
+        for x in range(width):
+            r, g, b = 125, 125, 125
+            if qr[y][x] == Color.BLACK:
+                r, g, b = 0, 0, 0
+            elif qr[y][x] == Color.WHITE:
+                r, g, b, = 255, 255, 255
+            qr_img.putpixel((x+2, y+2), (r, g, b))
+    qr_img.show()
+    qr_img.save("output/my_qr.png")
 
 if __name__ == '__main__':
     main()
