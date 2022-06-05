@@ -1,4 +1,4 @@
-from enums.error_collection_level import ErrorCollectionLevel
+from .error_collection_level import ErrorCollectionLevel
 
 
 # ISO/IEC 23941:2022 Table 6

@@ -1,5 +1,5 @@
-from utilities import msb, to_binary
-from galois_fields import GaloisFields
+from .utilities import msb, to_binary
+from .galois_fields import GaloisFields
 
 def compute_bch(data):
     data <<= 12

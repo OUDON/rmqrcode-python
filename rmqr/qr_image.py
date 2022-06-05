@@ -1,4 +1,4 @@
-from enums.color import Color
+from .enums.color import Color
 
 from PIL import Image
 

@@ -1,7 +1,6 @@
-from enums.color import Color
-from rmqr import rMQR, ErrorCollectionLevel
-from encoder.byte_encoder import ByteEncoder
-from qr_image import QRImage
+from rmqr import rMQR
+from rmqr import ErrorCollectionLevel
+from rmqr import QRImage
 
 
 def main():

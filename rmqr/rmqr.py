@@ -1,15 +1,14 @@
-from enums.color import Color
-from enums.generator_polynomials import GeneratorPolynomials
-from enums.alignment_pattern_coordinates import AlignmentPatternCoordinates
-from enums.generator_polynomials import GeneratorPolynomials
-from enums.error_collection_level import ErrorCollectionLevel
-from rmqr.data_capacities import data_capacities
+from .format.error_collection_level import ErrorCollectionLevel
+from .format.qr_versions import qr_versions
+from .format.data_capacities import data_capacities
+from .format.alignment_pattern_coordinates import AlignmentPatternCoordinates
+from .format.generator_polynomials import GeneratorPolynomials
+from .format.mask import mask
 
-from .qr_versions import qr_versions
-from .mask import mask
-from error_correction import compute_bch, compute_reed_solomon
-from encoder.byte_encoder import ByteEncoder
-from utilities import split_into_8bits
+from .encoder.byte_encoder import ByteEncoder
+from .lib.error_correction import compute_bch, compute_reed_solomon
+from .lib.utilities import split_into_8bits
+from .enums.color import Color
 
 
 class rMQR:
