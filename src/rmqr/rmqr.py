@@ -75,6 +75,10 @@ class rMQR:
         return self._qr[y][x]
 
 
+    def to_list(self):
+        return [list(map(lambda x: 1 if x == Color.BLACK else 0, column)) for column in self._qr]
+
+
     def dump(self):
         show = {}
         show[Color.WHITE] = "_"

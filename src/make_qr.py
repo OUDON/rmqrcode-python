@@ -9,6 +9,7 @@ def main():
     error_collection_level = ErrorCollectionLevel.M
     qr = rMQR.fit(data, error_collection_level)
     qr.dump()
+    print(qr.to_list())
 
     image = QRImage(qr)
     image.show()
