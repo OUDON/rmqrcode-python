@@ -37,7 +37,11 @@ class rMQR:
 
 
     def __init__(self, version, error_collection_level):
+        if not rMQR.validate_version(version):
+            raise IllegalVersionError("The rMQR version is illegal.")
+
         qr_version = qr_versions[version]
+        self._version = version
         self._height = qr_version['height']
         self._width = qr_version['width']
         self._error_collection_level = error_collection_level
@@ -363,5 +367,14 @@ class rMQR:
                 # qr[y][x] = 'B' if mask(x, y) else 'W'
 
 
+    @staticmethod
+    def validate_version(version_name):
+        return version_name in qr_versions
+
+
 class DataTooLongError(ValueError):
+    pass
+
+
+class IllegalVersionError(ValueError):
     pass
