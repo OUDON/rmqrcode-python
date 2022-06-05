@@ -3,6 +3,7 @@ from enums.generator_polynomials import GeneratorPolynomials
 from enums.alignment_pattern_coordinates import AlignmentPatternCoordinates
 from enums.generator_polynomials import GeneratorPolynomials
 from enums.error_collection_level import ErrorCollectionLevel
+from rmqr.data_capacities import data_capacities
 
 from .qr_versions import qr_versions
 from .mask import mask
@@ -12,6 +13,30 @@ from utilities import split_into_8bits
 
 
 class rMQR:
+    @staticmethod
+    def fit(data, error_collection_level):
+        data_length = ByteEncoder.length(data)
+        ok_versions = []
+        for qr_version, capacity in data_capacities.items():
+            if data_length <= capacity['Byte'][error_collection_level]:
+                ok_versions.append({
+                    'version': qr_version,
+                    'diff': capacity['Byte'][error_collection_level] - data_length
+                })
+                print(f"ok: {qr_version}")
+
+        if len(ok_versions) == 0:
+            raise DataTooLongError("The data is too long.")
+
+        # とりあえず容量のあまりが最も少なくなるものを選ぶ
+        # TODO: 選び方をパラメータで変えられるようにしたい
+        selected = sorted(ok_versions, key=lambda x: x['diff'])[0]
+
+        qr = rMQR(selected['version'], error_collection_level)
+        qr.make(data)
+        return qr
+
+
     def __init__(self, version, error_collection_level):
         qr_version = qr_versions[version]
         self._height = qr_version['height']
