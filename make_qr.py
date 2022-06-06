@@ -1,6 +1,6 @@
-from rmqr import rMQR
-from rmqr import ErrorCollectionLevel
-from rmqr import QRImage
+from rmqrcode import rMQR
+from rmqrcode import ErrorCollectionLevel
+from rmqrcode import QRImage
 
 
 def main():
