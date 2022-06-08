@@ -9,27 +9,41 @@ from .encoder.byte_encoder import ByteEncoder
 from .lib.error_correction import compute_bch, compute_reed_solomon
 from .lib.utilities import split_into_8bits
 from .enums.color import Color
+from .enums.fit_strategy import FitStrategy
 
 
 class rMQR:
     @staticmethod
-    def fit(data, error_collection_level):
+    def fit(data, error_collection_level, fit_strategy=FitStrategy.BALANCED):
         data_length = ByteEncoder.length(data)
         ok_versions = []
-        for qr_version, capacity in data_capacities.items():
-            if data_length <= capacity['Byte'][error_collection_level]:
-                ok_versions.append({
-                    'version': qr_version,
-                    'diff': capacity['Byte'][error_collection_level] - data_length
-                })
-                print(f"ok: {qr_version}")
+        determined_width = set()
+        determined_height = set()
+
+        for version_name, qr_version in data_capacities.items():
+            if data_length <= qr_version['capacity']['Byte'][error_collection_level]:
+                width, height = qr_version['width'], qr_version['height']
+                if not width in determined_width and not height in determined_height:
+                    determined_width.add(width)
+                    determined_height.add(height)
+                    ok_versions.append({
+                        'version': version_name,
+                        'width': width,
+                        'height': height,
+                    })
+                    print(f"ok: {version_name}")
 
         if len(ok_versions) == 0:
             raise DataTooLongError("The data is too long.")
 
-        # とりあえず容量のあまりが最も少なくなるものを選ぶ
-        # TODO: 選び方をパラメータで変えられるようにしたい
-        selected = sorted(ok_versions, key=lambda x: x['diff'])[0]
+        if fit_strategy == FitStrategy.MINIMIZE_WIDTH:
+            sort_key = lambda x: x['width']
+        elif fit_strategy == FitStrategy.MINIMIZE_HEIGHT:
+            sort_key = lambda x: x['height']
+        elif fit_strategy == FitStrategy.BALANCED:
+            sort_key = lambda x: x['height'] * 8 + x['width']
+        selected = sorted(ok_versions, key=sort_key)[0]
+        print(f"selected: {selected}")
 
         qr = rMQR(selected['version'], error_collection_level)
         qr.make(data)

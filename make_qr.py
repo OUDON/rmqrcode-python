@@ -1,14 +1,16 @@
 from rmqrcode import rMQR
 from rmqrcode import ErrorCollectionLevel
 from rmqrcode import QRImage
+from rmqrcode import FitStrategy
 
 
 def main():
     data = "ABCdef123漢字あいうえお"
     error_collection_level = ErrorCollectionLevel.M
+    fit_strategy = FitStrategy.BALANCED
 
     # Determine rMQR version automatically
-    qr = rMQR.fit(data, error_collection_level)
+    qr = rMQR.fit(data, error_collection_level, fit_strategy=fit_strategy)
     qr.dump()
 
     # Determine rMQR version manually
