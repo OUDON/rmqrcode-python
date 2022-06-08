@@ -41,7 +41,7 @@ class rMQR:
         elif fit_strategy == FitStrategy.MINIMIZE_HEIGHT:
             sort_key = lambda x: x['height']
         elif fit_strategy == FitStrategy.BALANCED:
-            sort_key = lambda x: x['height'] * 8 + x['width']
+            sort_key = lambda x: x['height'] * 9 + x['width']
         selected = sorted(ok_versions, key=sort_key)[0]
         print(f"selected: {selected}")
 
