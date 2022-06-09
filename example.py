@@ -3,9 +3,11 @@ from rmqrcode import ErrorCollectionLevel
 from rmqrcode import QRImage
 from rmqrcode import FitStrategy
 
+import os
+
 
 def main():
-    data = "ABCdef123漢字あいうえお"
+    data = "https://oudon.xyz"
     error_collection_level = ErrorCollectionLevel.M
     fit_strategy = FitStrategy.BALANCED
 
@@ -22,7 +24,7 @@ def main():
     # Save as png
     image = QRImage(qr)
     image.show()
-    image.save("output/my_qr.png")
+    image.save("my_qr.png")
 
 
 if __name__ == '__main__':
