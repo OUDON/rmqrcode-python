@@ -6,8 +6,8 @@ from .format.generator_polynomials import GeneratorPolynomials
 from .format.mask import mask
 
 from .encoder.byte_encoder import ByteEncoder
-from .lib.error_correction import compute_bch, compute_reed_solomon
-from .lib.utilities import split_into_8bits
+from .util.error_correction import compute_bch, compute_reed_solomon
+from .util.utilities import split_into_8bits
 from .enums.color import Color
 from .enums.fit_strategy import FitStrategy
 
