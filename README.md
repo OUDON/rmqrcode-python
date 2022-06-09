@@ -14,14 +14,14 @@ import rmqrcode
 data = "https://oudon.xyz"
 qr = rMQR.fit(
     data,
-    ecc=rmqrcode.ErrorCollectionLevel.M,
+    ecc=rmqrcode.ErrorCorrectionLevel.M,
     fit_strategy=rmqrcode.FitStrategy.MINIMIZE_WIDTH
 )
 ```
 
-The `ecc` parameter is an enum value of rmqrcode.ErrorCollectionLevel to select error collection level. The following values are available:
-- **`ErrorCollectionLevel.M`**: Approx. 15% Recovery Capacity.
-- **`ErrorCollectionLevel.H`**: Approx. 30% Recovery Capacity.
+The `ecc` parameter is an enum value of rmqrcode.ErrorCorrectionLevel to select error correction level. The following values are available:
+- **`ErrorCorrectionLevel.M`**: Approx. 15% Recovery Capacity.
+- **`ErrorCorrectionLevel.H`**: Approx. 30% Recovery Capacity.
 
 The `fit_strategy` parameter is enum value of rmqrcode.FitStrategy to specify how to determine size of rMQR Code. The following values are available:
 - **`FitStrategy.MINIMIZE_WIDTH`**: Try to minimize width.

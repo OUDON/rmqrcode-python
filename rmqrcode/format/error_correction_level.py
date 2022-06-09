@@ -1,5 +1,5 @@
 from enum import Enum
 
-class ErrorCollectionLevel(Enum):
+class ErrorCorrectionLevel(Enum):
     M = 0
     H = 1

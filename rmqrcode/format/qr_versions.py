@@ -1,4 +1,4 @@
-from .error_collection_level import ErrorCollectionLevel
+from .error_correction_level import ErrorCorrectionLevel
 
 
 qr_versions = {
@@ -10,14 +10,14 @@ qr_versions = {
         'character_count_length': 3,
         'codewords_total': 13,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 13,
                     'k': 6,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 1,
                     'c': 13,
@@ -34,14 +34,14 @@ qr_versions = {
         'character_count_length': 4,
         'codewords_total': 21,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 21,
                     'k': 12,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 1,
                     'c': 21,
@@ -58,14 +58,14 @@ qr_versions = {
         'character_count_length': 5,
         'codewords_total': 32,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 32,
                     'k': 20,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 1,
                     'c': 32,
@@ -82,14 +82,14 @@ qr_versions = {
         'character_count_length': 5,
         'codewords_total': 44,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 44,
                     'k': 28,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 1,
                     'c': 44,
@@ -106,14 +106,14 @@ qr_versions = {
         'character_count_length': 6,
         'codewords_total': 68,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 68,
                     'k': 44,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 2,
                     'c': 34,
@@ -130,14 +130,14 @@ qr_versions = {
         'character_count_length': 4,
         'codewords_total': 21,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 21,
                     'k': 12,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 1,
                     'c': 21,
@@ -154,14 +154,14 @@ qr_versions = {
         'character_count_length': 5,
         'codewords_total': 33,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 33,
                     'k': 21,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 1,
                     'c': 33,
@@ -178,14 +178,14 @@ qr_versions = {
         'character_count_length': 5,
         'codewords_total': 49,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 49,
                     'k': 31,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 1,
                     'c': 24,
@@ -207,14 +207,14 @@ qr_versions = {
         'character_count_length': 6,
         'codewords_total': 66,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 66,
                     'k': 42,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 2,
                     'c': 33,
@@ -231,7 +231,7 @@ qr_versions = {
         'character_count_length': 6,
         'codewords_total': 99,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 49,
@@ -243,7 +243,7 @@ qr_versions = {
                     'k': 32,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 3,
                     'c': 33,
@@ -260,14 +260,14 @@ qr_versions = {
         'character_count_length': 3,
         'codewords_total': 15,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 15,
                     'k': 7,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 1,
                     'c': 15,
@@ -284,14 +284,14 @@ qr_versions = {
         'character_count_length': 5,
         'codewords_total': 31,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 31,
                     'k': 19,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 1,
                     'c': 31,
@@ -308,14 +308,14 @@ qr_versions = {
         'character_count_length': 5,
         'codewords_total': 47,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 47,
                     'k': 31,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 1,
                     'c': 23,
@@ -337,14 +337,14 @@ qr_versions = {
         'character_count_length': 6,
         'codewords_total': 67,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 67,
                     'k': 43,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 1,
                     'c': 33,
@@ -366,7 +366,7 @@ qr_versions = {
         'character_count_length': 6,
         'codewords_total': 89,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 44,
@@ -378,7 +378,7 @@ qr_versions = {
                     'k': 29,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 1,
                     'c': 44,
@@ -400,14 +400,14 @@ qr_versions = {
         'character_count_length': 7,
         'codewords_total': 132,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 2,
                     'c': 66,
                     'k': 42,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 3,
                     'c': 44,
@@ -424,14 +424,14 @@ qr_versions = {
         'remainder_bits': 4,
         'codewords_total': 21,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 21,
                     'k': 14,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 1,
                     'c': 21,
@@ -448,14 +448,14 @@ qr_versions = {
         'character_count_length': 5,
         'codewords_total': 41,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 41,
                     'k': 27,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 1,
                     'c': 41,
@@ -472,14 +472,14 @@ qr_versions = {
         'character_count_length': 6,
         'codewords_total': 60,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 60,
                     'k': 38,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 2,
                     'c': 30,
@@ -496,7 +496,7 @@ qr_versions = {
         'character_count_length': 6,
         'codewords_total': 85,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 42,
@@ -508,7 +508,7 @@ qr_versions = {
                     'k': 27,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 1,
                     'c': 42,
@@ -530,7 +530,7 @@ qr_versions = {
         'character_count_length': 7,
         'codewords_total': 113,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 56,
@@ -542,7 +542,7 @@ qr_versions = {
                     'k': 37,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 1,
                     'c': 37,
@@ -564,7 +564,7 @@ qr_versions = {
         'character_count_length': 7,
         'codewords_total': 166,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 2,
                     'c': 55,
@@ -576,7 +576,7 @@ qr_versions = {
                     'k': 36,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 2,
                     'c': 41,
@@ -598,14 +598,14 @@ qr_versions = {
         'character_count_length': 6,
         'codewords_total': 51,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 51,
                     'k': 33,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 1,
                     'c': 25,
@@ -627,14 +627,14 @@ qr_versions = {
         'character_count_length': 6,
         'codewords_total': 74,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 74,
                     'k': 48,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 2,
                     'c': 37,
@@ -651,7 +651,7 @@ qr_versions = {
         'character_count_length': 7,
         'codewords_total': 103,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 51,
@@ -663,7 +663,7 @@ qr_versions = {
                     'k': 34,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 2,
                     'c': 34,
@@ -685,14 +685,14 @@ qr_versions = {
         'character_count_length': 7,
         'codewords_total': 136,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 2,
                     'c': 68,
                     'k': 44,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 4,
                     'c': 34,
@@ -709,7 +709,7 @@ qr_versions = {
         'character_count_length': 7,
         'codewords_total': 199,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 2,
                     'c': 66,
@@ -721,7 +721,7 @@ qr_versions = {
                     'k': 43,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 1,
                     'c': 39,
@@ -743,14 +743,14 @@ qr_versions = {
         'character_count_length': 6,
         'codewords_total': 61,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 1,
                     'c': 60,
                     'k': 39,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 1,
                     'c': 30,
@@ -772,14 +772,14 @@ qr_versions = {
         'character_count_length': 6,
         'codewords_total': 88,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 2,
                     'c': 44,
                     'k': 28,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 2,
                     'c': 44,
@@ -796,14 +796,14 @@ qr_versions = {
         'character_count_length': 7,
         'codewords_total': 122,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 2,
                     'c': 61,
                     'k': 39,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 1,
                     'c': 40,
@@ -825,7 +825,7 @@ qr_versions = {
         'character_count_length': 7,
         'codewords_total': 160,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 2,
                     'c': 53,
@@ -837,7 +837,7 @@ qr_versions = {
                     'k': 34,
                 }
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 4,
                     'c': 40,
@@ -854,14 +854,14 @@ qr_versions = {
         'character_count_length': 8,
         'codewords_total': 232,
         'blocks': {
-            ErrorCollectionLevel.M: [
+            ErrorCorrectionLevel.M: [
                 {
                     'num': 4,
                     'c': 58,
                     'k': 38,
                 },
             ],
-            ErrorCollectionLevel.H: [
+            ErrorCorrectionLevel.H: [
                 {
                     'num': 2,
                     'c': 38,

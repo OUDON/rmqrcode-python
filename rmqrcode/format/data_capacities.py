@@ -1,4 +1,4 @@
-from .error_collection_level import ErrorCollectionLevel
+from .error_correction_level import ErrorCorrectionLevel
 
 
 # ISO/IEC 23941:2022 Table 6
@@ -8,8 +8,8 @@ data_capacities = {
         'width': 43,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 5,
-                ErrorCollectionLevel.H: 2,
+                ErrorCorrectionLevel.M: 5,
+                ErrorCorrectionLevel.H: 2,
             },
         },
     },
@@ -18,8 +18,8 @@ data_capacities = {
         'width': 59,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 11,
-                ErrorCollectionLevel.H: 6,
+                ErrorCorrectionLevel.M: 11,
+                ErrorCorrectionLevel.H: 6,
             },
         },
     },
@@ -28,8 +28,8 @@ data_capacities = {
         'width': 77,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 19,
-                ErrorCollectionLevel.H: 9,
+                ErrorCorrectionLevel.M: 19,
+                ErrorCorrectionLevel.H: 9,
             },
         },
     },
@@ -38,8 +38,8 @@ data_capacities = {
         'width': 99,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 27,
-                ErrorCollectionLevel.H: 13,
+                ErrorCorrectionLevel.M: 27,
+                ErrorCorrectionLevel.H: 13,
             },
         },
     },
@@ -48,8 +48,8 @@ data_capacities = {
         'width': 139,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 42,
-                ErrorCollectionLevel.H: 22,
+                ErrorCorrectionLevel.M: 42,
+                ErrorCorrectionLevel.H: 22,
             },
         },
     },
@@ -58,8 +58,8 @@ data_capacities = {
         'width': 43,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 11,
-                ErrorCollectionLevel.H: 6,
+                ErrorCorrectionLevel.M: 11,
+                ErrorCorrectionLevel.H: 6,
             },
         },
     },
@@ -68,8 +68,8 @@ data_capacities = {
         'width': 59,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 20,
-                ErrorCollectionLevel.H: 10,
+                ErrorCorrectionLevel.M: 20,
+                ErrorCorrectionLevel.H: 10,
             },
         },
     },
@@ -78,8 +78,8 @@ data_capacities = {
         'width': 77,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 30,
-                ErrorCollectionLevel.H: 16,
+                ErrorCorrectionLevel.M: 30,
+                ErrorCorrectionLevel.H: 16,
             },
         },
     },
@@ -88,8 +88,8 @@ data_capacities = {
         'width': 99,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 40,
-                ErrorCollectionLevel.H: 20,
+                ErrorCorrectionLevel.M: 40,
+                ErrorCorrectionLevel.H: 20,
             },
         },
     },
@@ -98,8 +98,8 @@ data_capacities = {
         'width': 139,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 61,
-                ErrorCollectionLevel.H: 31,
+                ErrorCorrectionLevel.M: 61,
+                ErrorCorrectionLevel.H: 31,
             },
         },
     },
@@ -108,8 +108,8 @@ data_capacities = {
         'width': 27,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 6,
-                ErrorCollectionLevel.H: 4,
+                ErrorCorrectionLevel.M: 6,
+                ErrorCorrectionLevel.H: 4,
             },
         },
     },
@@ -118,8 +118,8 @@ data_capacities = {
         'width': 43,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 18,
-                ErrorCollectionLevel.H: 10,
+                ErrorCorrectionLevel.M: 18,
+                ErrorCorrectionLevel.H: 10,
             },
         },
     },
@@ -128,8 +128,8 @@ data_capacities = {
         'width': 59,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 30,
-                ErrorCollectionLevel.H: 14,
+                ErrorCorrectionLevel.M: 30,
+                ErrorCorrectionLevel.H: 14,
             },
         },
     },
@@ -138,8 +138,8 @@ data_capacities = {
         'width': 77,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 41,
-                ErrorCollectionLevel.H: 21,
+                ErrorCorrectionLevel.M: 41,
+                ErrorCorrectionLevel.H: 21,
             },
         },
     },
@@ -148,8 +148,8 @@ data_capacities = {
         'width': 99,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 55,
-                ErrorCollectionLevel.H: 27,
+                ErrorCorrectionLevel.M: 55,
+                ErrorCorrectionLevel.H: 27,
             },
         },
     },
@@ -158,8 +158,8 @@ data_capacities = {
         'width': 139,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 82,
-                ErrorCollectionLevel.H: 40,
+                ErrorCorrectionLevel.M: 82,
+                ErrorCorrectionLevel.H: 40,
             },
         },
     },
@@ -168,8 +168,8 @@ data_capacities = {
         'width': 27,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 11,
-                ErrorCollectionLevel.H: 6,
+                ErrorCorrectionLevel.M: 11,
+                ErrorCorrectionLevel.H: 6,
             },
         },
     },
@@ -178,8 +178,8 @@ data_capacities = {
         'width': 43,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 26,
-                ErrorCollectionLevel.H: 12,
+                ErrorCorrectionLevel.M: 26,
+                ErrorCorrectionLevel.H: 12,
             },
         },
     },
@@ -188,8 +188,8 @@ data_capacities = {
         'width': 59,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 36,
-                ErrorCollectionLevel.H: 18,
+                ErrorCorrectionLevel.M: 36,
+                ErrorCorrectionLevel.H: 18,
             },
         },
     },
@@ -198,8 +198,8 @@ data_capacities = {
         'width': 77,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 51,
-                ErrorCollectionLevel.H: 27,
+                ErrorCorrectionLevel.M: 51,
+                ErrorCorrectionLevel.H: 27,
             },
         },
     },
@@ -208,8 +208,8 @@ data_capacities = {
         'width': 99,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 71,
-                ErrorCollectionLevel.H: 33,
+                ErrorCorrectionLevel.M: 71,
+                ErrorCorrectionLevel.H: 33,
             },
         },
     },
@@ -218,8 +218,8 @@ data_capacities = {
         'width': 139,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 104,
-                ErrorCollectionLevel.H: 52,
+                ErrorCorrectionLevel.M: 104,
+                ErrorCorrectionLevel.H: 52,
             },
         },
     },
@@ -228,8 +228,8 @@ data_capacities = {
         'width': 43,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 31,
-                ErrorCollectionLevel.H: 13,
+                ErrorCorrectionLevel.M: 31,
+                ErrorCorrectionLevel.H: 13,
             },
         },
     },
@@ -238,8 +238,8 @@ data_capacities = {
         'width': 59,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 46,
-                ErrorCollectionLevel.H: 24,
+                ErrorCorrectionLevel.M: 46,
+                ErrorCorrectionLevel.H: 24,
             },
         },
     },
@@ -248,8 +248,8 @@ data_capacities = {
         'width': 77,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 65,
-                ErrorCollectionLevel.H: 29,
+                ErrorCorrectionLevel.M: 65,
+                ErrorCorrectionLevel.H: 29,
             },
         },
     },
@@ -258,8 +258,8 @@ data_capacities = {
         'width': 99,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 86,
-                ErrorCollectionLevel.H: 46,
+                ErrorCorrectionLevel.M: 86,
+                ErrorCorrectionLevel.H: 46,
             },
         },
     },
@@ -268,8 +268,8 @@ data_capacities = {
         'width': 139,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 125,
-                ErrorCollectionLevel.H: 67,
+                ErrorCorrectionLevel.M: 125,
+                ErrorCorrectionLevel.H: 67,
             },
         },
     },
@@ -278,8 +278,8 @@ data_capacities = {
         'width': 43,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 37,
-                ErrorCollectionLevel.H: 19,
+                ErrorCorrectionLevel.M: 37,
+                ErrorCorrectionLevel.H: 19,
             },
         },
     },
@@ -288,8 +288,8 @@ data_capacities = {
         'width': 59,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 54,
-                ErrorCollectionLevel.H: 26,
+                ErrorCorrectionLevel.M: 54,
+                ErrorCorrectionLevel.H: 26,
             },
         },
     },
@@ -298,8 +298,8 @@ data_capacities = {
         'width': 77,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 76,
-                ErrorCollectionLevel.H: 36,
+                ErrorCorrectionLevel.M: 76,
+                ErrorCorrectionLevel.H: 36,
             },
         },
     },
@@ -308,8 +308,8 @@ data_capacities = {
         'width': 99,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 98,
-                ErrorCollectionLevel.H: 54,
+                ErrorCorrectionLevel.M: 98,
+                ErrorCorrectionLevel.H: 54,
             },
         },
     },
@@ -318,8 +318,8 @@ data_capacities = {
         'width': 139,
         'capacity': {
             'Byte': {
-                ErrorCollectionLevel.M: 150,
-                ErrorCollectionLevel.H: 74,
+                ErrorCorrectionLevel.M: 150,
+                ErrorCorrectionLevel.H: 74,
             },
         },
     },
