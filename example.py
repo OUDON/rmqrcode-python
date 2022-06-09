@@ -3,8 +3,6 @@ from rmqrcode import ErrorCollectionLevel
 from rmqrcode import QRImage
 from rmqrcode import FitStrategy
 
-import os
-
 
 def main():
     data = "https://oudon.xyz"
