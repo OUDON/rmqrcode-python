@@ -12,8 +12,21 @@ from rmqrcode import rMQR
 import rmqrcode
 
 data = "https://oudon.xyz"
-qr = rMQR.fit(data, rmqrcode.ErrorCollectionLevel.M, fit_strategy=rmqrcode.FitStrategy.MINIMIZE_WIDTH)
+qr = rMQR.fit(
+    data,
+    ecc=rmqrcode.ErrorCollectionLevel.M,
+    fit_strategy=rmqrcode.FitStrategy.MINIMIZE_WIDTH
+)
 ```
+
+The `ecc` parameter is an enum value of rmqrcode.ErrorCollectionLevel to select error collection level. The following values are available:
+- `ErrorCollectionLevel.M`: Approx. 15% Recovery Capacity.
+- `ErrorCollectionLevel.H`: Approx. 30% Recovery Capacity.
+
+The `fit_strategy` parameter is enum value of rmqrcode.FitStrategy to specify how to determine size of rMQR Code. The following values are available:
+- 'FitStrategy.MINIMIZE_WIDTH': Try to minimize width.
+- 'FitStrategy.MINIMIZE_HEIGHT': Try to minimize height.
+- 'FitStrategy.BALANCED': Try to keep balance of width and height.
 
 ----
 The word "QR Code" is registered trademark of DENSO WAVE Incorporated.<br>
