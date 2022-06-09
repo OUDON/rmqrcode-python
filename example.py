@@ -3,6 +3,8 @@ from rmqrcode import ErrorCorrectionLevel
 from rmqrcode import QRImage
 from rmqrcode import FitStrategy
 
+import logging
+
 
 def main():
     data = "https://oudon.xyz"
@@ -11,13 +13,13 @@ def main():
 
     # Determine rMQR version automatically
     qr = rMQR.fit(data, ecc=error_correction_level, fit_strategy=fit_strategy)
-    qr.dump()
+    print(qr)
 
     # Determine rMQR version manually
     # version = 'R13x99'
     # qr = rMQR(version, error_correction_level)
     # qr.make(data)
-    # qr.dump()
+    # print(qr)
 
     # Save as png
     image = QRImage(qr)
@@ -25,5 +27,15 @@ def main():
     image.save("my_qr.png")
 
 
+def _init_logger():
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.DEBUG)
+    logger.addHandler(ch)
+    return logger
+
+
 if __name__ == '__main__':
+    logger = _init_logger()
     main()

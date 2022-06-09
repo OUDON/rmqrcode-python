@@ -11,15 +11,28 @@ from .lib.utilities import split_into_8bits
 from .enums.color import Color
 from .enums.fit_strategy import FitStrategy
 
+import logging
 
 class rMQR:
     @staticmethod
+    def _init_logger():
+        logger = logging.getLogger(__name__)
+        logger.addHandler(logging.NullHandler())
+        logger.setLevel(logging.DEBUG)
+        logger.propagate = True
+        return logger
+
+
+    @staticmethod
     def fit(data,ecc=ErrorCorrectionLevel.M, fit_strategy=FitStrategy.BALANCED):
+        logger = rMQR._init_logger()
+
         data_length = ByteEncoder.length(data)
         ok_versions = []
         determined_width = set()
         determined_height = set()
 
+        logger.debug("Select rMQR Code version")
         for version_name, qr_version in data_capacities.items():
             if data_length <= qr_version['capacity']['Byte'][ecc]:
                 width, height = qr_version['width'], qr_version['height']
@@ -31,7 +44,7 @@ class rMQR:
                         'width': width,
                         'height': height,
                     })
-                    print(f"ok: {version_name}")
+                    logger.debug(f"ok: {version_name}")
 
         if len(ok_versions) == 0:
             raise DataTooLongError("The data is too long.")
@@ -43,14 +56,16 @@ class rMQR:
         elif fit_strategy == FitStrategy.BALANCED:
             sort_key = lambda x: x['height'] * 9 + x['width']
         selected = sorted(ok_versions, key=sort_key)[0]
-        print(f"selected: {selected}")
+        logger.debug(f"selected: {selected}")
 
         qr = rMQR(selected['version'], ecc)
         qr.make(data)
         return qr
 
 
-    def __init__(self, version, ecc):
+    def __init__(self, version, ecc, logger=None):
+        self._logger = logger or rMQR._init_logger()
+
         if not rMQR.validate_version(version):
             raise IllegalVersionError("The rMQR version is illegal.")
 
@@ -96,21 +111,25 @@ class rMQR:
         return [list(map(lambda x: 1 if x == Color.BLACK else 0, column)) for column in self._qr]
 
 
-    def dump(self):
+    def __str__(self):
+        res = ""
+
         show = {}
         show[Color.WHITE] = "_"
         show[Color.BLACK] = "X"
         show[Color.UNDEFINED] = "?"
         show[True] = "X"
         show[False] = "_"
-        print(f"rMQR Version R{self._height}x{self._width}:")
+
+        res += f"rMQR Version R{self._height}x{self._width}:\n"
         for i in range(self._height):
             for j in range(self._width):
                 if self._qr[i][j] in show:
-                    print(show[self._qr[i][j]], end="")
+                    res += show[self._qr[i][j]]
                 else:
-                    print(self._qr[i][j], end="")
-            print("")
+                    res += self._qr[i][j]
+            res += "\n"
+        return res
 
 
     def _put_finder_pattern(self):
@@ -259,9 +278,6 @@ class rMQR:
             codewords,
             qr_version['blocks'][self._error_correction_level]
         )
-        # print("==============")
-        # print(f"data_codewords_per_block = {data_codewords_per_block}")
-        # print(f"rs_codewords_per_block = {rs_codewords_per_block}")
 
         # データの並び替え
         # Data codewords
@@ -271,7 +287,7 @@ class rMQR:
                 if i >= len(data_codewords):
                     continue
                 final_codewords.append(data_codewords[i])
-                print(f"Put QR data codeword {i} : {data_codewords[i]}")
+                self._logger.debug(f"Put QR data codeword {i} : {data_codewords[i]}")
 
         # RS Codewords
         for i in range(len(rs_codewords_per_block[-1])):
@@ -279,7 +295,7 @@ class rMQR:
                 if i >= len(rs_codewords):
                     continue
                 final_codewords.append(rs_codewords[i])
-                print(f"Put RS data codewords {i} : {rs_codewords[i]}")
+                self._logger.debug(f"Put RS data codewords {i} : {rs_codewords[i]}")
 
         # 配置
         dy = -1 # 最初は上方向
@@ -292,7 +308,6 @@ class rMQR:
         while True:
             for x in [cx, cx-1]:
                 if self._qr[cy][x] == Color.UNDEFINED:
-                    # print(f"(x, y) = ({x}, {cy}), dir = {dy}, codewords[{current_codeword_idx}][{current_bit_idx}] = {final_codewords[current_codeword_idx][current_bit_idx]}")
                     # 空白のセルのみ処理する
                     if current_codeword_idx == len(final_codewords):
                         # codewordsを配置しきった場合はremainder_bitsがあれば配置する
@@ -303,7 +318,6 @@ class rMQR:
                         # codewordsを配置する
                         self._qr[cy][x] = Color.BLACK if final_codewords[current_codeword_idx][current_bit_idx] == '1' else Color.WHITE
                         mask_area[cy][x] = True
-                        # qr[cy][x] = chr(ord('A') + current_codeword_idx)
                         current_bit_idx += 1
                         if current_bit_idx == 8:
                             current_bit_idx = 0
@@ -340,10 +354,6 @@ class rMQR:
                 rs_codewords_num = block_definition['c'] - block_definition['k']
                 g = GeneratorPolynomials[rs_codewords_num]
 
-                # print('----------')
-                # print(f"D{data_idx} to D{data_idx + data_codewords_num - 1}")
-                # print(f"E{error_idx} to D{error_idx + rs_codewords_num - 1}")
-
                 codewords_in_block = codewords[data_idx : data_idx + data_codewords_num]
                 rs_codewords_in_block = compute_reed_solomon(codewords_in_block, g, rs_codewords_num)
 
@@ -353,8 +363,6 @@ class rMQR:
                 data_idx += data_codewords_num
                 error_idx += rs_codewords_num
 
-                # print(f"codewords in block = {codewords_in_block}, len = {len(codewords_in_block)}")
-                # print(f"rs_codewords in block = {rs_codewords_in_block}, len = {len(rs_codewords_in_block)}")
         return data_codewords_per_block, rs_codewords_per_block
 
 
@@ -378,7 +386,6 @@ class rMQR:
                         self._qr[y][x] = Color.WHITE
                     elif self._qr[y][x] == Color.WHITE:
                         self._qr[y][x] = Color.BLACK
-                # qr[y][x] = 'B' if mask(x, y) else 'W'
 
 
     @staticmethod
