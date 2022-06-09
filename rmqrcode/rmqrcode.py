@@ -14,14 +14,14 @@ from .enums.fit_strategy import FitStrategy
 
 class rMQR:
     @staticmethod
-    def fit(data, error_correction_level, fit_strategy=FitStrategy.BALANCED):
+    def fit(data,ecc=ErrorCorrectionLevel.M, fit_strategy=FitStrategy.BALANCED):
         data_length = ByteEncoder.length(data)
         ok_versions = []
         determined_width = set()
         determined_height = set()
 
         for version_name, qr_version in data_capacities.items():
-            if data_length <= qr_version['capacity']['Byte'][error_correction_level]:
+            if data_length <= qr_version['capacity']['Byte'][ecc]:
                 width, height = qr_version['width'], qr_version['height']
                 if not width in determined_width and not height in determined_height:
                     determined_width.add(width)
@@ -45,12 +45,12 @@ class rMQR:
         selected = sorted(ok_versions, key=sort_key)[0]
         print(f"selected: {selected}")
 
-        qr = rMQR(selected['version'], error_correction_level)
+        qr = rMQR(selected['version'], ecc)
         qr.make(data)
         return qr
 
 
-    def __init__(self, version, error_correction_level):
+    def __init__(self, version, ecc):
         if not rMQR.validate_version(version):
             raise IllegalVersionError("The rMQR version is illegal.")
 
@@ -58,7 +58,7 @@ class rMQR:
         self._version = version
         self._height = qr_version['height']
         self._width = qr_version['width']
-        self._error_correction_level = error_correction_level
+        self._error_correction_level = ecc
         self._qr = [[Color.UNDEFINED for x in range(self._width)] for y in range(self._height)]
 
 

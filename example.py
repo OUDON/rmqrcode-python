@@ -10,7 +10,7 @@ def main():
     fit_strategy = FitStrategy.BALANCED
 
     # Determine rMQR version automatically
-    qr = rMQR.fit(data, error_correction_level, fit_strategy=fit_strategy)
+    qr = rMQR.fit(data, ecc=error_correction_level, fit_strategy=fit_strategy)
     qr.dump()
 
     # Determine rMQR version manually
