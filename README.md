@@ -20,13 +20,17 @@ qr = rMQR.fit(
 ```
 
 The `ecc` parameter is an enum value of rmqrcode.ErrorCollectionLevel to select error collection level. The following values are available:
-- `ErrorCollectionLevel.M`: Approx. 15% Recovery Capacity.
-- `ErrorCollectionLevel.H`: Approx. 30% Recovery Capacity.
+- **`ErrorCollectionLevel.M`**: Approx. 15% Recovery Capacity.
+- **`ErrorCollectionLevel.H`**: Approx. 30% Recovery Capacity.
 
 The `fit_strategy` parameter is enum value of rmqrcode.FitStrategy to specify how to determine size of rMQR Code. The following values are available:
-- 'FitStrategy.MINIMIZE_WIDTH': Try to minimize width.
-- 'FitStrategy.MINIMIZE_HEIGHT': Try to minimize height.
-- 'FitStrategy.BALANCED': Try to keep balance of width and height.
+- **`FitStrategy.MINIMIZE_WIDTH`**: Try to minimize width.
+- **`FitStrategy.MINIMIZE_HEIGHT`**: Try to minimize height.
+- **`FitStrategy.BALANCED`**: Try to keep balance of width and height.
+
+Here is an example of images genereated by each fit strategies for data `Test test test`:
+![Example of fit strategies](https://user-images.githubusercontent.com/14174940/172822478-4f2b5fb8-49bd-464f-b6b2-c7347f71cbf5.png)
+
 
 ----
 The word "QR Code" is registered trademark of DENSO WAVE Incorporated.<br>
