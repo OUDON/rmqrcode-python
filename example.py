@@ -22,7 +22,7 @@ def main():
     # print(qr)
 
     # Save as png
-    image = QRImage(qr)
+    image = QRImage(qr, module_size=8)
     image.show()
     image.save("my_qr.png")
 
