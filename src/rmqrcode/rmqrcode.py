@@ -60,6 +60,7 @@ class rMQR:
 
         qr = rMQR(selected['version'], ecc)
         qr.make(data)
+        raise DataTooLongError
         return qr
 
 
