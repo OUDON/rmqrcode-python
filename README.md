@@ -16,6 +16,7 @@ pip install rmqrcode
 
 
 ## Basic Usage
+### Generate rMQR Code
 ```py
 from rmqrcode import rMQR
 import rmqrcode
@@ -40,6 +41,15 @@ The `fit_strategy` parameter is enum value of rmqrcode.FitStrategy to specify ho
 Here is an example of images genereated by each fit strategies for data `Test test test`:
 ![Example of fit strategies](https://user-images.githubusercontent.com/14174940/172822478-4f2b5fb8-49bd-464f-b6b2-c7347f71cbf5.png)
 
+### Save as image
+```py
+from rmqrcode import QRImage
+
+image = QRImage(qr, module_size=8)
+image.show()
+image.save("my_qr.png")
+```
+
 
 ## Advanced Usage
 ### Select rMQR Code size manually
@@ -48,6 +58,17 @@ To select rMQR Code size manually, use `rMQR()` constructor.
 qr = rMQR('R11x139', ErrorCorrectionLevel.H)
 qr.make("https://oudon.xyz")
 ```
+
+`R11x139` means 11 rows and 139 columns. The following table shows available combinations.
+						
+| |27|43|59|77|99|139|
+|-|-|-|-|-|-|-|
+|R7|❌|✅|✅|✅|✅|✅|
+|R9|❌|✅|✅|✅|✅|✅|
+|R11|✅|✅|✅|✅|✅|✅|
+|R13|✅|✅|✅|✅|✅|✅|
+|R15|❌|✅|✅|✅|✅|✅|
+|R17|❌|✅|✅|✅|✅|✅|
 
 
 ----
