@@ -41,6 +41,7 @@ optional arguments:
 ```
 
 ### Generate rMQR Code
+Alternatively, you can also use in python scripts:
 ```py
 from rmqrcode import rMQR
 import rmqrcode
