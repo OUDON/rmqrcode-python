@@ -16,6 +16,30 @@ pip install rmqrcode
 
 
 ## 📕 Basic Usage
+### CLI
+Generate an rMQR Code image from your command line, use `rmqr` command:
+```sh
+rmqr 'Text data' 'my_qr.png'
+```
+
+See the help to list the options:
+```sh
+➜ rmqr -h
+usage: rmqr [-h] [--ecc {M,H}] [--version VERSION] [--fit-strategy {min_width,min_height,balanced}]
+            DATA OUTPUT
+
+positional arguments:
+  DATA                  Data to encode.
+  OUTPUT                Output file path
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --ecc {M,H}           Error correction level. (default: M)
+  --version VERSION     rMQR Code version like 'R11x139'.
+  --fit-strategy {min_width,min_height,balanced}
+                        Strategy how to determine rMQR Code size.
+```
+
 ### Generate rMQR Code
 ```py
 from rmqrcode import rMQR
@@ -60,7 +84,7 @@ qr.make("https://oudon.xyz")
 ```
 
 `R11x139` means 11 rows and 139 columns. The following table shows available combinations.
-						
+
 | |27|43|59|77|99|139|
 |-|:-:|:-:|:-:|:-:|:-:|:-:|
 |R7|❌|✅|✅|✅|✅|✅|
