@@ -265,6 +265,9 @@ class rMQR:
         encoded_data = self._convert_to_bites_data(data, character_count_length, codewords_total)
         codewords = split_into_8bits(encoded_data)
 
+        if len(codewords) > codewords_total:
+            raise DataTooLongError("The data is too long.")
+
         # codeword数に満たない場合は規定の文字列を付与する
         while True:
             if len(codewords) >= codewords_total:
