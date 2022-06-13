@@ -4,7 +4,7 @@ class GaloisFields:
     i2e = {}
 
     def __init__(self):
-        # GF(2^8)の既約多項式
+        # Irreducible polynomial in GF(2^8)
         p = (1<<8)|(1<<4)|(1<<3)|(1<<2)|1
 
         self.e2i[0] = 1
