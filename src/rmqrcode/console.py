@@ -62,8 +62,6 @@ def main():
 
     _save_image(qr, args.OUTPUT)
 
-    print(f"{qr}")
-
 
 def _init_argparser():
     parser = argparse.ArgumentParser()
