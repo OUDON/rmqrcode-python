@@ -1,6 +1,6 @@
 from .format.error_correction_level import ErrorCorrectionLevel
-from .format.qr_versions import qr_versions
-from .format.data_capacities import data_capacities
+from .format.rmqr_versions import rMQRVersions
+from .format.data_capacities import DataCapacities
 from .format.alignment_pattern_coordinates import AlignmentPatternCoordinates
 from .format.generator_polynomials import GeneratorPolynomials
 from .format.mask import mask
@@ -33,7 +33,7 @@ class rMQR:
         determined_height = set()
 
         logger.debug("Select rMQR Code version")
-        for version_name, qr_version in data_capacities.items():
+        for version_name, qr_version in DataCapacities.items():
             if data_length <= qr_version['capacity']['Byte'][ecc]:
                 width, height = qr_version['width'], qr_version['height']
                 if not width in determined_width and not height in determined_height:
@@ -69,7 +69,7 @@ class rMQR:
         if not rMQR.validate_version(version):
             raise IllegalVersionError("The rMQR version is illegal.")
 
-        qr_version = qr_versions[version]
+        qr_version = rMQRVersions[version]
         self._version = version
         self._height = qr_version['height']
         self._width = qr_version['width']
@@ -248,7 +248,7 @@ class rMQR:
 
 
     def _compute_version_info(self):
-        qr_version = qr_versions[self.version_name()]
+        qr_version = rMQRVersions[self.version_name()]
         version_information_data = qr_version['version_indicator']
         if self._error_correction_level == ErrorCorrectionLevel.H:
             version_information_data |= 1<<6
@@ -258,7 +258,7 @@ class rMQR:
 
 
     def _put_data(self, data):
-        qr_version = qr_versions[self.version_name()]
+        qr_version = rMQRVersions[self.version_name()]
 
         character_count_length = qr_version['character_count_length']
         codewords_total = qr_version['codewords_total']
@@ -393,7 +393,7 @@ class rMQR:
 
     @staticmethod
     def validate_version(version_name):
-        return version_name in qr_versions
+        return version_name in rMQRVersions
 
 
 class DataTooLongError(ValueError):

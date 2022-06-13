@@ -1,7 +1,7 @@
 from .error_correction_level import ErrorCorrectionLevel
 
 
-qr_versions = {
+rMQRVersions = {
     'R7x43': {
         'version_indicator': 0b00000,
         'height': 7,
