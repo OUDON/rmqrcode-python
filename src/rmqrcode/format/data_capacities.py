@@ -2,7 +2,7 @@ from .error_correction_level import ErrorCorrectionLevel
 
 
 # ISO/IEC 23941:2022 Table 6
-data_capacities = {
+DataCapacities = {
     'R7x43': {
         'height': 7,
         'width': 43,
