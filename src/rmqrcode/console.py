@@ -53,16 +53,17 @@ def main():
     elif args.fit_strategy == 'min_height':
         fit_strategy = FitStrategy.MINIMIZE_HEIGHT
 
-    qr = _make_qr(
-        args.DATA,
-        ecc=ecc,
-        version=args.version,
-        fit_strategy=fit_strategy
-    )
+    try:
+        qr = _make_qr(
+            args.DATA,
+            ecc=ecc,
+            version=args.version,
+            fit_strategy=fit_strategy
+        )
+    except DataTooLongError:
+        _show_error_and_exit("Error: The data is too long.")
 
     _save_image(qr, args.OUTPUT)
-
-    print(f"{qr}")
 
 
 def _init_argparser():

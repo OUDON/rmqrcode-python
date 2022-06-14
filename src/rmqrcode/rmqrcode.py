@@ -1,6 +1,6 @@
 from .format.error_correction_level import ErrorCorrectionLevel
-from .format.qr_versions import qr_versions
-from .format.data_capacities import data_capacities
+from .format.rmqr_versions import rMQRVersions
+from .format.data_capacities import DataCapacities
 from .format.alignment_pattern_coordinates import AlignmentPatternCoordinates
 from .format.generator_polynomials import GeneratorPolynomials
 from .format.mask import mask
@@ -33,7 +33,7 @@ class rMQR:
         determined_height = set()
 
         logger.debug("Select rMQR Code version")
-        for version_name, qr_version in data_capacities.items():
+        for version_name, qr_version in DataCapacities.items():
             if data_length <= qr_version['capacity']['Byte'][ecc]:
                 width, height = qr_version['width'], qr_version['height']
                 if not width in determined_width and not height in determined_height:
@@ -69,7 +69,7 @@ class rMQR:
         if not rMQR.validate_version(version):
             raise IllegalVersionError("The rMQR version is illegal.")
 
-        qr_version = qr_versions[version]
+        qr_version = rMQRVersions[version]
         self._version = version
         self._height = qr_version['height']
         self._width = qr_version['width']
@@ -134,7 +134,7 @@ class rMQR:
 
     def _put_finder_pattern(self):
         # Finder pattern
-        # 周囲
+        # Outer square
         for i in range(7):
             for j in range(7):
                 if i == 0 or i == 6 or j == 0 or j == 6:
@@ -142,7 +142,7 @@ class rMQR:
                 else:
                     self._qr[i][j] = Color.WHITE
 
-        # 真ん中
+        # Inner square
         for i in range(3):
             for j in range(3):
                 self._qr[2+i][2+j] = Color.BLACK
@@ -156,19 +156,19 @@ class rMQR:
                 self._qr[7][n] = Color.WHITE
 
         # Finder sub pattern
-        # 周囲
+        # Outer square
         for i in range(5):
             for j in range(5):
                 color = Color.BLACK if i == 0 or i == 4 or j == 0 or j == 4 else Color.WHITE
                 self._qr[self._height-i-1][self._width-j-1] = color
 
-        # 真ん中
+        # Inner square
         self._qr[self._height-1-2][self._width-1-2] = Color.BLACK
 
 
     def _put_corner_finder_pattern(self):
         # Corner finder pattern
-        # 左下
+        # Bottom left
         self._qr[self._height-1][0] = Color.BLACK
         self._qr[self._height-1][1] = Color.BLACK
         self._qr[self._height-1][2] = Color.BLACK
@@ -177,7 +177,7 @@ class rMQR:
             self._qr[self._height-2][0] = Color.BLACK
             self._qr[self._height-2][1] = Color.WHITE
 
-        # 右上
+        # Top right
         self._qr[0][self._width-1] = Color.BLACK
         self._qr[0][self._width-2] = Color.BLACK
         self._qr[1][self._width-1] = Color.BLACK
@@ -191,22 +191,22 @@ class rMQR:
             for i in range(3):
                 for j in range(3):
                     color = Color.BLACK if i == 0 or i == 2 or j == 0 or j == 2 else Color.WHITE
-                    # 上側
+                    # Top side
                     self._qr[i][center_x + j - 1] = color
-                    # 下側
+                    # Bottom side
                     self._qr[self._height-1-i][center_x + j - 1] = color
 
 
     def _put_timing_pattern(self):
         # Timing pattern
-        # 横
+        # Horizontal
         for j in range(self._width):
             color = Color.BLACK if (j + 1) % 2 else Color.WHITE
             for i in [0, self._height - 1]:
                 if self._qr[i][j] == Color.UNDEFINED:
                     self._qr[i][j] = color
 
-        # 縦
+        # Vertical
         center_xs = [0, self._width - 1]
         center_xs.extend(AlignmentPatternCoordinates[self._width])
         for i in range(self._height):
@@ -248,7 +248,7 @@ class rMQR:
 
 
     def _compute_version_info(self):
-        qr_version = qr_versions[self.version_name()]
+        qr_version = rMQRVersions[self.version_name()]
         version_information_data = qr_version['version_indicator']
         if self._error_correction_level == ErrorCorrectionLevel.H:
             version_information_data |= 1<<6
@@ -258,14 +258,17 @@ class rMQR:
 
 
     def _put_data(self, data):
-        qr_version = qr_versions[self.version_name()]
+        qr_version = rMQRVersions[self.version_name()]
 
         character_count_length = qr_version['character_count_length']
         codewords_total = qr_version['codewords_total']
         encoded_data = self._convert_to_bites_data(data, character_count_length, codewords_total)
         codewords = split_into_8bits(encoded_data)
 
-        # codeword数に満たない場合は規定の文字列を付与する
+        if len(codewords) > codewords_total:
+            raise DataTooLongError("The data is too long.")
+
+        # Add the remainder codewords
         while True:
             if len(codewords) >= codewords_total:
                 break
@@ -279,7 +282,7 @@ class rMQR:
             qr_version['blocks'][self._error_correction_level]
         )
 
-        # データの並び替え
+        # Construct the final message codeword sequence
         # Data codewords
         final_codewords = []
         for i in range(len(data_codewords_per_block[-1])):
@@ -297,8 +300,8 @@ class rMQR:
                 final_codewords.append(rs_codewords[i])
                 self._logger.debug(f"Put RS data codewords {i} : {rs_codewords[i]}")
 
-        # 配置
-        dy = -1 # 最初は上方向
+        # Codeword placement
+        dy = -1 # Up
         current_codeword_idx = 0
         current_bit_idx = 0
         cx, cy = self._width - 2, self._height - 6
@@ -308,14 +311,14 @@ class rMQR:
         while True:
             for x in [cx, cx-1]:
                 if self._qr[cy][x] == Color.UNDEFINED:
-                    # 空白のセルのみ処理する
+                    # Process only empty cell
                     if current_codeword_idx == len(final_codewords):
-                        # codewordsを配置しきった場合はremainder_bitsがあれば配置する
+                        # Remainder bits
                         self._qr[cy][x] = Color.WHITE
                         mask_area[cy][x] = True
                         remainder_bits -= 1
                     else:
-                        # codewordsを配置する
+                        # Codewords
                         self._qr[cy][x] = Color.BLACK if final_codewords[current_codeword_idx][current_bit_idx] == '1' else Color.WHITE
                         mask_area[cy][x] = True
                         current_bit_idx += 1
@@ -323,15 +326,13 @@ class rMQR:
                             current_bit_idx = 0
                             current_codeword_idx += 1
 
-                    # codewordsの配置が終わりremainder_bitsも残っていなければ終了
                     if current_codeword_idx == len(final_codewords) and remainder_bits == 0:
                         break
 
-            # codewordsの配置が終わりremainder_bitsも残っていなければ終了
             if current_codeword_idx == len(final_codewords) and remainder_bits == 0:
                 break
 
-            # 座標の更新
+            # Update current coordinates
             if dy < 0 and cy == 1:
                 cx -= 2
                 dy = 1
@@ -369,7 +370,7 @@ class rMQR:
     def _convert_to_bites_data(self, data, character_count_length, codewords_total):
         encoded_data = ByteEncoder.encode(data, character_count_length)
 
-        # 付加できるなら終端文字を付け加える
+        # Terminator (may be truncated)
         if len(encoded_data) + 3 <= codewords_total * 8:
             encoded_data += "000"
 
@@ -390,7 +391,7 @@ class rMQR:
 
     @staticmethod
     def validate_version(version_name):
-        return version_name in qr_versions
+        return version_name in rMQRVersions
 
 
 class DataTooLongError(ValueError):
