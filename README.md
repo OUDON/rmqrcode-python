@@ -67,7 +67,7 @@ The `fit_strategy` parameter is enum value of `rmqrcode.FitStrategy` to specify 
 - **`FitStrategy.BALANCED`**: Try to keep balance of width and height.
 
 Here is an example of images genereated by each fit strategies for data `Test test test`:
-![Example of fit strategies](https://user-images.githubusercontent.com/14174940/172822478-4f2b5fb8-49bd-464f-b6b2-c7347f71cbf5.png)
+![Example of fit strategies](https://user-images.githubusercontent.com/14174940/175758463-07a8e10d-faf8-4e56-8a01-356443e82d19.png)
 
 ### Save as image
 ```py
