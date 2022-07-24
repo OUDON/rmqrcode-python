@@ -3,7 +3,6 @@ from .enums.color import Color
 from PIL import Image
 from PIL import ImageDraw
 
-
 class QRImage:
     def __init__(self, qr, module_size=10):
         self._module_size = module_size
@@ -14,11 +13,17 @@ class QRImage:
         )
         self._make_image(qr)
 
-
     def show(self):
         self._img.show()
         pass
 
+    def get_ndarray(self):
+        try:
+            import numpy as np
+        except ImportError:
+            raise ImportError("numpy is not installed")
+
+        return np.array(self._img)
 
     def save(self, name):
         self._img.save(name)
