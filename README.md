@@ -79,7 +79,7 @@ image.save("my_qr.png")
 ```
 
 
-## 📚 Advanced Usage
+## 📙 Advanced Usage
 ### Select rMQR Code size manually
 To select rMQR Code size manually, use `rMQR()` constructor.
 ```py
@@ -110,6 +110,16 @@ The rMQR Code has the four encoding modes Numeric, Alphanumeric, Byte and Kanji 
 |Alphanumeric||
 |Byte|✅|
 |Kanji||
+
+
+## 🤝 Contiributing
+Any suggestions are welcome! If you are interesting in contiributing, please read [CONTRIBUTING](https://github.com/OUDON/rmqrcode-python/blob/develop/CONTRIBUTING.md).
+
+
+## 📚 References
+- [Rectangular Micro QR Code (rMQR) bar code symbology specification: ISO/IEC 23941:2022](https://www.iso.org/standard/77404.html)
+- [Creating a QR Code step by step](https://www.nayuki.io/page/creating-a-qr-code-step-by-step)
+
 
 ----
 The word "QR Code" is registered trademark of DENSO WAVE Incorporated.<br>
