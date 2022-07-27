@@ -5,7 +5,14 @@ from rmqrcode import FitStrategy
 
 import logging
 
-USE_NUMPY = True
+
+try:
+    import numpy
+    import cv2
+    USE_NUMPY = True
+except ImportError:
+    USE_NUMPY = False
+
 
 def main():
     data = "https://oudon.xyz"
@@ -29,7 +36,6 @@ def main():
 
     # Convert to numpy array
     if USE_NUMPY:
-        import cv2
         img = image.get_ndarray()
         cv2.imshow("img", img)
         cv2.waitKey(0)
