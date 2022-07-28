@@ -10,4 +10,5 @@ Consider starting commit message with one of the following prefixes.
 - `fix:` : Bug fix
 - `refactor:` : Refactoring
 - `chore:` : Little things
+- `ci`: CI
 - `doc:` : Documentation
