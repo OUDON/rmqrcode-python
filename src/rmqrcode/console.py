@@ -2,7 +2,6 @@
 import argparse
 import sys
 
-import rmqrcode
 from rmqrcode import DataTooLongError, ErrorCorrectionLevel, FitStrategy, IllegalVersionError, QRImage, rMQR
 
 
@@ -12,7 +11,7 @@ def _show_error_and_exit(msg):
 
 
 def _make_qr(data, ecc, version, fit_strategy):
-    if version == None:
+    if version is None:
         qr = rMQR.fit(data, ecc=ecc, fit_strategy=fit_strategy)
     else:
         try:

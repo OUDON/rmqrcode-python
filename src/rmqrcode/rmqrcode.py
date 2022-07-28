@@ -35,7 +35,7 @@ class rMQR:
         for version_name, qr_version in DataCapacities.items():
             if data_length <= qr_version["capacity"]["Byte"][ecc]:
                 width, height = qr_version["width"], qr_version["height"]
-                if not width in determined_width and not height in determined_height:
+                if width not in determined_width and height not in determined_height:
                     determined_width.add(width)
                     determined_height.add(height)
                     ok_versions.append(
@@ -51,11 +51,20 @@ class rMQR:
             raise DataTooLongError("The data is too long.")
 
         if fit_strategy == FitStrategy.MINIMIZE_WIDTH:
-            sort_key = lambda x: x["width"]
+
+            def sort_key(x):
+                return x["width"]
+
         elif fit_strategy == FitStrategy.MINIMIZE_HEIGHT:
-            sort_key = lambda x: x["height"]
+
+            def sort_key(x):
+                return x["height"]
+
         elif fit_strategy == FitStrategy.BALANCED:
-            sort_key = lambda x: x["height"] * 9 + x["width"]
+
+            def sort_key(x):
+                return x["height"] * 9 + x["width"]
+
         selected = sorted(ok_versions, key=sort_key)[0]
         logger.debug(f"selected: {selected}")
 
