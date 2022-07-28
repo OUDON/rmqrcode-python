@@ -2,7 +2,14 @@
 import argparse
 import sys
 
-from rmqrcode import DataTooLongError, ErrorCorrectionLevel, FitStrategy, IllegalVersionError, QRImage, rMQR
+from rmqrcode import (
+    DataTooLongError,
+    ErrorCorrectionLevel,
+    FitStrategy,
+    IllegalVersionError,
+    QRImage,
+    rMQR,
+)
 
 
 def _show_error_and_exit(msg):
