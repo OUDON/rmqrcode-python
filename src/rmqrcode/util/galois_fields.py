@@ -5,7 +5,7 @@ class GaloisFields:
 
     def __init__(self):
         # Irreducible polynomial in GF(2^8)
-        p = (1<<8)|(1<<4)|(1<<3)|(1<<2)|1
+        p = (1 << 8) | (1 << 4) | (1 << 3) | (1 << 2) | 1
 
         self.e2i[0] = 1
         self.e2i[255] = 1
@@ -15,7 +15,7 @@ class GaloisFields:
         tmp = 1
         for e in range(1, 255):
             tmp <<= 1
-            if tmp & (1<<8):
+            if tmp & (1 << 8):
                 tmp ^= p
             self.e2i[e] = tmp
             self.i2e[tmp] = e

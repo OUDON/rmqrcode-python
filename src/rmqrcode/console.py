@@ -1,14 +1,9 @@
 #!/usr/bin/env python
-import rmqrcode
-from rmqrcode import rMQR
-from rmqrcode import QRImage
-from rmqrcode import ErrorCorrectionLevel
-from rmqrcode import FitStrategy
-from rmqrcode import DataTooLongError
-from rmqrcode import IllegalVersionError
-
 import argparse
 import sys
+
+import rmqrcode
+from rmqrcode import DataTooLongError, ErrorCorrectionLevel, FitStrategy, IllegalVersionError, QRImage, rMQR
 
 
 def _show_error_and_exit(msg):
@@ -29,7 +24,6 @@ def _make_qr(data, ecc, version, fit_strategy):
     return qr
 
 
-
 def _save_image(qr, output):
     image = QRImage(qr)
     try:
@@ -42,24 +36,19 @@ def main():
     parser = _init_argparser()
     args = parser.parse_args()
 
-    if args.ecc == 'M':
+    if args.ecc == "M":
         ecc = ErrorCorrectionLevel.M
-    elif args.ecc == 'H':
+    elif args.ecc == "H":
         ecc = ErrorCorrectionLevel.H
 
     fit_strategy = FitStrategy.BALANCED
-    if args.fit_strategy == 'min_width':
+    if args.fit_strategy == "min_width":
         fit_strategy = FitStrategy.MINIMIZE_WIDTH
-    elif args.fit_strategy == 'min_height':
+    elif args.fit_strategy == "min_height":
         fit_strategy = FitStrategy.MINIMIZE_HEIGHT
 
     try:
-        qr = _make_qr(
-            args.DATA,
-            ecc=ecc,
-            version=args.version,
-            fit_strategy=fit_strategy
-        )
+        qr = _make_qr(args.DATA, ecc=ecc, version=args.version, fit_strategy=fit_strategy)
     except DataTooLongError:
         _show_error_and_exit("Error: The data is too long.")
 
@@ -68,11 +57,18 @@ def main():
 
 def _init_argparser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('DATA', type=str, help="Data to encode.")
-    parser.add_argument('OUTPUT', type=str, help="Output file path")
-    parser.add_argument('--ecc', help="Error correction level. (default: M)", type=str, choices=["M", "H"], default='M')
-    parser.add_argument('--version', help="rMQR Code version like 'R11x139'.")
-    parser.add_argument('--fit-strategy', choices=["min_width", "min_height", "balanced"], help="Strategy how to determine rMQR Code size.", dest="fit_strategy")
+    parser.add_argument("DATA", type=str, help="Data to encode.")
+    parser.add_argument("OUTPUT", type=str, help="Output file path")
+    parser.add_argument(
+        "--ecc", help="Error correction level. (default: M)", type=str, choices=["M", "H"], default="M"
+    )
+    parser.add_argument("--version", help="rMQR Code version like 'R11x139'.")
+    parser.add_argument(
+        "--fit-strategy",
+        choices=["min_width", "min_height", "balanced"],
+        help="Strategy how to determine rMQR Code size.",
+        dest="fit_strategy",
+    )
     return parser
 
 
