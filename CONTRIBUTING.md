@@ -11,3 +11,10 @@ Consider starting commit message with one of the following prefixes.
 - `refactor:` : Refactoring
 - `chore:` : Little things
 - `doc:` : Documentation
+
+
+## Pull Requests
+Before make a pull request, please do the following.
+1. `make format`
+2. `make lint`
+3. `python -m pytest` and make sure all tests pass.
