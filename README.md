@@ -117,7 +117,8 @@ Any suggestions are welcome! If you are interesting in contiributing, please rea
 
 
 ## 📚 References
-- [Rectangular Micro QR Code (rMQR) bar code symbology specification: ISO/IEC 23941:2022](https://www.iso.org/standard/77404.html)
+- [Rectangular Micro QR Code (rMQR) bar code symbology specification: ISO/IEC 23941](https://www.iso.org/standard/77404.html)
+- [rMQR Code | QRcode.com | DENSO WAVE](https://www.qrcode.com/en/codes/rmqr.html)
 - [Creating a QR Code step by step](https://www.nayuki.io/page/creating-a-qr-code-step-by-step)
 
 
