@@ -14,6 +14,8 @@ from .util.utilities import split_into_8bits
 
 
 class rMQR:
+    QUIET_ZONE_MODULES = 2
+
     @staticmethod
     def _init_logger():
         logger = logging.getLogger(__name__)
@@ -72,7 +74,7 @@ class rMQR:
         qr.make(data)
         return qr
 
-    def __init__(self, version, ecc, logger=None):
+    def __init__(self, version, ecc, with_quiet_zone=True, logger=None):
         self._logger = logger or rMQR._init_logger()
 
         if not rMQR.validate_version(version):
@@ -109,10 +111,23 @@ class rMQR:
     def value_at(self, x, y):
         return self._qr[y][x]
 
-    def to_list(self):
-        return [list(map(lambda x: 1 if x == Color.BLACK else 0, column)) for column in self._qr]
+    def to_list(self, with_quiet_zone=True):
+        res = []
+        if with_quiet_zone:
+            for y in range(self.QUIET_ZONE_MODULES):
+                res.append([0] * (self.width() + self.QUIET_ZONE_MODULES * 2))
+            for row in self._to_binary_list():
+                res.append([0] * self.QUIET_ZONE_MODULES + row + [0] * self.QUIET_ZONE_MODULES)
+            for y in range(self.QUIET_ZONE_MODULES):
+                res.append([0] * (self.width() + self.QUIET_ZONE_MODULES * 2))
+        else:
+            res = self._to_binary_list()
+        return res
 
-    def __str__(self):
+    def _to_binary_list(self):
+            return [list(map(lambda x: 1 if x == Color.BLACK else 0, column)) for column in self._qr]
+
+    def __str__(self, with_quiet_zone=True):
         res = ""
 
         show = {}
@@ -123,13 +138,25 @@ class rMQR:
         show[False] = "_"
 
         res += f"rMQR Version R{self._height}x{self._width}:\n"
-        for i in range(self._height):
-            for j in range(self._width):
+        if with_quiet_zone:
+            res += (show[False] * (self.width() + self.QUIET_ZONE_MODULES * 2) + '\n') * self.QUIET_ZONE_MODULES
+
+        for i in range(self.height()):
+            if with_quiet_zone:
+                res += show[False] * self.QUIET_ZONE_MODULES
+
+            for j in range(self.width()):
                 if self._qr[i][j] in show:
                     res += show[self._qr[i][j]]
                 else:
                     res += self._qr[i][j]
+
+            if with_quiet_zone:
+                res += show[False] * self.QUIET_ZONE_MODULES
             res += "\n"
+
+        if with_quiet_zone:
+            res += (show[False] * (self.width() + self.QUIET_ZONE_MODULES * 2) + '\n') * self.QUIET_ZONE_MODULES
         return res
 
     def _put_finder_pattern(self):
