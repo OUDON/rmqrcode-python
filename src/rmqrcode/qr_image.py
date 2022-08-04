@@ -1,7 +1,5 @@
 from PIL import Image, ImageDraw
 
-from .enums.color import Color
-
 
 class QRImage:
     def __init__(self, qr, module_size=10):
