@@ -125,7 +125,7 @@ class rMQR:
         return res
 
     def _to_binary_list(self):
-            return [list(map(lambda x: 1 if x == Color.BLACK else 0, column)) for column in self._qr]
+        return [list(map(lambda x: 1 if x == Color.BLACK else 0, column)) for column in self._qr]
 
     def __str__(self, with_quiet_zone=True):
         res = ""
@@ -139,7 +139,7 @@ class rMQR:
 
         res += f"rMQR Version R{self._height}x{self._width}:\n"
         if with_quiet_zone:
-            res += (show[False] * (self.width() + self.QUIET_ZONE_MODULES * 2) + '\n') * self.QUIET_ZONE_MODULES
+            res += (show[False] * (self.width() + self.QUIET_ZONE_MODULES * 2) + "\n") * self.QUIET_ZONE_MODULES
 
         for i in range(self.height()):
             if with_quiet_zone:
@@ -156,7 +156,7 @@ class rMQR:
             res += "\n"
 
         if with_quiet_zone:
-            res += (show[False] * (self.width() + self.QUIET_ZONE_MODULES * 2) + '\n') * self.QUIET_ZONE_MODULES
+            res += (show[False] * (self.width() + self.QUIET_ZONE_MODULES * 2) + "\n") * self.QUIET_ZONE_MODULES
         return res
 
     def _put_finder_pattern(self):
