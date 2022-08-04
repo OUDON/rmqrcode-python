@@ -7,9 +7,7 @@ class QRImage:
     def __init__(self, qr, module_size=10):
         self._module_size = module_size
         qr_list = qr.to_list()
-        self._img = Image.new(
-            "RGB", (len(qr_list[0]) * module_size, len(qr_list) * module_size), (255, 255, 255)
-        )
+        self._img = Image.new("RGB", (len(qr_list[0]) * module_size, len(qr_list) * module_size), (255, 255, 255))
         self._make_image(qr_list)
 
     def show(self):
