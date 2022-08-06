@@ -2,6 +2,10 @@
 Thank you for interesting in contributing to rmqrcode-python! Any suggestions are welcome.
 
 ## Style Guides
+
+### Docstrings
+This project uses [Google-Style format](https://google.github.io/styleguide/pyguide.html#381-docstrings) docstrings.
+
 ### Git Commit Message
 Consider starting commit message with one of the following prefixes.
 - `feat:` : New feature

@@ -18,6 +18,12 @@ class rMQR:
 
     @staticmethod
     def _init_logger():
+        """ Initializes a logger and returns it.
+
+        Returns:
+            logging.RootLogger: Logger
+
+        """
         logger = logging.getLogger(__name__)
         logger.addHandler(logging.NullHandler())
         logger.setLevel(logging.DEBUG)
@@ -26,6 +32,20 @@ class rMQR:
 
     @staticmethod
     def fit(data, ecc=ErrorCorrectionLevel.M, fit_strategy=FitStrategy.BALANCED):
+        """ Attempts to make an rMQR have optimized version for given data.
+
+        Args:
+            data (str): Data to encode.
+            ecc (rmqrcode.ErrorCorrectionLevel): Error correction level.
+            fit_strategy (rmqrcode.FitStrategy): Strategy how determine rMQR Code version.
+
+        Returns:
+            rmqrcode.rMQR: Optimized rMQR Code.
+
+        Raises:
+            rmqrcode.DataTooLongError: If the data is too long to encode.
+
+        """
         logger = rMQR._init_logger()
 
         data_length = ByteEncoder.length(data)
@@ -97,21 +117,84 @@ class rMQR:
         self._apply_mask(mask_area)
 
     def version_name(self):
+        """ Returns the version name.
+
+        Returns:
+            str: The version name.
+
+        Examples:
+            >>> qr.version_name()
+                "R13x77"
+
+        """
         return f"R{self._height}x{self._width}"
 
     def size(self):
+        """ Returns the size.
+
+        Returns:
+            tuple: The rMQR Code size.
+
+        Examples:
+            >>> qr.size()
+                (77, 13)
+
+        Note:
+            This not includes the quiet zone.
+
+        """
         return (self.width(), self.height())
 
     def height(self):
+        """ Returns the height.
+
+        Returns:
+            int: The height.
+
+        Note:
+            This not includes the quiet zone.
+
+        """
         return self._height
 
     def width(self):
+        """ Returns the width.
+
+        Returns:
+            int: The width.
+
+        Note:
+            This not includes the quiet zone.
+
+        """
         return self._width
 
     def value_at(self, x, y):
+        """ DEPRECATED: Returns the color at the point of (x, y).
+
+        Returns:
+            rmqrcode.Color: The color of rMQRCode at the point of (x, y).
+
+        Note:
+            This method is deprecated. Use to_list() alternatively.
+            This not includes the quiet zone.
+
+        """
         return self._qr[y][x]
 
     def to_list(self, with_quiet_zone=True):
+        """ Convert to two-dimensional list and returns it.
+
+            The value is 1 for the dark module and 0 for the light module.
+
+            Arguments:
+                with_quiet_zone (bool): Flag to select whether include the quiet zone.
+
+            Returns:
+                list: Converted list.
+
+        """
+
         res = []
         if with_quiet_zone:
             for y in range(self.QUIET_ZONE_MODULES):
