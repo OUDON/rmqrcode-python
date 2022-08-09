@@ -15,6 +15,7 @@ Example:
         qr.make("https://oudon.xyz")
 
 """
+
 import logging
 
 from .encoder.byte_encoder import ByteEncoder
@@ -37,6 +38,7 @@ class rMQR:
         QUIET_ZONE_MODULES (int): The width of the quiet zone.
 
     """
+
     QUIET_ZONE_MODULES = 2
 
     @staticmethod
