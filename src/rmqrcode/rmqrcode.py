@@ -1,3 +1,21 @@
+"""A module to make an rMQR Code.
+
+Example:
+    Use the rMQR.fit method to make an rMQR automatically with some options.
+
+        qr = rMQR.fit(
+            "https://oudon.xyz",
+            ecc=ErrorCorrectionLevel.M,
+            fit_strategy=FitStrategy.MINIMIZE_WIDTH
+        )
+
+    The following example shows how to select the size of an rMQR Code.
+
+        qr = rMQR("R11x139", ErrorCorrectionLevel.H)
+        qr.make("https://oudon.xyz")
+
+"""
+
 import logging
 
 from .encoder.byte_encoder import ByteEncoder
@@ -14,10 +32,23 @@ from .util.utilities import split_into_8bits
 
 
 class rMQR:
+    """A class to make an rMQR Code.
+
+    Attributes:
+        QUIET_ZONE_MODULES (int): The width of the quiet zone.
+
+    """
+
     QUIET_ZONE_MODULES = 2
 
     @staticmethod
     def _init_logger():
+        """Initializes a logger and returns it.
+
+        Returns:
+            logging.RootLogger: Logger
+
+        """
         logger = logging.getLogger(__name__)
         logger.addHandler(logging.NullHandler())
         logger.setLevel(logging.DEBUG)
@@ -26,6 +57,20 @@ class rMQR:
 
     @staticmethod
     def fit(data, ecc=ErrorCorrectionLevel.M, fit_strategy=FitStrategy.BALANCED):
+        """Attempts to make an rMQR have optimized version for given data.
+
+        Args:
+            data (str): Data string to encode.
+            ecc (rmqrcode.ErrorCorrectionLevel): Error correction level.
+            fit_strategy (rmqrcode.FitStrategy): Strategy how determine rMQR Code version.
+
+        Returns:
+            rmqrcode.rMQR: Optimized rMQR Code.
+
+        Raises:
+            rmqrcode.DataTooLongError: If the data is too long to encode.
+
+        """
         logger = rMQR._init_logger()
 
         data_length = ByteEncoder.length(data)
@@ -88,6 +133,14 @@ class rMQR:
         self._qr = [[Color.UNDEFINED for x in range(self._width)] for y in range(self._height)]
 
     def make(self, data):
+        """Makes an rMQR Code for given data
+
+        Args:
+            data (str): Data string.
+
+        Returns:
+            void
+        """
         self._put_finder_pattern()
         self._put_corner_finder_pattern()
         self._put_alignment_pattern()
@@ -97,21 +150,84 @@ class rMQR:
         self._apply_mask(mask_area)
 
     def version_name(self):
+        """Returns the version name.
+
+        Returns:
+            str: The version name.
+
+        Examples:
+            >>> qr.version_name()
+                "R13x77"
+
+        """
         return f"R{self._height}x{self._width}"
 
     def size(self):
+        """Returns the size.
+
+        Returns:
+            tuple: The rMQR Code size.
+
+        Examples:
+            >>> qr.size()
+                (77, 13)
+
+        Note:
+            This not includes the quiet zone.
+
+        """
         return (self.width(), self.height())
 
     def height(self):
+        """Returns the height.
+
+        Returns:
+            int: The height.
+
+        Note:
+            This not includes the quiet zone.
+
+        """
         return self._height
 
     def width(self):
+        """Returns the width.
+
+        Returns:
+            int: The width.
+
+        Note:
+            This not includes the quiet zone.
+
+        """
         return self._width
 
     def value_at(self, x, y):
+        """DEPRECATED: Returns the color at the point of (x, y).
+
+        Returns:
+            rmqrcode.Color: The color of rMQRCode at the point of (x, y).
+
+        Note:
+            This method is deprecated. Use to_list() alternatively.
+            This not includes the quiet zone.
+
+        """
         return self._qr[y][x]
 
     def to_list(self, with_quiet_zone=True):
+        """Converts to two-dimensional list and returns it.
+
+        The value is 1 for the dark module and 0 for the light module.
+
+        Args:
+            with_quiet_zone (bool): Flag to select whether include the quiet zone.
+
+        Returns:
+            list: Converted list.
+
+        """
+
         res = []
         if with_quiet_zone:
             for y in range(self.QUIET_ZONE_MODULES):
@@ -125,6 +241,19 @@ class rMQR:
         return res
 
     def _to_binary_list(self):
+        """Converts to two-dimensional list and returns it.
+
+        The value is 1 for the dark module and 0 for the light module.
+
+        Args:
+            with_quiet_zone (bool): Flag to select whether include the quiet zone.
+
+        Returns:
+            list: Converted list.
+
+        Note:
+            This not includes the quiet zone.
+        """
         return [list(map(lambda x: 1 if x == Color.BLACK else 0, column)) for column in self._qr]
 
     def __str__(self, with_quiet_zone=True):
@@ -283,6 +412,21 @@ class rMQR:
         return version_information_data
 
     def _put_data(self, data):
+        """Symbol character placement.
+
+        This method puts data into the encoding region of the rMQR Code. Also this
+        method computes a two-dimensional list shows where encoding region at the
+        same time. And returns the list.
+
+        See: "7.7.3 Symbol character placement" in the ISO/IEC 23941.
+
+        Args:
+            data (str): Data string.
+
+        Returns:
+            list: A two-dimensional list shows where encoding region.
+
+        """
         qr_version = rMQRVersions[self.version_name()]
 
         character_count_length = qr_version["character_count_length"]
@@ -403,6 +547,18 @@ class rMQR:
         return encoded_data
 
     def _apply_mask(self, mask_area):
+        """Data masking.
+
+        This method applies the data mask.
+
+        Args:
+            mask_area (list): A two-dimensional list shows where encoding region.
+                This is computed by self._put_data().
+
+        Returns:
+            void
+
+        """
         for y in range(self._height):
             for x in range(self._width):
                 if not mask_area[y][x]:
@@ -415,12 +571,33 @@ class rMQR:
 
     @staticmethod
     def validate_version(version_name):
+        """Check if the given version_name is valid
+
+        Args:
+            version_name (str): Version name.
+
+        Returns:
+            bool: Validation result.
+
+        Example:
+            >>> rMQR.validate_version("R13x77")
+                True
+
+            >>> rMQR.validate_version("R14x55")
+                False
+
+            >>> rMQR.validate_version("13, 77")
+                False
+
+        """
         return version_name in rMQRVersions
 
 
 class DataTooLongError(ValueError):
+    "A class represents an error raised when the given data is too long."
     pass
 
 
 class IllegalVersionError(ValueError):
+    "A class represents an error raised when the given version name is illegal."
     pass
