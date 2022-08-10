@@ -6,6 +6,14 @@ from rmqrcode import FitStrategy
 import logging
 
 
+try:
+    import numpy
+    import cv2
+    USE_NUMPY = True
+except ImportError:
+    USE_NUMPY = False
+
+
 def main():
     data = "https://oudon.xyz"
     error_correction_level = ErrorCorrectionLevel.M
@@ -25,6 +33,13 @@ def main():
     image = QRImage(qr, module_size=8)
     image.show()
     image.save("my_qr.png")
+
+    # Convert to numpy array
+    if USE_NUMPY:
+        img = image.get_ndarray()
+        cv2.imshow("img", img)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
 
 
 def _init_logger():

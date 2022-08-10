@@ -14,6 +14,12 @@ class TestRMQR:
         qr = rMQR('R13x99', ErrorCorrectionLevel.M)
         qr.make("abc")
 
+        assert len(qr.to_list(with_quiet_zone=True)) is 17
+        assert len(qr.to_list(with_quiet_zone=True)[0]) is 103
+
+        assert len(qr.to_list(with_quiet_zone=False)) is 13
+        assert len(qr.to_list(with_quiet_zone=False)[0]) is 99
+
     def test_raise_too_long_error(self):
         with pytest.raises(DataTooLongError) as e:
             s = "a".ljust(200, "a")

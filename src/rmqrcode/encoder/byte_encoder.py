@@ -4,11 +4,10 @@ class ByteEncoder:
     @staticmethod
     def _encoded_bits(s):
         res = ""
-        encoded = s.encode('utf-8')
+        encoded = s.encode("utf-8")
         for byte in encoded:
             res += bin(byte)[2:].zfill(8)
         return res
-
 
     @staticmethod
     def encode(data, character_count_length):
@@ -17,7 +16,6 @@ class ByteEncoder:
         res += ByteEncoder._encoded_bits(data)
         return res
 
-
     @staticmethod
     def length(data):
-        return len(data.encode('utf-8'))
+        return len(data.encode("utf-8"))
