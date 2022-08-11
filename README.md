@@ -1,4 +1,4 @@
-# An rMQR Code Generator
+# Rectangular Micro QR Code (rMQR Code) Generator
 ![reop-url](https://user-images.githubusercontent.com/14174940/172978619-accbf9d0-9dd8-4b19-b47e-ad139a68dcc9.png)
 
 
