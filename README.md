@@ -2,7 +2,7 @@
 ![reop-url](https://user-images.githubusercontent.com/14174940/172978619-accbf9d0-9dd8-4b19-b47e-ad139a68dcc9.png)
 
 
-The rMQR Code is a rectangular two-dimensional barcode. This package can generate an rMQR Code image. This is implemented based on [ISO/IEC 23941: Rectangular Micro QR Code (rMQR) bar code symbology specification](https://www.iso.org/standard/77404.html).
+The rMQR Code is a rectangular two-dimensional barcode. This is easy to print in narrow space compared to conventional QR Code. This package can generate an rMQR Code image. This is implemented based on [ISO/IEC 23941: Rectangular Micro QR Code (rMQR) bar code symbology specification](https://www.iso.org/standard/77404.html).
 
 [![pytest](https://github.com/OUDON/rmqrcode-python/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/OUDON/rmqrcode-python/actions/workflows/python-app.yml)
 ![PyPI](https://img.shields.io/pypi/v/rmqrcode?color=blue)
