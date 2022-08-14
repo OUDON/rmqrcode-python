@@ -24,3 +24,7 @@ class ByteEncoder(EncoderBase):
     @classmethod
     def length(cls, data, character_count_indicator_length):
         return len(cls.mode_indicator()) + character_count_indicator_length + 8 * len(data.encode("utf-8"))
+
+    @classmethod
+    def is_valid_characters(cls, data):
+        return True # Any characters can encode in the Byte Mode
