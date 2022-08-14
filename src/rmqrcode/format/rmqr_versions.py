@@ -8,7 +8,7 @@ rMQRVersions = {
         "height": 7,
         "width": 43,
         "remainder_bits": 0,
-        "character_count_length": {
+        "character_count_indicator_length": {
             ByteEncoder: 3,
             NumericEncoder: 4,
         },
@@ -35,7 +35,7 @@ rMQRVersions = {
         "height": 7,
         "width": 59,
         "remainder_bits": 3,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 5,
             ByteEncoder: 4,
         },
@@ -62,7 +62,7 @@ rMQRVersions = {
         "height": 7,
         "width": 77,
         "remainder_bits": 5,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 6,
             ByteEncoder: 5,
         },
@@ -89,7 +89,7 @@ rMQRVersions = {
         "height": 7,
         "width": 99,
         "remainder_bits": 6,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 7,
             ByteEncoder: 5,
         },
@@ -116,7 +116,7 @@ rMQRVersions = {
         "height": 7,
         "width": 139,
         "remainder_bits": 1,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 7,
             ByteEncoder: 6,
         },
@@ -143,7 +143,7 @@ rMQRVersions = {
         "height": 9,
         "width": 43,
         "remainder_bits": 2,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 5,
             ByteEncoder: 4,
         },
@@ -170,7 +170,7 @@ rMQRVersions = {
         "height": 9,
         "width": 59,
         "remainder_bits": 3,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 6,
             ByteEncoder: 5,
         },
@@ -197,7 +197,7 @@ rMQRVersions = {
         "height": 9,
         "width": 77,
         "remainder_bits": 1,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 7,
             ByteEncoder: 5,
         },
@@ -229,7 +229,7 @@ rMQRVersions = {
         "height": 9,
         "width": 99,
         "remainder_bits": 4,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 7,
             ByteEncoder: 6,
         },
@@ -256,7 +256,7 @@ rMQRVersions = {
         "height": 9,
         "width": 139,
         "remainder_bits": 5,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 8,
             ByteEncoder: 6,
         },
@@ -288,7 +288,7 @@ rMQRVersions = {
         "height": 11,
         "width": 27,
         "remainder_bits": 2,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 4,
             ByteEncoder: 3,
         },
@@ -315,7 +315,7 @@ rMQRVersions = {
         "height": 11,
         "width": 43,
         "remainder_bits": 1,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 6,
             ByteEncoder: 5,
         },
@@ -342,7 +342,7 @@ rMQRVersions = {
         "height": 11,
         "width": 59,
         "remainder_bits": 0,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 7,
             ByteEncoder: 5,
         },
@@ -374,7 +374,7 @@ rMQRVersions = {
         "height": 11,
         "width": 77,
         "remainder_bits": 2,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 7,
             ByteEncoder: 6,
         },
@@ -406,7 +406,7 @@ rMQRVersions = {
         "height": 11,
         "width": 99,
         "remainder_bits": 7,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 8,
             ByteEncoder: 6,
         },
@@ -443,7 +443,7 @@ rMQRVersions = {
         "height": 11,
         "width": 139,
         "remainder_bits": 6,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 8,
             ByteEncoder: 7,
         },
@@ -469,7 +469,7 @@ rMQRVersions = {
         "version_indicator": 0b10000,
         "height": 13,
         "width": 27,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 5,
             ByteEncoder: 4,
         },
@@ -497,7 +497,7 @@ rMQRVersions = {
         "height": 13,
         "width": 43,
         "remainder_bits": 1,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 6,
             ByteEncoder: 5,
         },
@@ -524,7 +524,7 @@ rMQRVersions = {
         "height": 13,
         "width": 59,
         "remainder_bits": 6,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 7,
             ByteEncoder: 6,
         },
@@ -551,7 +551,7 @@ rMQRVersions = {
         "height": 13,
         "width": 77,
         "remainder_bits": 4,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 7,
             ByteEncoder: 6,
         },
@@ -588,7 +588,7 @@ rMQRVersions = {
         "height": 13,
         "width": 99,
         "remainder_bits": 3,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 8,
             ByteEncoder: 7,
         },
@@ -625,7 +625,7 @@ rMQRVersions = {
         "height": 13,
         "width": 139,
         "remainder_bits": 0,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 8,
             ByteEncoder: 7,
         },
@@ -662,7 +662,7 @@ rMQRVersions = {
         "height": 15,
         "width": 43,
         "remainder_bits": 1,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 7,
             ByteEncoder: 6,
         },
@@ -694,7 +694,7 @@ rMQRVersions = {
         "height": 15,
         "width": 59,
         "remainder_bits": 4,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 7,
             ByteEncoder: 6,
         },
@@ -721,7 +721,7 @@ rMQRVersions = {
         "height": 15,
         "width": 77,
         "remainder_bits": 6,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 8,
             ByteEncoder: 7,
         },
@@ -758,7 +758,7 @@ rMQRVersions = {
         "height": 15,
         "width": 99,
         "remainder_bits": 7,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 8,
             ByteEncoder: 7,
         },
@@ -785,7 +785,7 @@ rMQRVersions = {
         "height": 15,
         "width": 139,
         "remainder_bits": 2,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 9,
             ByteEncoder: 7,
         },
@@ -822,7 +822,7 @@ rMQRVersions = {
         "height": 17,
         "width": 43,
         "remainder_bits": 1,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 7,
             ByteEncoder: 6,
         },
@@ -854,7 +854,7 @@ rMQRVersions = {
         "height": 17,
         "width": 59,
         "remainder_bits": 2,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 8,
             ByteEncoder: 6,
         },
@@ -881,7 +881,7 @@ rMQRVersions = {
         "height": 17,
         "width": 77,
         "remainder_bits": 0,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 8,
             ByteEncoder: 7,
         },
@@ -913,7 +913,7 @@ rMQRVersions = {
         "height": 17,
         "width": 99,
         "remainder_bits": 3,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 8,
             ByteEncoder: 7,
         },
@@ -945,7 +945,7 @@ rMQRVersions = {
         "height": 17,
         "width": 139,
         "remainder_bits": 4,
-        "character_count_length": {
+        "character_count_indicator_length": {
             NumericEncoder: 9,
             ByteEncoder: 8,
         },
