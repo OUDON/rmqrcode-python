@@ -1,6 +1,5 @@
+from ..encoder import ByteEncoder, NumericEncoder
 from .error_correction_level import ErrorCorrectionLevel
-from ..encoder import NumericEncoder, ByteEncoder
-
 
 rMQRVersions = {
     "R7x43": {

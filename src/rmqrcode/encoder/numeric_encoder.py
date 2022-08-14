@@ -50,6 +50,6 @@ class NumericEncoder(EncoderBase):
     @classmethod
     def is_valid_characters(cls, data):
         for c in data:
-            if ord(c) < ord('0') or ord(c) > ord('9'):
+            if ord(c) < ord("0") or ord(c) > ord("9"):
                 return False
         return True
