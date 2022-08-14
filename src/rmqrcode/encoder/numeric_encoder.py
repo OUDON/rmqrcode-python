@@ -1,4 +1,3 @@
-import re
 from .encoder_base import EncoderBase, IllegalCharacterError
 
 
