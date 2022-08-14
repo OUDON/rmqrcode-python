@@ -115,6 +115,7 @@ The rMQR Code has the four encoding modes Numeric, Alphanumeric, Byte and Kanji 
 |Alphanumeric||
 |Byte|✅|
 |Kanji||
+|Mixed||
 
 
 ## 🤝 Contiributing
