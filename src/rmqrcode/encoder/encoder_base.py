@@ -28,6 +28,9 @@ class EncoderBase(ABC):
         Returns:
             str: Encoded binary as string.
 
+        Raises:
+            IllegalCharacterError: If the data includes illegal character.
+
         """
         raise NotImplementedError()
 
@@ -61,3 +64,22 @@ class EncoderBase(ABC):
 
         """
         raise NotImplementedError()
+
+    @classmethod
+    @abstractmethod
+    def is_valid_characters(cls, data):
+        """Checks wether the data does not include invalid character.
+
+        Args:
+            data (str): Data to validate.
+
+        Returns:
+            bool: Validation result.
+
+        """
+        raise NotImplementedError()
+
+
+class IllegalCharacterError(ValueError):
+    "A class represents an error raised when the given data includes illegal character."
+    pass

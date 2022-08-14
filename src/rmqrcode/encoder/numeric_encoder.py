@@ -1,5 +1,5 @@
 import re
-from .encoder_base import EncoderBase
+from .encoder_base import EncoderBase, IllegalCharacterError
 
 
 class NumericEncoder(EncoderBase):
@@ -9,6 +9,9 @@ class NumericEncoder(EncoderBase):
 
     @classmethod
     def encode(cls, data, character_count_indicator_length):
+        if not cls.is_valid_characters(data):
+            raise IllegalCharacterError
+
         res = cls.mode_indicator()
         res += bin(len(data))[2:].zfill(character_count_indicator_length)
         res += cls._encoded_bits(data)
@@ -44,3 +47,10 @@ class NumericEncoder(EncoderBase):
         elif len(data) % 3 == 2:
             r = 7
         return len(cls.mode_indicator()) + character_count_indicator_length + 10 * (len(data) // 3) + r
+
+    @classmethod
+    def is_valid_characters(cls, data):
+        for c in data:
+            if ord(c) < ord('0') or ord(c) > ord('9'):
+                return False
+        return True
