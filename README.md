@@ -118,7 +118,7 @@ The rMQR Code has the four encoding modes Numeric, Alphanumeric, Byte and Kanji 
 |Mixed||
 
 
-## 🤝 Contiributing
+## 🤝 Contributing
 Any suggestions are welcome! If you are interesting in contiributing, please read [CONTRIBUTING](https://github.com/OUDON/rmqrcode-python/blob/develop/CONTRIBUTING.md).
 
 
