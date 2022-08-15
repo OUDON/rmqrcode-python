@@ -82,8 +82,10 @@ class rMQR:
 
         logger.debug("Select rMQR Code version")
         for version_name, qr_version in DataCapacities.items():
-            data_length = encoder_class.length(data, rMQRVersions[version_name]["character_count_indicator_length"][encoder_class])
-            if data_length <= qr_version["capacity"]["Byte"][ecc]:
+            data_length = encoder_class.length(
+                data, rMQRVersions[version_name]["character_count_indicator_length"][encoder_class]
+            )
+            if data_length <= qr_version["number_of_data_bits"][ecc]:
                 width, height = qr_version["width"], qr_version["height"]
                 if width not in determined_width and height not in determined_height:
                     determined_width.add(width)
@@ -439,7 +441,9 @@ class rMQR:
 
         character_count_indicator_length = qr_version["character_count_indicator_length"][encoder_class]
         codewords_total = qr_version["codewords_total"]
-        encoded_data = self._convert_to_bites_data(data, character_count_indicator_length, codewords_total, encoder_class=encoder_class)
+        encoded_data = self._convert_to_bites_data(
+            data, character_count_indicator_length, codewords_total, encoder_class=encoder_class
+        )
         codewords = split_into_8bits(encoded_data)
         print(codewords)
 
@@ -546,7 +550,9 @@ class rMQR:
 
         return data_codewords_per_block, rs_codewords_per_block
 
-    def _convert_to_bites_data(self, data, character_count_indicator_length, codewords_total, encoder_class=encoder.ByteEncoder):
+    def _convert_to_bites_data(
+        self, data, character_count_indicator_length, codewords_total, encoder_class=encoder.ByteEncoder
+    ):
         encoded_data = encoder_class.encode(data, character_count_indicator_length)
 
         # Terminator (may be truncated)

@@ -27,4 +27,4 @@ class ByteEncoder(EncoderBase):
 
     @classmethod
     def is_valid_characters(cls, data):
-        return True # Any characters can encode in the Byte Mode
+        return True  # Any characters can encode in the Byte Mode
