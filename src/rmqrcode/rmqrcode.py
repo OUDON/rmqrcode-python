@@ -18,7 +18,7 @@ Example:
 
 import logging
 
-from .encoder.byte_encoder import ByteEncoder
+from . import encoder
 from .enums.color import Color
 from .enums.fit_strategy import FitStrategy
 from .format.alignment_pattern_coordinates import AlignmentPatternCoordinates
@@ -78,11 +78,11 @@ class rMQR:
         determined_height = set()
 
         # Fixed value currently
-        encoder = ByteEncoder
+        encoder_class = encoder.ByteEncoder
 
         logger.debug("Select rMQR Code version")
         for version_name, qr_version in DataCapacities.items():
-            data_length = encoder.length(data, rMQRVersions[version_name]["character_count_indicator_length"][encoder])
+            data_length = encoder_class.length(data, rMQRVersions[version_name]["character_count_indicator_length"][encoder_class])
             if data_length <= qr_version["capacity"]["Byte"][ecc]:
                 width, height = qr_version["width"], qr_version["height"]
                 if width not in determined_width and height not in determined_height:
@@ -135,21 +135,24 @@ class rMQR:
         self._error_correction_level = ecc
         self._qr = [[Color.UNDEFINED for x in range(self._width)] for y in range(self._height)]
 
-    def make(self, data):
+    def make(self, data, encoder_class=encoder.ByteEncoder):
         """Makes an rMQR Code for given data.
 
         Args:
             data (str): Data string.
+            encoder_class (abc.ABCMeta): Pass a subclass of EncoderBase to select encoding mode.
+                Using ByteEncoder by default.
 
         Returns:
             void
+
         """
         self._put_finder_pattern()
         self._put_corner_finder_pattern()
         self._put_alignment_pattern()
         self._put_timing_pattern()
         self._put_version_information()
-        mask_area = self._put_data(data)
+        mask_area = self._put_data(data, encoder_class=encoder_class)
         self._apply_mask(mask_area)
 
     def version_name(self):
@@ -414,7 +417,7 @@ class rMQR:
         version_information_data = version_information_data << 12 | reminder_polynomial
         return version_information_data
 
-    def _put_data(self, data):
+    def _put_data(self, data, encoder_class=encoder.ByteEncoder):
         """Symbol character placement.
 
         This method puts data into the encoding region of the rMQR Code. Also this
@@ -425,6 +428,8 @@ class rMQR:
 
         Args:
             data (str): Data string.
+            encoder_class (abc.ABCMeta): Pass a subclass of EncoderBase to select encoding mode.
+                Using ByteEncoder by default.
 
         Returns:
             list: A two-dimensional list shows where encoding region.
@@ -432,13 +437,11 @@ class rMQR:
         """
         qr_version = rMQRVersions[self.version_name()]
 
-        # Fixed value currently
-        encoder = ByteEncoder
-
-        character_count_indicator_length = qr_version["character_count_indicator_length"][encoder]
+        character_count_indicator_length = qr_version["character_count_indicator_length"][encoder_class]
         codewords_total = qr_version["codewords_total"]
-        encoded_data = self._convert_to_bites_data(data, character_count_indicator_length, codewords_total, encoder)
+        encoded_data = self._convert_to_bites_data(data, character_count_indicator_length, codewords_total, encoder_class=encoder_class)
         codewords = split_into_8bits(encoded_data)
+        print(codewords)
 
         if len(codewords) > codewords_total:
             raise DataTooLongError("The data is too long.")
@@ -543,8 +546,8 @@ class rMQR:
 
         return data_codewords_per_block, rs_codewords_per_block
 
-    def _convert_to_bites_data(self, data, character_count_indicator_length, codewords_total, encoder):
-        encoded_data = encoder.encode(data, character_count_indicator_length)
+    def _convert_to_bites_data(self, data, character_count_indicator_length, codewords_total, encoder_class=encoder.ByteEncoder):
+        encoded_data = encoder_class.encode(data, character_count_indicator_length)
 
         # Terminator (may be truncated)
         if len(encoded_data) + 3 <= codewords_total * 8:
