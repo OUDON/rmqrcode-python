@@ -301,7 +301,7 @@ DataCapacities = {
         "width": 139,
         "number_of_data_bits": {
             ErrorCorrectionLevel.M: 848,
-            ErrorCorrectionLevel.H: 232,
+            ErrorCorrectionLevel.H: 432,
         },
         "capacity": {
             "Byte": {
