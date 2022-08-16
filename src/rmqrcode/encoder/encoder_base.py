@@ -32,7 +32,13 @@ class EncoderBase(ABC):
             IllegalCharacterError: If the data includes illegal character.
 
         """
-        raise NotImplementedError()
+        if not cls.is_valid_characters(data):
+            raise IllegalCharacterError
+
+        res = cls.mode_indicator()
+        res += bin(len(data))[2:].zfill(character_count_indicator_length)
+        res += cls._encoded_bits(data)
+        return res
 
     @classmethod
     @abstractmethod

@@ -7,16 +7,6 @@ class NumericEncoder(EncoderBase):
         return "001"
 
     @classmethod
-    def encode(cls, data, character_count_indicator_length):
-        if not cls.is_valid_characters(data):
-            raise IllegalCharacterError
-
-        res = cls.mode_indicator()
-        res += bin(len(data))[2:].zfill(character_count_indicator_length)
-        res += cls._encoded_bits(data)
-        return res
-
-    @classmethod
     def _encoded_bits(cls, data):
         res = ""
         data_grouped = cls._group_by_3characters(data)
