@@ -8,8 +8,10 @@ rMQRVersions = {
         "width": 43,
         "remainder_bits": 0,
         "character_count_indicator_length": {
-            ByteEncoder: 3,
             NumericEncoder: 4,
+            AlphanumericEncoder: 3,
+            ByteEncoder: 3,
+            KanjiEncoder: 2,
         },
         "codewords_total": 13,
         "blocks": {
@@ -36,7 +38,9 @@ rMQRVersions = {
         "remainder_bits": 3,
         "character_count_indicator_length": {
             NumericEncoder: 5,
+            AlphanumericEncoder: 5,
             ByteEncoder: 4,
+            KanjiEncoder: 3,
         },
         "codewords_total": 21,
         "blocks": {
@@ -63,7 +67,9 @@ rMQRVersions = {
         "remainder_bits": 5,
         "character_count_indicator_length": {
             NumericEncoder: 6,
+            AlphanumericEncoder: 5,
             ByteEncoder: 5,
+            KanjiEncoder: 4,
         },
         "codewords_total": 32,
         "blocks": {
@@ -90,7 +96,9 @@ rMQRVersions = {
         "remainder_bits": 6,
         "character_count_indicator_length": {
             NumericEncoder: 7,
+            AlphanumericEncoder: 6,
             ByteEncoder: 5,
+            KanjiEncoder: 5,
         },
         "codewords_total": 44,
         "blocks": {
@@ -117,7 +125,9 @@ rMQRVersions = {
         "remainder_bits": 1,
         "character_count_indicator_length": {
             NumericEncoder: 7,
+            AlphanumericEncoder: 6,
             ByteEncoder: 6,
+            KanjiEncoder: 5,
         },
         "codewords_total": 68,
         "blocks": {
@@ -144,7 +154,9 @@ rMQRVersions = {
         "remainder_bits": 2,
         "character_count_indicator_length": {
             NumericEncoder: 5,
+            AlphanumericEncoder: 5,
             ByteEncoder: 4,
+            KanjiEncoder: 3,
         },
         "codewords_total": 21,
         "blocks": {
@@ -171,7 +183,9 @@ rMQRVersions = {
         "remainder_bits": 3,
         "character_count_indicator_length": {
             NumericEncoder: 6,
+            AlphanumericEncoder: 5,
             ByteEncoder: 5,
+            KanjiEncoder: 4,
         },
         "codewords_total": 33,
         "blocks": {
@@ -198,7 +212,9 @@ rMQRVersions = {
         "remainder_bits": 1,
         "character_count_indicator_length": {
             NumericEncoder: 7,
+            AlphanumericEncoder: 6,
             ByteEncoder: 5,
+            KanjiEncoder: 5,
         },
         "codewords_total": 49,
         "blocks": {
@@ -230,7 +246,9 @@ rMQRVersions = {
         "remainder_bits": 4,
         "character_count_indicator_length": {
             NumericEncoder: 7,
+            AlphanumericEncoder: 6,
             ByteEncoder: 6,
+            KanjiEncoder: 5,
         },
         "codewords_total": 66,
         "blocks": {
@@ -257,7 +275,9 @@ rMQRVersions = {
         "remainder_bits": 5,
         "character_count_indicator_length": {
             NumericEncoder: 8,
+            AlphanumericEncoder: 7,
             ByteEncoder: 6,
+            KanjiEncoder: 6,
         },
         "codewords_total": 99,
         "blocks": {
@@ -289,7 +309,9 @@ rMQRVersions = {
         "remainder_bits": 2,
         "character_count_indicator_length": {
             NumericEncoder: 4,
+            AlphanumericEncoder: 4,
             ByteEncoder: 3,
+            KanjiEncoder: 2,
         },
         "codewords_total": 15,
         "blocks": {
@@ -316,7 +338,9 @@ rMQRVersions = {
         "remainder_bits": 1,
         "character_count_indicator_length": {
             NumericEncoder: 6,
+            AlphanumericEncoder: 5,
             ByteEncoder: 5,
+            KanjiEncoder: 4,
         },
         "codewords_total": 31,
         "blocks": {
@@ -343,7 +367,9 @@ rMQRVersions = {
         "remainder_bits": 0,
         "character_count_indicator_length": {
             NumericEncoder: 7,
+            AlphanumericEncoder: 6,
             ByteEncoder: 5,
+            KanjiEncoder: 5,
         },
         "codewords_total": 47,
         "blocks": {
@@ -375,7 +401,9 @@ rMQRVersions = {
         "remainder_bits": 2,
         "character_count_indicator_length": {
             NumericEncoder: 7,
+            AlphanumericEncoder: 6,
             ByteEncoder: 6,
+            KanjiEncoder: 5,
         },
         "codewords_total": 67,
         "blocks": {
@@ -407,7 +435,9 @@ rMQRVersions = {
         "remainder_bits": 7,
         "character_count_indicator_length": {
             NumericEncoder: 8,
+            AlphanumericEncoder: 7,
             ByteEncoder: 6,
+            KanjiEncoder: 6,
         },
         "codewords_total": 89,
         "blocks": {
@@ -444,7 +474,9 @@ rMQRVersions = {
         "remainder_bits": 6,
         "character_count_indicator_length": {
             NumericEncoder: 8,
+            AlphanumericEncoder: 7,
             ByteEncoder: 7,
+            KanjiEncoder: 6,
         },
         "codewords_total": 132,
         "blocks": {
@@ -470,7 +502,9 @@ rMQRVersions = {
         "width": 27,
         "character_count_indicator_length": {
             NumericEncoder: 5,
+            AlphanumericEncoder: 5,
             ByteEncoder: 4,
+            KanjiEncoder: 3,
         },
         "remainder_bits": 4,
         "codewords_total": 21,
@@ -498,7 +532,9 @@ rMQRVersions = {
         "remainder_bits": 1,
         "character_count_indicator_length": {
             NumericEncoder: 6,
+            AlphanumericEncoder: 6,
             ByteEncoder: 5,
+            KanjiEncoder: 5,
         },
         "codewords_total": 41,
         "blocks": {
@@ -525,7 +561,9 @@ rMQRVersions = {
         "remainder_bits": 6,
         "character_count_indicator_length": {
             NumericEncoder: 7,
+            AlphanumericEncoder: 6,
             ByteEncoder: 6,
+            KanjiEncoder: 5,
         },
         "codewords_total": 60,
         "blocks": {
@@ -552,7 +590,9 @@ rMQRVersions = {
         "remainder_bits": 4,
         "character_count_indicator_length": {
             NumericEncoder: 7,
+            AlphanumericEncoder: 7,
             ByteEncoder: 6,
+            KanjiEncoder: 6,
         },
         "codewords_total": 85,
         "blocks": {
@@ -589,7 +629,9 @@ rMQRVersions = {
         "remainder_bits": 3,
         "character_count_indicator_length": {
             NumericEncoder: 8,
+            AlphanumericEncoder: 7,
             ByteEncoder: 7,
+            KanjiEncoder: 6,
         },
         "codewords_total": 113,
         "blocks": {
@@ -626,7 +668,9 @@ rMQRVersions = {
         "remainder_bits": 0,
         "character_count_indicator_length": {
             NumericEncoder: 8,
+            AlphanumericEncoder: 8,
             ByteEncoder: 7,
+            KanjiEncoder: 7,
         },
         "codewords_total": 166,
         "blocks": {
@@ -663,7 +707,9 @@ rMQRVersions = {
         "remainder_bits": 1,
         "character_count_indicator_length": {
             NumericEncoder: 7,
+            AlphanumericEncoder: 6,
             ByteEncoder: 6,
+            KanjiEncoder: 5,
         },
         "codewords_total": 51,
         "blocks": {
@@ -695,7 +741,9 @@ rMQRVersions = {
         "remainder_bits": 4,
         "character_count_indicator_length": {
             NumericEncoder: 7,
+            AlphanumericEncoder: 7,
             ByteEncoder: 6,
+            KanjiEncoder: 5,
         },
         "codewords_total": 74,
         "blocks": {
@@ -722,7 +770,9 @@ rMQRVersions = {
         "remainder_bits": 6,
         "character_count_indicator_length": {
             NumericEncoder: 8,
+            AlphanumericEncoder: 7,
             ByteEncoder: 7,
+            KanjiEncoder: 6,
         },
         "codewords_total": 103,
         "blocks": {
@@ -759,7 +809,9 @@ rMQRVersions = {
         "remainder_bits": 7,
         "character_count_indicator_length": {
             NumericEncoder: 8,
+            AlphanumericEncoder: 7,
             ByteEncoder: 7,
+            KanjiEncoder: 6,
         },
         "codewords_total": 136,
         "blocks": {
@@ -786,7 +838,9 @@ rMQRVersions = {
         "remainder_bits": 2,
         "character_count_indicator_length": {
             NumericEncoder: 9,
+            AlphanumericEncoder: 8,
             ByteEncoder: 7,
+            KanjiEncoder: 7,
         },
         "codewords_total": 199,
         "blocks": {
@@ -823,7 +877,9 @@ rMQRVersions = {
         "remainder_bits": 1,
         "character_count_indicator_length": {
             NumericEncoder: 7,
+            AlphanumericEncoder: 6,
             ByteEncoder: 6,
+            KanjiEncoder: 5,
         },
         "codewords_total": 61,
         "blocks": {
@@ -855,7 +911,9 @@ rMQRVersions = {
         "remainder_bits": 2,
         "character_count_indicator_length": {
             NumericEncoder: 8,
+            AlphanumericEncoder: 7,
             ByteEncoder: 6,
+            KanjiEncoder: 6,
         },
         "codewords_total": 88,
         "blocks": {
@@ -882,7 +940,9 @@ rMQRVersions = {
         "remainder_bits": 0,
         "character_count_indicator_length": {
             NumericEncoder: 8,
+            AlphanumericEncoder: 7,
             ByteEncoder: 7,
+            KanjiEncoder: 6,
         },
         "codewords_total": 122,
         "blocks": {
@@ -914,7 +974,9 @@ rMQRVersions = {
         "remainder_bits": 3,
         "character_count_indicator_length": {
             NumericEncoder: 8,
+            KanjiEncoder: 8,
             ByteEncoder: 7,
+            KanjiEncoder: 6,
         },
         "codewords_total": 160,
         "blocks": {
@@ -946,7 +1008,9 @@ rMQRVersions = {
         "remainder_bits": 4,
         "character_count_indicator_length": {
             NumericEncoder: 9,
+            AlphanumericEncoder: 8,
             ByteEncoder: 8,
+            KanjiEncoder: 7,
         },
         "codewords_total": 232,
         "blocks": {
