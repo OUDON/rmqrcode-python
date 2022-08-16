@@ -20,7 +20,7 @@ class KanjiEncoder(EncoderBase):
     def _encoded_bits(cls, data):
         res = ""
         for c in data:
-            shift_jis = c.encode('shift-jis')
+            shift_jis = c.encode("shift-jis")
             hex_value = shift_jis[0] * 256 + shift_jis[1]
 
             if hex_value >= 0x8140 and hex_value <= 0x9FFC:
@@ -43,10 +43,10 @@ class KanjiEncoder(EncoderBase):
     @classmethod
     def is_valid_characters(cls, data):
         for c in data:
-            shift_jis = c.encode('shift_jis')
+            shift_jis = c.encode("shift_jis")
             if len(shift_jis) < 2:
                 return False
             hex_value = shift_jis[0] * 256 + shift_jis[1]
-            if (0x8140 > hex_value and 0x9ffc < hex_value) or (0xe040 > hex_value and 0xebbf < hex_value):
+            if (0x8140 > hex_value and 0x9FFC < hex_value) or (0xE040 > hex_value and 0xEBBF < hex_value):
                 return False
         return True

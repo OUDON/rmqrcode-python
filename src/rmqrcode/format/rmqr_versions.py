@@ -1,4 +1,4 @@
-from ..encoder import ByteEncoder, NumericEncoder
+from ..encoder import AlphanumericEncoder, ByteEncoder, KanjiEncoder, NumericEncoder
 from .error_correction_level import ErrorCorrectionLevel
 
 rMQRVersions = {
@@ -974,7 +974,7 @@ rMQRVersions = {
         "remainder_bits": 3,
         "character_count_indicator_length": {
             NumericEncoder: 8,
-            KanjiEncoder: 8,
+            AlphanumericEncoder: 8,
             ByteEncoder: 7,
             KanjiEncoder: 6,
         },
