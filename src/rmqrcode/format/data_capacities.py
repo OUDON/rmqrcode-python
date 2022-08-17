@@ -5,6 +5,10 @@ DataCapacities = {
     "R7x43": {
         "height": 7,
         "width": 43,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 48,
+            ErrorCorrectionLevel.H: 24,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 5,
@@ -15,6 +19,10 @@ DataCapacities = {
     "R7x59": {
         "height": 7,
         "width": 59,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 96,
+            ErrorCorrectionLevel.H: 56,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 11,
@@ -25,6 +33,10 @@ DataCapacities = {
     "R7x77": {
         "height": 7,
         "width": 77,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 160,
+            ErrorCorrectionLevel.H: 80,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 19,
@@ -35,6 +47,10 @@ DataCapacities = {
     "R7x99": {
         "height": 7,
         "width": 99,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 224,
+            ErrorCorrectionLevel.H: 112,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 27,
@@ -45,6 +61,10 @@ DataCapacities = {
     "R7x139": {
         "height": 7,
         "width": 139,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 352,
+            ErrorCorrectionLevel.H: 192,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 42,
@@ -55,6 +75,10 @@ DataCapacities = {
     "R9x43": {
         "height": 9,
         "width": 43,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 96,
+            ErrorCorrectionLevel.H: 56,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 11,
@@ -65,6 +89,10 @@ DataCapacities = {
     "R9x59": {
         "height": 9,
         "width": 59,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 168,
+            ErrorCorrectionLevel.H: 88,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 20,
@@ -75,6 +103,10 @@ DataCapacities = {
     "R9x77": {
         "height": 9,
         "width": 77,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 248,
+            ErrorCorrectionLevel.H: 136,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 30,
@@ -85,6 +117,10 @@ DataCapacities = {
     "R9x99": {
         "height": 9,
         "width": 99,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 336,
+            ErrorCorrectionLevel.H: 176,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 40,
@@ -95,6 +131,10 @@ DataCapacities = {
     "R9x139": {
         "height": 9,
         "width": 139,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 504,
+            ErrorCorrectionLevel.H: 264,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 61,
@@ -105,6 +145,10 @@ DataCapacities = {
     "R11x27": {
         "height": 11,
         "width": 27,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 56,
+            ErrorCorrectionLevel.H: 40,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 6,
@@ -115,6 +159,10 @@ DataCapacities = {
     "R11x43": {
         "height": 11,
         "width": 43,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 152,
+            ErrorCorrectionLevel.H: 88,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 18,
@@ -125,6 +173,10 @@ DataCapacities = {
     "R11x59": {
         "height": 11,
         "width": 59,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 248,
+            ErrorCorrectionLevel.H: 120,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 30,
@@ -135,6 +187,10 @@ DataCapacities = {
     "R11x77": {
         "height": 11,
         "width": 77,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 344,
+            ErrorCorrectionLevel.H: 184,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 41,
@@ -145,6 +201,10 @@ DataCapacities = {
     "R11x99": {
         "height": 11,
         "width": 99,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 456,
+            ErrorCorrectionLevel.H: 232,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 55,
@@ -155,6 +215,10 @@ DataCapacities = {
     "R11x139": {
         "height": 11,
         "width": 139,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 672,
+            ErrorCorrectionLevel.H: 336,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 82,
@@ -165,6 +229,10 @@ DataCapacities = {
     "R13x27": {
         "height": 13,
         "width": 27,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 96,
+            ErrorCorrectionLevel.H: 56,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 11,
@@ -175,6 +243,10 @@ DataCapacities = {
     "R13x43": {
         "height": 13,
         "width": 43,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 216,
+            ErrorCorrectionLevel.H: 104,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 26,
@@ -185,6 +257,10 @@ DataCapacities = {
     "R13x59": {
         "height": 13,
         "width": 59,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 304,
+            ErrorCorrectionLevel.H: 160,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 36,
@@ -195,6 +271,10 @@ DataCapacities = {
     "R13x77": {
         "height": 13,
         "width": 77,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 424,
+            ErrorCorrectionLevel.H: 232,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 51,
@@ -205,6 +285,10 @@ DataCapacities = {
     "R13x99": {
         "height": 13,
         "width": 99,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 584,
+            ErrorCorrectionLevel.H: 280,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 71,
@@ -215,6 +299,10 @@ DataCapacities = {
     "R13x139": {
         "height": 13,
         "width": 139,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 848,
+            ErrorCorrectionLevel.H: 432,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 104,
@@ -225,6 +313,10 @@ DataCapacities = {
     "R15x43": {
         "height": 15,
         "width": 43,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 264,
+            ErrorCorrectionLevel.H: 120,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 31,
@@ -235,6 +327,10 @@ DataCapacities = {
     "R15x59": {
         "height": 15,
         "width": 59,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 384,
+            ErrorCorrectionLevel.H: 208,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 46,
@@ -245,6 +341,10 @@ DataCapacities = {
     "R15x77": {
         "height": 15,
         "width": 77,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 536,
+            ErrorCorrectionLevel.H: 248,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 65,
@@ -255,6 +355,10 @@ DataCapacities = {
     "R15x99": {
         "height": 15,
         "width": 99,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 704,
+            ErrorCorrectionLevel.H: 384,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 86,
@@ -265,6 +369,10 @@ DataCapacities = {
     "R15x139": {
         "height": 15,
         "width": 139,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 1016,
+            ErrorCorrectionLevel.H: 552,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 125,
@@ -275,6 +383,10 @@ DataCapacities = {
     "R17x43": {
         "height": 17,
         "width": 43,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 312,
+            ErrorCorrectionLevel.H: 168,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 37,
@@ -285,6 +397,10 @@ DataCapacities = {
     "R17x59": {
         "height": 17,
         "width": 59,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 448,
+            ErrorCorrectionLevel.H: 224,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 54,
@@ -295,6 +411,10 @@ DataCapacities = {
     "R17x77": {
         "height": 17,
         "width": 77,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 624,
+            ErrorCorrectionLevel.H: 304,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 76,
@@ -305,6 +425,10 @@ DataCapacities = {
     "R17x99": {
         "height": 17,
         "width": 99,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 800,
+            ErrorCorrectionLevel.H: 448,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 98,
@@ -315,6 +439,10 @@ DataCapacities = {
     "R17x139": {
         "height": 17,
         "width": 139,
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 1216,
+            ErrorCorrectionLevel.H: 608,
+        },
         "capacity": {
             "Byte": {
                 ErrorCorrectionLevel.M: 150,

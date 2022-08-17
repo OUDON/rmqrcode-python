@@ -1,21 +1,23 @@
-class ByteEncoder:
-    MODE_INDICATOR = "011"
+from .encoder_base import EncoderBase
 
-    @staticmethod
-    def _encoded_bits(s):
+
+class ByteEncoder(EncoderBase):
+    @classmethod
+    def mode_indicator(cls):
+        return "011"
+
+    @classmethod
+    def _encoded_bits(cls, s):
         res = ""
         encoded = s.encode("utf-8")
         for byte in encoded:
             res += bin(byte)[2:].zfill(8)
         return res
 
-    @staticmethod
-    def encode(data, character_count_length):
-        res = ByteEncoder.MODE_INDICATOR
-        res += bin(len(data))[2:].zfill(character_count_length)
-        res += ByteEncoder._encoded_bits(data)
-        return res
+    @classmethod
+    def length(cls, data, character_count_indicator_length):
+        return len(cls.mode_indicator()) + character_count_indicator_length + 8 * len(data.encode("utf-8"))
 
-    @staticmethod
-    def length(data):
-        return len(data.encode("utf-8"))
+    @classmethod
+    def is_valid_characters(cls, data):
+        return True  # Any characters can encode in the Byte Mode

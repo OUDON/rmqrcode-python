@@ -107,14 +107,15 @@ qr.make("https://oudon.xyz")
 ## 🛠️ Under the Hood
 ### Encoding modes
 
-The rMQR Code has the four encoding modes Numeric, Alphanumeric, Byte and Kanji to convert data efficiently. However, this package supoprts only Byte mode currently.
+The rMQR Code has the four encoding modes Numeric, Alphanumeric, Byte and Kanji to convert data efficiently. For now, the supported encoding modes are below.
 
 |Mode|Supported?|
 |-|:-:|
-|Numeric| |
-|Alphanumeric||
+|Numeric|✅|
+|Alphanumeric|✅|
 |Byte|✅|
-|Kanji||
+|Kanji|✅|
+|Mixed||
 
 
 ## 🤝 Contributing
