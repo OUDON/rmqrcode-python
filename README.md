@@ -105,7 +105,7 @@ qr.make("https://oudon.xyz")
 
 ### Encoding modes
 
-The rMQR Code has the four encoding modes Numeric, Alphanumeric, Byte and Kanji to convert data efficiently. The following example shows how to encode data "123456" in the Numeric mode. We can select an encoding mode by passing encoder_class argument to the `rMQR#make` method. In this case, the length of bits after encoding is 27 in the Numeric mode, which is shorter than 56 in the Byte mode.
+The rMQR Code has the four encoding modes Numeric, Alphanumeric, Byte and Kanji to convert data efficiently. The following example shows how to encode data "123456" in the Numeric mode. We can select an encoding mode by passing the `encoder_class` argument to the `rMQR#make` method. In this case, the length of bits after encoding is 27 in the Numeric mode, which is shorter than 56 in the Byte mode.
 
 ```py
 from rmqrcode import rMQR, ErrorCorrectionLevel, encoder
