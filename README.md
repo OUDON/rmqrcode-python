@@ -103,19 +103,26 @@ qr.make("https://oudon.xyz")
 |R15|❌|✅|✅|✅|✅|✅|
 |R17|❌|✅|✅|✅|✅|✅|
 
-
-## 🛠️ Under the Hood
 ### Encoding modes
 
-The rMQR Code has the four encoding modes Numeric, Alphanumeric, Byte and Kanji to convert data efficiently. For now, the supported encoding modes are below.
+The rMQR Code has the four encoding modes Numeric, Alphanumeric, Byte and Kanji to convert data efficiently. The following example shows how to encode data "123456" in the Numeric mode. We can select an encoding mode by passing encoder_class argument to the `rMQR#make` method. In this case, the length of bits after encoding is 27 in the Numeric mode, which is shorter than 56 in the Byte mode.
 
-|Mode|Supported?|
-|-|:-:|
-|Numeric|✅|
-|Alphanumeric|✅|
-|Byte|✅|
-|Kanji|✅|
-|Mixed||
+```py
+from rmqrcode import rMQR, ErrorCorrectionLevel, encoder
+qr = rMQR('R13x43', ErrorCorrectionLevel.M)
+qr.make("123456", encoder_class=encoder.NumericEncoder)
+```
+
+The value for `encoder_class` is listed in the below table.
+
+|Mode|Value of encoder_class|Characters|
+|-|-|-|
+|Numeric|NumericEncoder|0-9|
+|Alphanumeric|AlphanumericEncoder|0-9 A-Z \s $ % * + - .　/　:|
+|Byte|ByteEncoder|Any|
+|Kanji|KanjiEncoder|from 0x8140 to 0x9FFC, from 0xE040 to 0xEBBF in Shift JIS value|
+
+The rMQR Code also supports mixed modes in order to encode more efficiently. However, this package has not supported this feature yet.
 
 
 ## 🤝 Contributing
