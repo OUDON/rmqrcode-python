@@ -1,4 +1,6 @@
-from .encoder_base import EncoderBase, IllegalCharacterError
+import re
+
+from .encoder_base import EncoderBase
 
 
 class AlphanumericEncoder(EncoderBase):
@@ -83,7 +85,4 @@ class AlphanumericEncoder(EncoderBase):
 
     @classmethod
     def is_valid_characters(cls, data):
-        for c in data:
-            if c not in cls.CHARACTER_MAP:
-                return False
-        return True
+        return bool(re.match(r"^[A-Z\s\$\%\*\+\-\.\/\:]*$", data))

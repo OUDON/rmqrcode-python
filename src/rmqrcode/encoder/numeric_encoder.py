@@ -1,4 +1,6 @@
-from .encoder_base import EncoderBase, IllegalCharacterError
+import re
+
+from .encoder_base import EncoderBase
 
 
 class NumericEncoder(EncoderBase):
@@ -39,7 +41,4 @@ class NumericEncoder(EncoderBase):
 
     @classmethod
     def is_valid_characters(cls, data):
-        for c in data:
-            if ord(c) < ord("0") or ord(c) > ord("9"):
-                return False
-        return True
+        return bool(re.match(r"^[0-9]*$", data))
