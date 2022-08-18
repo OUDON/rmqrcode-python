@@ -121,7 +121,8 @@ class rMQR:
         logger.debug(f"selected: {selected}")
 
         qr = rMQR(selected["version"], ecc)
-        qr.make(data)
+        qr.add_segment(data, encoder_class)
+        qr.make()
         return qr
 
     def __init__(self, version, ecc, with_quiet_zone=True, logger=None):
@@ -136,12 +137,15 @@ class rMQR:
         self._width = qr_version["width"]
         self._error_correction_level = ecc
         self._qr = [[Color.UNDEFINED for x in range(self._width)] for y in range(self._height)]
+        self._segments = []
 
-    def make(self, data, encoder_class=encoder.ByteEncoder):
-        """Makes an rMQR Code for given data.
+    def add_segment(self, data, encoder_class=encoder.ByteEncoder):
+        """Adds the segment.
+
+        A segment consists of data and an encoding mode.
 
         Args:
-            data (str): Data string.
+            data (str): The data.
             encoder_class (abc.ABCMeta): Pass a subclass of EncoderBase to select encoding mode.
                 Using ByteEncoder by default.
 
@@ -149,13 +153,78 @@ class rMQR:
             void
 
         """
+        self._segments.append({"data": data, "encoder_class": encoder_class})
+
+    def make(self):
+        """Makes an rMQR Code for stored segments.
+
+        This method makes an rMQR Code for stored segments. Before call this,
+        you need add segments at least one by the add_segment method.
+
+        Returns:
+            void
+
+        Raises:
+            NoSegmentError: If no segment are stored.
+
+        """
+        if len(self._segments) < 1:
+            raise NoSegmentError()
+        try:
+            encoded_data = self._encode_data()
+        except DataTooLongError:
+            raise DataTooLongError()
+
         self._put_finder_pattern()
         self._put_corner_finder_pattern()
         self._put_alignment_pattern()
         self._put_timing_pattern()
         self._put_version_information()
-        mask_area = self._put_data(data, encoder_class=encoder_class)
+        mask_area = self._put_data(encoded_data)
         self._apply_mask(mask_area)
+
+    def _encode_data(self):
+        """Encodes the data.
+
+        This method encodes the data for added segments. This method concatenates the
+        encoded data of each segments. Finally, this concatenates the terminator if possible.
+
+        Returns:
+            str: The encoded data.
+
+        """
+        qr_version = rMQRVersions[self.version_name()]
+        data_bits_max = DataCapacities[self.version_name()]["number_of_data_bits"][self._error_correction_level]
+
+        res = ""
+        for segment in self._segments:
+            character_count_indicator_length = qr_version["character_count_indicator_length"][segment["encoder_class"]]
+            res += segment["encoder_class"].encode(segment["data"], character_count_indicator_length)
+        res = self._append_terminator_if_possible(res, data_bits_max)
+
+        if len(res) > data_bits_max:
+            raise DataTooLongError("The data is too long.")
+
+        return res
+
+    def _append_terminator_if_possible(self, data, data_bits_max):
+        """Appends the terminator.
+
+        This method appends the terminator at the end of data and returns the
+        appended string. The terminator shall be omitted if the length of string
+        after appending the terminator greater than the rMQR code capacity.
+
+        Args:
+            data: The data.
+            data_bits_max: The max length of data bits.
+
+        Returns:
+            str: The string after appending the terminator.
+
+        """
+        if len(data) + 3 <= data_bits_max:
+            data += "000"
+        return data
 
     def version_name(self):
         """Returns the version name.
@@ -235,7 +304,6 @@ class rMQR:
             list: Converted list.
 
         """
-
         res = []
         if with_quiet_zone:
             for y in range(self.QUIET_ZONE_MODULES):
@@ -419,38 +487,27 @@ class rMQR:
         version_information_data = version_information_data << 12 | reminder_polynomial
         return version_information_data
 
-    def _put_data(self, data, encoder_class=encoder.ByteEncoder):
+    def _put_data(self, encoded_data):
         """Symbol character placement.
 
-        This method puts data into the encoding region of the rMQR Code. Also this
-        method computes a two-dimensional list shows where encoding region at the
+        This method puts data into the encoding region of the rMQR Code. The data
+        should be encoded by NumericEncoder, AlphanumericEncoder, ByteEncoder or KanjiEncoder.
+        Also this method computes a two-dimensional list shows where encoding region at the
         same time. And returns the list.
-
         See: "7.7.3 Symbol character placement" in the ISO/IEC 23941.
 
         Args:
-            data (str): Data string.
-            encoder_class (abc.ABCMeta): Pass a subclass of EncoderBase to select encoding mode.
-                Using ByteEncoder by default.
+            encoded_data (str): The data after encoding. Expected all segments are joined.
 
         Returns:
             list: A two-dimensional list shows where encoding region.
 
         """
-        qr_version = rMQRVersions[self.version_name()]
-
-        character_count_indicator_length = qr_version["character_count_indicator_length"][encoder_class]
-        codewords_total = qr_version["codewords_total"]
-        encoded_data = self._convert_to_bites_data(
-            data, character_count_indicator_length, codewords_total, encoder_class=encoder_class
-        )
         codewords = split_into_8bits(encoded_data)
-        print(codewords)
-
-        if len(codewords) > codewords_total:
-            raise DataTooLongError("The data is too long.")
 
         # Add the remainder codewords
+        qr_version = rMQRVersions[self.version_name()]
+        codewords_total = qr_version["codewords_total"]
         while True:
             if len(codewords) >= codewords_total:
                 break
@@ -550,17 +607,6 @@ class rMQR:
 
         return data_codewords_per_block, rs_codewords_per_block
 
-    def _convert_to_bites_data(
-        self, data, character_count_indicator_length, codewords_total, encoder_class=encoder.ByteEncoder
-    ):
-        encoded_data = encoder_class.encode(data, character_count_indicator_length)
-
-        # Terminator (may be truncated)
-        if len(encoded_data) + 3 <= codewords_total * 8:
-            encoded_data += "000"
-
-        return encoded_data
-
     def _apply_mask(self, mask_area):
         """Data masking.
 
@@ -615,4 +661,9 @@ class DataTooLongError(ValueError):
 
 class IllegalVersionError(ValueError):
     "A class represents an error raised when the given version name is illegal."
+    pass
+
+
+class NoSegmentError(ValueError):
+    "A class represents an error raised when no segments are add"
     pass

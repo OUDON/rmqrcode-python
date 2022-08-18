@@ -27,8 +27,9 @@ def main():
     # Determine rMQR version manually
     # version = 'R7x43'
     # qr = rMQR(version, error_correction_level)
-    # Also you can select encoding mode manually
-    # qr.make("123456", encoder_class=encoder.NumericEncoder)
+    # qr.add_segment("123", encoder_class=encoder.NumericEncoder)
+    # qr.add_segment("Abc", encoder_class=encoder.ByteEncoder)
+    # qr.make()
     # print(qr)
 
     # Save as png

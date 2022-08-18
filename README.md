@@ -88,8 +88,8 @@ image.save("my_qr.png")
 ### Select rMQR Code size manually
 To select rMQR Code size manually, use `rMQR()` constructor.
 ```py
+from rmqrcode import rMQR, ErrorCorrectionLevel
 qr = rMQR('R11x139', ErrorCorrectionLevel.H)
-qr.make("https://oudon.xyz")
 ```
 
 `R11x139` means 11 rows and 139 columns. The following table shows available combinations.
@@ -103,14 +103,18 @@ qr.make("https://oudon.xyz")
 |R15|❌|✅|✅|✅|✅|✅|
 |R17|❌|✅|✅|✅|✅|✅|
 
-### Encoding modes
+### Encoding Modes and Segments
 
-The rMQR Code has the four encoding modes Numeric, Alphanumeric, Byte and Kanji to convert data efficiently. The following example shows how to encode data "123456" in the Numeric mode. We can select an encoding mode by passing the `encoder_class` argument to the `rMQR#make` method. In this case, the length of bits after encoding is 27 in the Numeric mode, which is shorter than 56 in the Byte mode.
+The rMQR Code has the four encoding modes Numeric, Alphanumeric, Byte and Kanji to convert data efficiently. We can select encoding mode for each data segment separately.
+The following example shows how to encode data "123Abc". The first segment is for "123" in the Numeric mode. The second segment is for "Abc" in the Byte mode.
+We can select an encoding mode by passing the `encoder_class` argument to the `rMQR#add_segment` method. In this example, the length of bits after encoding is 47 in the case combined with the Numeric mode and the Byte mode, which is shorter than 56 in the Byte mode only.
 
 ```py
 from rmqrcode import rMQR, ErrorCorrectionLevel, encoder
-qr = rMQR('R13x43', ErrorCorrectionLevel.M)
-qr.make("123456", encoder_class=encoder.NumericEncoder)
+qr = rMQR('R7x43', ErrorCorrectionLevel.M)
+qr.add_segment("123", encoder_class=encoder.NumericEncoder)
+qr.add_segment("Abc", encoder_class=encoder.ByteEncoder)
+qr.make()
 ```
 
 The value for `encoder_class` is listed in the below table.
@@ -118,11 +122,9 @@ The value for `encoder_class` is listed in the below table.
 |Mode|Value of encoder_class|Characters|
 |-|-|-|
 |Numeric|NumericEncoder|0-9|
-|Alphanumeric|AlphanumericEncoder|0-9 A-Z \s $ % * + - .　/　:|
+|Alphanumeric|AlphanumericEncoder|0-9 A-Z \s $ % * + - . / :|
 |Byte|ByteEncoder|Any|
 |Kanji|KanjiEncoder|from 0x8140 to 0x9FFC, from 0xE040 to 0xEBBF in Shift JIS value|
-
-The rMQR Code also supports mixed modes in order to encode more efficiently. However, this package has not supported this feature yet.
 
 
 ## 🤝 Contributing
