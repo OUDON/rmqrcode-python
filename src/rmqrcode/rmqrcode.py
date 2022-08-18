@@ -157,8 +157,11 @@ class rMQR:
         """
         if len(self._segments) < 1:
             raise NoSegmentError()
+        try:
+            encoded_data = self._encode_data()
+        except DataTooLongError:
+            raise DataTooLongError()
 
-        encoded_data = self._encode_data()
         self._put_finder_pattern()
         self._put_corner_finder_pattern()
         self._put_alignment_pattern()
@@ -455,19 +458,15 @@ class rMQR:
         should be encoded by NumericEncoder, AlphanumericEncoder, ByteEncoder or KanjiEncoder.
         Also this method computes a two-dimensional list shows where encoding region at the
         same time. And returns the list.
-
         See: "7.7.3 Symbol character placement" in the ISO/IEC 23941.
+
+        Args:
+            encoded_data (str): The data after encoding. Expected all segments are joined.
 
         Returns:
             list: A two-dimensional list shows where encoding region.
 
         """
-        try:
-            encoded_data = self._encode_data()
-        except DataTooLongError:
-            raise DataTooLongError()
-        except NoSegmentError:
-            raise NoSegmentError()
         codewords = split_into_8bits(encoded_data)
 
         # Add the remainder codewords
