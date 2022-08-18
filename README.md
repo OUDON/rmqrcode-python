@@ -88,7 +88,7 @@ image.save("my_qr.png")
 ### Select rMQR Code size manually
 To select rMQR Code size manually, use `rMQR()` constructor.
 ```py
-from rmqrcode import rMQR, ErrorCorrectionLevel, encoder
+from rmqrcode import rMQR, ErrorCorrectionLevel
 qr = rMQR('R11x139', ErrorCorrectionLevel.H)
 ```
 
