@@ -140,6 +140,19 @@ class rMQR:
         self._segments = []
 
     def add_segment(self, data, encoder_class=encoder.ByteEncoder):
+        """Adds the segment.
+
+        A segment consists of data and an encoding mode.
+
+        Args:
+            data (str): The data.
+            encoder_class (abc.ABCMeta): Pass a subclass of EncoderBase to select encoding mode.
+                Using ByteEncoder by default.
+
+        Returns:
+            void
+
+        """
         self._segments.append({"data": data, "encoder_class": encoder_class})
 
     def make(self):
@@ -171,6 +184,15 @@ class rMQR:
         self._apply_mask(mask_area)
 
     def _encode_data(self):
+        """Encodes the data.
+
+        This method encodes the data for added segments. This method concatenates the
+        encoded data of each segments. Finally, this concatenates the terminator if possible.
+
+        Returns:
+            str: The encoded data.
+
+        """
         qr_version = rMQRVersions[self.version_name()]
         codewords_total = qr_version["codewords_total"]
 
@@ -178,14 +200,28 @@ class rMQR:
         for segment in self._segments:
             character_count_indicator_length = qr_version["character_count_indicator_length"][segment["encoder_class"]]
             res += segment["encoder_class"].encode(segment["data"], character_count_indicator_length)
-        res = self._append_terminator_if_needed(res, codewords_total)
+        res = self._append_terminator_if_possible(res, codewords_total)
 
         if len(res) > codewords_total * 8:
             raise DataTooLongError("The data is too long.")
 
         return res
 
-    def _append_terminator_if_needed(self, data, codewords_total):
+    def _append_terminator_if_possible(self, data, codewords_total):
+        """Appends the terminator.
+
+        This method appends the terminator at the end of data and returns the
+        appended string. The terminator shall be omitted if the length of string
+        after appending the terminator greater than the rMQR code capacity.
+
+        Args:
+            data: The data.
+            codewords_total: TODO: Fix
+
+        Returns:
+            str: The string after appending the terminator.
+
+        """
         if len(data) + 3 <= codewords_total * 8:
             data += "000"
         return data
