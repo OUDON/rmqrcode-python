@@ -194,20 +194,20 @@ class rMQR:
 
         """
         qr_version = rMQRVersions[self.version_name()]
-        codewords_total = qr_version["codewords_total"]
+        data_bits_max = DataCapacities[self.version_name()]["number_of_data_bits"][self._error_correction_level]
 
         res = ""
         for segment in self._segments:
             character_count_indicator_length = qr_version["character_count_indicator_length"][segment["encoder_class"]]
             res += segment["encoder_class"].encode(segment["data"], character_count_indicator_length)
-        res = self._append_terminator_if_possible(res, codewords_total)
+        res = self._append_terminator_if_possible(res, data_bits_max)
 
-        if len(res) > codewords_total * 8:
+        if len(res) > data_bits_max:
             raise DataTooLongError("The data is too long.")
 
         return res
 
-    def _append_terminator_if_possible(self, data, codewords_total):
+    def _append_terminator_if_possible(self, data, data_bits_max):
         """Appends the terminator.
 
         This method appends the terminator at the end of data and returns the
@@ -216,13 +216,13 @@ class rMQR:
 
         Args:
             data: The data.
-            codewords_total: TODO: Fix
+            data_bits_max: The max length of data bits.
 
         Returns:
             str: The string after appending the terminator.
 
         """
-        if len(data) + 3 <= codewords_total * 8:
+        if len(data) + 3 <= data_bits_max:
             data += "000"
         return data
 

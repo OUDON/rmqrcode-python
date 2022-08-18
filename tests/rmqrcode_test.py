@@ -1,8 +1,11 @@
-from rmqrcode import rMQR
-from rmqrcode import ErrorCorrectionLevel
-from rmqrcode import DataTooLongError
-from rmqrcode import IllegalVersionError
-from rmqrcode import NoSegmentError
+from rmqrcode import (
+    rMQR,
+    encoder,
+    ErrorCorrectionLevel,
+    DataTooLongError,
+    IllegalVersionError,
+    NoSegmentError,
+)
 
 import pytest
 
@@ -27,7 +30,59 @@ class TestRMQR:
             qr = rMQR("R13x99", ErrorCorrectionLevel.M)
             qr.make()
 
-    def test_raise_too_long_error(self):
+    def test_can_make_max_length_numeric_encoder(self):
+        s = "1" * 361
+        qr = rMQR("R17x139", ErrorCorrectionLevel.M)
+        qr.add_segment(s, encoder_class=encoder.NumericEncoder)
+        qr.make()
+
+    def test_raise_too_long_error_numeric_encoder(self):
+        with pytest.raises(DataTooLongError) as e:
+            s = "1" * 362
+            qr = rMQR("R17x139", ErrorCorrectionLevel.M)
+            qr.add_segment(s, encoder_class=encoder.NumericEncoder)
+            qr.make()
+
+    def test_can_make_max_length_alphanumeric_encoder(self):
+        s = "A" * 219
+        qr = rMQR("R17x139", ErrorCorrectionLevel.M)
+        qr.add_segment(s, encoder_class=encoder.AlphanumericEncoder)
+        qr.make()
+
+    def test_raise_too_long_error_alphanumeric_encoder(self):
+        with pytest.raises(DataTooLongError) as e:
+            s = "A" * 220
+            qr = rMQR("R17x139", ErrorCorrectionLevel.M)
+            qr.add_segment(s, encoder_class=encoder.AlphanumericEncoder)
+            qr.make()
+
+    def test_can_make_max_length_byte_encoder(self):
+        s = "a" * 150
+        qr = rMQR("R17x139", ErrorCorrectionLevel.M)
+        qr.add_segment(s, encoder_class=encoder.ByteEncoder)
+        qr.make()
+
+    def test_raise_too_long_error_byte_encoder(self):
+        with pytest.raises(DataTooLongError) as e:
+            s = "a" * 151
+            qr = rMQR("R17x139", ErrorCorrectionLevel.M)
+            qr.add_segment(s, encoder_class=encoder.ByteEncoder)
+            qr.make()
+
+    def test_can_make_max_length_kanji_encoder(self):
+        s = "漢" * 92
+        qr = rMQR("R17x139", ErrorCorrectionLevel.M)
+        qr.add_segment(s, encoder_class=encoder.KanjiEncoder)
+        qr.make()
+
+    def test_raise_too_long_error_kanji_encoder(self):
+        with pytest.raises(DataTooLongError) as e:
+            s = "漢" * 93
+            qr = rMQR("R17x139", ErrorCorrectionLevel.M)
+            qr.add_segment(s, encoder_class=encoder.KanjiEncoder)
+            qr.make()
+
+    def test_raise_too_long_error_fit(self):
         with pytest.raises(DataTooLongError) as e:
             s = "a".ljust(200, "a")
             rMQR.fit(s)
