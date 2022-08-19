@@ -241,7 +241,7 @@ class rMQR:
             })
         print(segments)
 
-    return segments
+        return segments
 
     def __init__(self, version, ecc, with_quiet_zone=True, logger=None):
         self._logger = logger or rMQR._init_logger()
