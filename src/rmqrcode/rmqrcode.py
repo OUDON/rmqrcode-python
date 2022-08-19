@@ -125,6 +125,124 @@ class rMQR:
         qr.make()
         return qr
 
+    def _compute_optimize_segmentation(self, data):
+        qr_version = rMQRVersions[self.version_name()]
+        INF = 1000
+
+        dp = [[[INF for n in range(3)] for mode in range(4)] for length in range(1300)]
+        parents = [[[-1 for n in range(3)] for mode in range(4)] for length in range(1300)]
+
+        encoders = [
+            encoder.NumericEncoder,
+            encoder.AlphanumericEncoder,
+            encoder.ByteEncoder,
+            encoder.KanjiEncoder,
+        ]
+
+        # Set initial costs
+        for mode in range(len(encoders)):
+            encoder_class = encoders[mode]
+            character_count_indicator_length = qr_version["character_count_indicator_length"][encoder_class]
+            dp[0][mode][0] = encoder_class.length("", character_count_indicator_length)
+            parents[0][mode][0] = (0, 0)
+
+        # Compute all costs
+        for n in range(0, len(data)):
+            print("----")
+            print(f"{n} -> {n+1}")
+            print(dp[n])
+            for mode in range(4):
+                for length in range(3):
+                    if dp[n][mode][length] == INF:
+                        continue
+
+                    for new_mode in range(4):
+                        if not encoders[new_mode].is_valid_characters(data[n]):
+                            continue
+
+                        encoder_class = encoders[new_mode]
+                        character_count_indicator_length = qr_version["character_count_indicator_length"][encoder_class]
+                        if new_mode == mode:
+                            # Keep the mode
+                            if encoder_class == encoder.NumericEncoder:
+                                new_length = (length + 1) % 3
+                                cost = 4 if length == 0 else 3
+                            elif encoder_class == encoder.AlphanumericEncoder:
+                                new_length = (length + 1) % 2
+                                cost = 6 if length == 0 else 5
+                            elif encoder_class == encoder.ByteEncoder:
+                                new_length = 0
+                                cost = 8
+                            elif encoder_class == encoder.KanjiEncoder:
+                                new_length = 0
+                                cost = 13
+                        else:
+                            # Change the mode
+                            if encoder_class == encoder.NumericEncoder:
+                                new_length = 1
+                                cost = encoders[new_mode].length(data[n], character_count_indicator_length)
+                            elif encoder_class == encoder.AlphanumericEncoder:
+                                new_length = 1
+                                cost = encoders[new_mode].length(data[n], character_count_indicator_length)
+                            elif encoder_class == encoder.ByteEncoder:
+                                new_length = 0
+                                cost = encoders[new_mode].length(data[n], character_count_indicator_length)
+                            elif encoder_class == encoder.KanjiEncoder:
+                                new_length = 0
+                                cost = encoders[new_mode].length(data[n], character_count_indicator_length)
+
+                        if dp[n][mode][length] + cost < dp[n+1][new_mode][new_length]:
+                            dp[n+1][new_mode][new_length] = dp[n][mode][length] + cost
+                            parents[n+1][new_mode][new_length] = (n, mode, length)
+
+        print("=======")
+        print(dp[len(data)])
+
+        # Find the best
+        best = INF
+        best_index = (-1, -1)
+        for mode in range(4):
+            for length in range(3):
+                if dp[len(data)][mode][length] < best:
+                    best = dp[len(data)][mode][length]
+                    best_index = (len(data), mode, length)
+
+        # Reconstruct the path
+        path = []
+        index = best_index
+        while index != (0, 0):
+            path.append(index)
+            index = parents[index[0]][index[1]][index[2]]
+        path.reverse()
+        path = path[1:]
+        print(path)
+
+        # Compute the segments
+        segments = []
+        current_segment_data = ""
+        current_mode = -1
+        for p in path:
+            if current_mode == -1:
+                current_mode = p[1]
+                current_segment_data += data[p[0] - 1]
+            elif current_mode == p[1]:
+                current_segment_data += data[p[0] - 1]
+            else:
+                segments.append({
+                    "data": current_segment_data,
+                    "encoder_class": encoders[current_mode]
+                })
+                current_segment_data = data[p[0] - 1]
+                current_mode = p[1]
+        if current_mode != -1:
+            segments.append({
+                "data": current_segment_data,
+                "encoder_class": encoders[current_mode]
+            })
+        print(segments)
+
+    return segments
+
     def __init__(self, version, ecc, with_quiet_zone=True, logger=None):
         self._logger = logger or rMQR._init_logger()
 
