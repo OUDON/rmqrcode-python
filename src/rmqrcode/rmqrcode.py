@@ -126,11 +126,14 @@ class rMQR:
         return qr
 
     def _compute_optimize_segmentation(self, data):
-        qr_version = rMQRVersions[self.version_name()]
         INF = 1000
+        MAX_CHARACTER = 360
+        if len(data) > MAX_CHARACTER:
+            raise DataTooLongError()
 
-        dp = [[[INF for n in range(3)] for mode in range(4)] for length in range(1300)]
-        parents = [[[-1 for n in range(3)] for mode in range(4)] for length in range(1300)]
+        qr_version = rMQRVersions[self.version_name()]
+        dp = [[[INF for n in range(3)] for mode in range(4)] for length in range(MAX_CHARACTER + 1)]
+        parents = [[[-1 for n in range(3)] for mode in range(4)] for length in range(MAX_CHARACTER + 1)]
 
         encoders = [
             encoder.NumericEncoder,
@@ -178,18 +181,11 @@ class rMQR:
                                 cost = 13
                         else:
                             # Change the mode
-                            if encoder_class == encoder.NumericEncoder:
+                            if encoder_class in [encoder.NumericEncoder, encoder.AlphanumericEncoder]:
                                 new_length = 1
-                                cost = encoders[new_mode].length(data[n], character_count_indicator_length)
-                            elif encoder_class == encoder.AlphanumericEncoder:
-                                new_length = 1
-                                cost = encoders[new_mode].length(data[n], character_count_indicator_length)
-                            elif encoder_class == encoder.ByteEncoder:
+                            elif encoder_class in [encoder.ByteEncoder, encoder.KanjiEncoder]:
                                 new_length = 0
-                                cost = encoders[new_mode].length(data[n], character_count_indicator_length)
-                            elif encoder_class == encoder.KanjiEncoder:
-                                new_length = 0
-                                cost = encoders[new_mode].length(data[n], character_count_indicator_length)
+                            cost = encoders[new_mode].length(data[n], character_count_indicator_length)
 
                         if dp[n][mode][length] + cost < dp[n+1][new_mode][new_length]:
                             dp[n+1][new_mode][new_length] = dp[n][mode][length] + cost
@@ -239,7 +235,6 @@ class rMQR:
                 "data": current_segment_data,
                 "encoder_class": encoders[current_mode]
             })
-        print(segments)
 
         return segments
 
