@@ -12,7 +12,7 @@ encoders = [
 
 class SegmentOptimizer:
     MAX_CHARACTER = 360
-    INF = 1000
+    INF = 100000
 
     def __init__(self):
         self.dp = [[[self.INF for n in range(3)] for mode in range(4)] for length in range(self.MAX_CHARACTER + 1)]
@@ -136,7 +136,7 @@ class SegmentOptimizer:
         """
         path = []
         index = best_index
-        while index != (0, 0, 0):
+        while index[0] != 0:
             path.append(index)
             index = self.parents[index[0]][index[1]][index[2]]
         path.reverse()
