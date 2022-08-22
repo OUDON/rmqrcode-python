@@ -79,14 +79,18 @@ class rMQR:
         determined_width = set()
         determined_height = set()
 
-        # Fixed value currently
-        encoder_class = encoder.ByteEncoder
-
         logger.debug("Select rMQR Code version")
         for version_name, qr_version in DataCapacities.items():
             optimizer = SegmentOptimizer()
             segments = optimizer.compute(data, version_name)
-            data_length = sum(map(lambda s:s["encoder_class"].length(s["data"], rMQRVersions[version_name]["character_count_indicator_length"][s["encoder_class"]]), segments))
+            data_length = sum(
+                map(
+                    lambda s: s["encoder_class"].length(
+                        s["data"], rMQRVersions[version_name]["character_count_indicator_length"][s["encoder_class"]]
+                    ),
+                    segments,
+                )
+            )
 
             if data_length <= qr_version["number_of_data_bits"][ecc]:
                 width, height = qr_version["width"], qr_version["height"]
