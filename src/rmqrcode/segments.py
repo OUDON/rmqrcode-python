@@ -125,10 +125,10 @@ class SegmentOptimizer:
         return best_index
 
     def _reconstruct_path(self, best_index):
-        """Reconstruct the path
+        """Reconstructs the path.
 
         Args:
-            best_index
+            best_index: The best index computed by self._find_best().
 
         Returns:
             list: The path of minimum cost in the dynamic programming table
@@ -145,7 +145,18 @@ class SegmentOptimizer:
         return path
 
     def _compute_segments(self, path, data):
-        """Compute the segments"""
+        """Computes the segments
+
+        This method computes the segments. The adjacent characters has same mode are merged.
+
+        Args:
+            path (list): The path computed by self._reconstruct_path().
+            data (str): The data to encode.
+
+        Returns:
+            list: The list of segments.
+
+        """
         segments = []
         current_segment_data = ""
         current_mode = -1
