@@ -1,6 +1,6 @@
-from .format.rmqr_versions import rMQRVersions
-from .errors import DataTooLongError
 from . import encoder
+from .errors import DataTooLongError
+from .format.rmqr_versions import rMQRVersions
 
 encoders = [
     encoder.NumericEncoder,
@@ -8,6 +8,7 @@ encoders = [
     encoder.ByteEncoder,
     encoder.KanjiEncoder,
 ]
+
 
 class SegmentOptimizer:
     MAX_CHARACTER = 360
@@ -50,7 +51,9 @@ class SegmentOptimizer:
                             continue
 
                         encoder_class = encoders[new_mode]
-                        character_count_indicator_length = self.qr_version["character_count_indicator_length"][encoder_class]
+                        character_count_indicator_length = self.qr_version["character_count_indicator_length"][
+                            encoder_class
+                        ]
                         if new_mode == mode:
                             # Keep the mode
                             if encoder_class == encoder.NumericEncoder:
@@ -73,9 +76,9 @@ class SegmentOptimizer:
                                 new_length = 0
                             cost = encoders[new_mode].length(data[n], character_count_indicator_length)
 
-                        if self.dp[n][mode][length] + cost < self.dp[n+1][new_mode][new_length]:
-                            self.dp[n+1][new_mode][new_length] = self.dp[n][mode][length] + cost
-                            self.parents[n+1][new_mode][new_length] = (n, mode, length)
+                        if self.dp[n][mode][length] + cost < self.dp[n + 1][new_mode][new_length]:
+                            self.dp[n + 1][new_mode][new_length] = self.dp[n][mode][length] + cost
+                            self.parents[n + 1][new_mode][new_length] = (n, mode, length)
 
         print("=======")
         print(self.dp[len(data)])
@@ -115,15 +118,9 @@ class SegmentOptimizer:
             elif current_mode == p[1]:
                 current_segment_data += data[p[0] - 1]
             else:
-                segments.append({
-                    "data": current_segment_data,
-                    "encoder_class": encoders[current_mode]
-                })
+                segments.append({"data": current_segment_data, "encoder_class": encoders[current_mode]})
                 current_segment_data = data[p[0] - 1]
                 current_mode = p[1]
         if current_mode != -1:
-            segments.append({
-                "data": current_segment_data,
-                "encoder_class": encoders[current_mode]
-            })
+            segments.append({"data": current_segment_data, "encoder_class": encoders[current_mode]})
         return segments

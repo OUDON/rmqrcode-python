@@ -21,16 +21,16 @@ import logging
 from . import encoder
 from .enums.color import Color
 from .enums.fit_strategy import FitStrategy
+from .errors import DataTooLongError, IllegalVersionError, NoSegmentError
 from .format.alignment_pattern_coordinates import AlignmentPatternCoordinates
 from .format.data_capacities import DataCapacities
 from .format.error_correction_level import ErrorCorrectionLevel
 from .format.generator_polynomials import GeneratorPolynomials
 from .format.mask import mask
 from .format.rmqr_versions import rMQRVersions
+from .segments import SegmentOptimizer
 from .util.error_correction import compute_bch, compute_reed_solomon
 from .util.utilities import split_into_8bits
-from .segments import SegmentOptimizer
-from .errors import DataTooLongError, IllegalVersionError, NoSegmentError
 
 
 class rMQR:
