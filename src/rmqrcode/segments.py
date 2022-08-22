@@ -60,9 +60,9 @@ class SegmentOptimizer:
             self.parents[0][mode][0] = (0, 0, 0)
 
         for n in range(0, len(data)):
-            print("----")
-            print(f"{n} -> {n+1}")
-            print(self.dp[n])
+            # print("----")
+            # print(f"{n} -> {n+1}")
+            # print(self.dp[n])
             for mode in range(4):
                 for length in range(3):
                     if self.dp[n][mode][length] == self.INF:
@@ -102,8 +102,8 @@ class SegmentOptimizer:
                             self.dp[n + 1][new_mode][new_length] = self.dp[n][mode][length] + cost
                             self.parents[n + 1][new_mode][new_length] = (n, mode, length)
 
-        print("=======")
-        print(self.dp[len(data)])
+        # print("=======")
+        # print(self.dp[len(data)])
 
     def _find_best(self, data):
         """Find the index which has the minimum costs.
@@ -140,12 +140,10 @@ class SegmentOptimizer:
             path.append(index)
             index = self.parents[index[0]][index[1]][index[2]]
         path.reverse()
-        path = path[1:]
-        print(path)
         return path
 
     def _compute_segments(self, path, data):
-        """Computes the segments
+        """Computes the segments.
 
         This method computes the segments. The adjacent characters has same mode are merged.
 

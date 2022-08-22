@@ -84,9 +84,10 @@ class rMQR:
 
         logger.debug("Select rMQR Code version")
         for version_name, qr_version in DataCapacities.items():
-            data_length = encoder_class.length(
-                data, rMQRVersions[version_name]["character_count_indicator_length"][encoder_class]
-            )
+            optimizer = SegmentOptimizer()
+            segments = optimizer.compute(data, version_name)
+            data_length = sum(map(lambda s:s["encoder_class"].length(s["data"], rMQRVersions[version_name]["character_count_indicator_length"][s["encoder_class"]]), segments))
+
             if data_length <= qr_version["number_of_data_bits"][ecc]:
                 width, height = qr_version["width"], qr_version["height"]
                 if width not in determined_width and height not in determined_height:
@@ -97,6 +98,7 @@ class rMQR:
                             "version": version_name,
                             "width": width,
                             "height": height,
+                            "segments": segments,
                         }
                     )
                     logger.debug(f"ok: {version_name}")
@@ -123,7 +125,7 @@ class rMQR:
         logger.debug(f"selected: {selected}")
 
         qr = rMQR(selected["version"], ecc)
-        qr.add_segment(data, encoder_class)
+        qr.add_segments(selected["segments"])
         qr.make()
         return qr
 
@@ -161,6 +163,10 @@ class rMQR:
 
         """
         self._segments.append({"data": data, "encoder_class": encoder_class})
+
+    def add_segments(self, segments):
+        for segment in segments:
+            self.add_segment(segment["data"], segment["encoder_class"])
 
     def make(self):
         """Makes an rMQR Code for stored segments.
