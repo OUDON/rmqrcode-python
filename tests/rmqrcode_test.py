@@ -84,8 +84,7 @@ class TestRMQR:
 
     def test_raise_too_long_error_fit(self):
         with pytest.raises(DataTooLongError) as e:
-            s = "a" * 200
-            rMQR.fit(s)
+            rMQR.fit("a" * 200)
 
     def test_raise_invalid_version_error(self):
         with pytest.raises(IllegalVersionError) as e:

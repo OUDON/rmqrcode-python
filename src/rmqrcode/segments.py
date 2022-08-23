@@ -10,7 +10,36 @@ encoders = [
 ]
 
 
+def compute_length(segments, version_name):
+    """Computes the sum of length of the segments.
+
+    Args:
+        segments (list): The list of segment.
+        version_name (str): The version name.
+
+    Returns:
+        int: The sum of the length of the segments.
+
+    """
+    return sum(
+        map(
+            lambda s: s["encoder_class"].length(
+                s["data"], rMQRVersions[version_name]["character_count_indicator_length"][s["encoder_class"]]
+            ),
+            segments,
+        )
+    )
+
+
 class SegmentOptimizer:
+    """A class for computing optimal segmentation of the given data by dynamic programming.
+
+    Attributes:
+        MAX_CHARACTER (int): The maximum characters of the given data.
+        INF (int): Large enough value. This is used as initial value of the dynamic programming table.
+
+    """
+
     MAX_CHARACTER = 360
     INF = 100000
 

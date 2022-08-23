@@ -19,6 +19,7 @@ Example:
 import logging
 
 from . import encoder
+from . import segments as qr_segments
 from .enums.color import Color
 from .enums.fit_strategy import FitStrategy
 from .errors import DataTooLongError, IllegalVersionError, NoSegmentError
@@ -28,7 +29,6 @@ from .format.error_correction_level import ErrorCorrectionLevel
 from .format.generator_polynomials import GeneratorPolynomials
 from .format.mask import mask
 from .format.rmqr_versions import rMQRVersions
-from .segments import SegmentOptimizer
 from .util.error_correction import compute_bch, compute_reed_solomon
 from .util.utilities import split_into_8bits
 
@@ -81,16 +81,9 @@ class rMQR:
 
         logger.debug("Select rMQR Code version")
         for version_name, qr_version in DataCapacities.items():
-            optimizer = SegmentOptimizer()
-            segments = optimizer.compute(data, version_name)
-            data_length = sum(
-                map(
-                    lambda s: s["encoder_class"].length(
-                        s["data"], rMQRVersions[version_name]["character_count_indicator_length"][s["encoder_class"]]
-                    ),
-                    segments,
-                )
-            )
+            optimizer = qr_segments.SegmentOptimizer()
+            optimized_segments = optimizer.compute(data, version_name)
+            data_length = qr_segments.compute_length(optimized_segments, version_name)
 
             if data_length <= qr_version["number_of_data_bits"][ecc]:
                 width, height = qr_version["width"], qr_version["height"]
@@ -102,7 +95,7 @@ class rMQR:
                             "version": version_name,
                             "width": width,
                             "height": height,
-                            "segments": segments,
+                            "segments": optimized_segments,
                         }
                     )
                     logger.debug(f"ok: {version_name}")
@@ -135,8 +128,7 @@ class rMQR:
 
     def _optimized_segments(self, data):
         optimizer = SegmentOptimizer()
-        segments = optimizer.compute(data, self.version_name())
-        return segments
+        return optimizer.compute(data, self.version_name())
 
     def __init__(self, version, ecc, with_quiet_zone=True, logger=None):
         self._logger = logger or rMQR._init_logger()
