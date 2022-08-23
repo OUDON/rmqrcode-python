@@ -127,7 +127,7 @@ class rMQR:
         return qr
 
     def _optimized_segments(self, data):
-        optimizer = SegmentOptimizer()
+        optimizer = qr_segments.SegmentOptimizer()
         return optimizer.compute(data, self.version_name())
 
     def __init__(self, version, ecc, with_quiet_zone=True, logger=None):
