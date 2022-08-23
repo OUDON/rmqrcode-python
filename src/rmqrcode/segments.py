@@ -57,6 +57,9 @@ class SegmentOptimizer:
         Returns:
             list: The list of segments.
 
+        Raises:
+            rmqrcode.DataTooLongError: If the data is too long to encode.
+
         """
         if len(data) > self.MAX_CHARACTER:
             raise DataTooLongError()
