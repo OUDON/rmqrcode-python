@@ -71,9 +71,10 @@ class SegmentOptimizer:
     def _compute_costs(self, data):
         """Computes costs by dynamic programming.
 
-        This method computes costs of the dynamic programming table. Define dp[n][mode][length] as
-        the minimize bit length when encode only the `n`-th leading characters which the last
-        character is encoded in `mode` and the remainder bits length is `length`.
+        This method computes costs of the dynamic programming table. Define
+        dp[n][mode][unfilled_length] as the minimize bit length when encode only
+        the `n`-th leading characters which the last character is encoded in `mode`
+        and the remainder bits length is `unfilled_length`.
 
         Args:
             data (str): The data to encode
@@ -93,8 +94,8 @@ class SegmentOptimizer:
             # print(f"{n} -> {n+1}")
             # print(self.dp[n])
             for mode in range(4):
-                for length in range(3):
-                    if self.dp[n][mode][length] == self.INF:
+                for unfilled_length in range(3):
+                    if self.dp[n][mode][unfilled_length] == self.INF:
                         continue
 
                     for new_mode in range(4):
@@ -108,11 +109,11 @@ class SegmentOptimizer:
                         if new_mode == mode:
                             # Keep the mode
                             if encoder_class == encoder.NumericEncoder:
-                                new_length = (length + 1) % 3
-                                cost = 4 if length == 0 else 3
+                                new_length = (unfilled_length + 1) % 3
+                                cost = 4 if unfilled_length == 0 else 3
                             elif encoder_class == encoder.AlphanumericEncoder:
-                                new_length = (length + 1) % 2
-                                cost = 6 if length == 0 else 5
+                                new_length = (unfilled_length + 1) % 2
+                                cost = 6 if unfilled_length == 0 else 5
                             elif encoder_class == encoder.ByteEncoder:
                                 new_length = 0
                                 cost = 8
@@ -127,9 +128,9 @@ class SegmentOptimizer:
                                 new_length = 0
                             cost = encoders[new_mode].length(data[n], character_count_indicator_length)
 
-                        if self.dp[n][mode][length] + cost < self.dp[n + 1][new_mode][new_length]:
-                            self.dp[n + 1][new_mode][new_length] = self.dp[n][mode][length] + cost
-                            self.parents[n + 1][new_mode][new_length] = (n, mode, length)
+                        if self.dp[n][mode][unfilled_length] + cost < self.dp[n + 1][new_mode][new_length]:
+                            self.dp[n + 1][new_mode][new_length] = self.dp[n][mode][unfilled_length] + cost
+                            self.parents[n + 1][new_mode][new_length] = (n, mode, unfilled_length)
 
         # print("=======")
         # print(self.dp[len(data)])
@@ -141,16 +142,16 @@ class SegmentOptimizer:
             data (str): The data to encode
 
         Returns:
-            tuple: The best index as tuple (n, mode, length).
+            tuple: The best index as tuple (n, mode, unfilled_length).
 
         """
         best = self.INF
         best_index = (-1, -1)
         for mode in range(4):
-            for length in range(3):
-                if self.dp[len(data)][mode][length] < best:
-                    best = self.dp[len(data)][mode][length]
-                    best_index = (len(data), mode, length)
+            for unfilled_length in range(3):
+                if self.dp[len(data)][mode][unfilled_length] < best:
+                    best = self.dp[len(data)][mode][unfilled_length]
+                    best_index = (len(data), mode, unfilled_length)
         return best_index
 
     def _reconstruct_path(self, best_index):
