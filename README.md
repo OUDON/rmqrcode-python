@@ -131,6 +131,7 @@ The `rMQR.fit` method mentioned above computes the optimal segmentation.
 For example, the data "123Abc" is divided into the following two segments.
 
 |Segment No.|Data|Encoding Mode|
+|-|-|-|
 |Segment1|123|Numeric|
 |Segment2|Abc|Byte|
 
