@@ -80,7 +80,7 @@ class SegmentOptimizer:
         and the remainder bits length is `unfilled_length`.
 
         Args:
-            data (str): The data to encode
+            data (str): The data to encode.
 
         Returns:
             void
@@ -93,9 +93,6 @@ class SegmentOptimizer:
             self.parents[0][mode][0] = (0, 0, 0)
 
         for n in range(0, len(data)):
-            # print("----")
-            # print(f"{n} -> {n+1}")
-            # print(self.dp[n])
             for mode in range(4):
                 for unfilled_length in range(3):
                     if self.dp[n][mode][unfilled_length] == self.INF:
@@ -135,14 +132,11 @@ class SegmentOptimizer:
                             self.dp[n + 1][new_mode][new_length] = self.dp[n][mode][unfilled_length] + cost
                             self.parents[n + 1][new_mode][new_length] = (n, mode, unfilled_length)
 
-        # print("=======")
-        # print(self.dp[len(data)])
-
     def _find_best(self, data):
         """Find the index which has the minimum costs.
 
         Args:
-            data (str): The data to encode
+            data (str): The data to encode.
 
         Returns:
             tuple: The best index as tuple (n, mode, unfilled_length).
@@ -164,7 +158,7 @@ class SegmentOptimizer:
             best_index: The best index computed by self._find_best().
 
         Returns:
-            list: The path of minimum cost in the dynamic programming table
+            list: The path of minimum cost in the dynamic programming table.
 
         """
         path = []
