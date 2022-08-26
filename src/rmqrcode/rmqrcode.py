@@ -19,8 +19,10 @@ Example:
 import logging
 
 from . import encoder
+from . import segments as qr_segments
 from .enums.color import Color
 from .enums.fit_strategy import FitStrategy
+from .errors import DataTooLongError, IllegalVersionError, NoSegmentError
 from .format.alignment_pattern_coordinates import AlignmentPatternCoordinates
 from .format.data_capacities import DataCapacities
 from .format.error_correction_level import ErrorCorrectionLevel
@@ -77,14 +79,12 @@ class rMQR:
         determined_width = set()
         determined_height = set()
 
-        # Fixed value currently
-        encoder_class = encoder.ByteEncoder
-
         logger.debug("Select rMQR Code version")
         for version_name, qr_version in DataCapacities.items():
-            data_length = encoder_class.length(
-                data, rMQRVersions[version_name]["character_count_indicator_length"][encoder_class]
-            )
+            optimizer = qr_segments.SegmentOptimizer()
+            optimized_segments = optimizer.compute(data, version_name)
+            data_length = qr_segments.compute_length(optimized_segments, version_name)
+
             if data_length <= qr_version["number_of_data_bits"][ecc]:
                 width, height = qr_version["width"], qr_version["height"]
                 if width not in determined_width and height not in determined_height:
@@ -95,6 +95,7 @@ class rMQR:
                             "version": version_name,
                             "width": width,
                             "height": height,
+                            "segments": optimized_segments,
                         }
                     )
                     logger.debug(f"ok: {version_name}")
@@ -121,9 +122,13 @@ class rMQR:
         logger.debug(f"selected: {selected}")
 
         qr = rMQR(selected["version"], ecc)
-        qr.add_segment(data, encoder_class)
+        qr.add_segments(selected["segments"])
         qr.make()
         return qr
+
+    def _optimized_segments(self, data):
+        optimizer = qr_segments.SegmentOptimizer()
+        return optimizer.compute(data, self.version_name())
 
     def __init__(self, version, ecc, with_quiet_zone=True, logger=None):
         self._logger = logger or rMQR._init_logger()
@@ -154,6 +159,10 @@ class rMQR:
 
         """
         self._segments.append({"data": data, "encoder_class": encoder_class})
+
+    def add_segments(self, segments):
+        for segment in segments:
+            self.add_segment(segment["data"], segment["encoder_class"])
 
     def make(self):
         """Makes an rMQR Code for stored segments.
@@ -652,18 +661,3 @@ class rMQR:
 
         """
         return version_name in rMQRVersions
-
-
-class DataTooLongError(ValueError):
-    "A class represents an error raised when the given data is too long."
-    pass
-
-
-class IllegalVersionError(ValueError):
-    "A class represents an error raised when the given version name is illegal."
-    pass
-
-
-class NoSegmentError(ValueError):
-    "A class represents an error raised when no segments are add"
-    pass

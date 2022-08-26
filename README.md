@@ -48,7 +48,7 @@ optional arguments:
                         Strategy how to determine rMQR Code size.
 ```
 
-### Generate rMQR Code
+### Generate rMQR Code in scripts
 Alternatively, you can also use in python scripts:
 ```py
 from rmqrcode import rMQR
@@ -126,6 +126,17 @@ The value for `encoder_class` is listed in the below table.
 |Byte|ByteEncoder|Any|
 |Kanji|KanjiEncoder|from 0x8140 to 0x9FFC, from 0xE040 to 0xEBBF in Shift JIS value|
 
+### Optimal Segmentation
+The `rMQR.fit` method mentioned above computes the optimal segmentation.
+For example, the data "123Abc" is divided into the following two segments.
+
+|Segment No.|Data|Encoding Mode|
+|-|-|-|
+|Segment1|123|Numeric|
+|Segment2|Abc|Byte|
+
+In the case of other segmentation like "123A bc", the length of the bit string after
+encoding will be longer than the above optimal case.
 
 ## 🤝 Contributing
 Any suggestions are welcome! If you are interesting in contributing, please read [CONTRIBUTING](https://github.com/OUDON/rmqrcode-python/blob/develop/CONTRIBUTING.md).
