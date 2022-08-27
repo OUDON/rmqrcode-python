@@ -33,7 +33,10 @@ class KanjiEncoder(EncoderBase):
     @classmethod
     def is_valid_characters(cls, data):
         for c in data:
-            shift_jis = c.encode("shift_jis")
+            try:
+                shift_jis = c.encode("shift_jis")
+            except UnicodeEncodeError:
+                return False
             if len(shift_jis) < 2:
                 return False
             hex_value = shift_jis[0] * 256 + shift_jis[1]
