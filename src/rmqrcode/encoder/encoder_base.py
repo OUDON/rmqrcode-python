@@ -74,7 +74,7 @@ class EncoderBase(ABC):
     @classmethod
     @abstractmethod
     def characters_num(cls, data):
-        """ Returns the number of the characters of the data.
+        """Returns the number of the characters of the data.
 
         Args:
             data (str): The data to encode.

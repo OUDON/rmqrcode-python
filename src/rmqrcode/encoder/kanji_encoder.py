@@ -32,7 +32,7 @@ class KanjiEncoder(EncoderBase):
 
     @classmethod
     def characters_num(cls, data):
-        return len(data.encode("shift_jis"))//2
+        return len(data.encode("shift_jis")) // 2
 
     @classmethod
     def is_valid_characters(cls, data):
