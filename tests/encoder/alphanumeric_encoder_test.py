@@ -19,3 +19,4 @@ class TestAlphaNumericEncoder:
     def test_is_valid_characters(self):
         assert AlphanumericEncoder.is_valid_characters("AC-42") is True
         assert AlphanumericEncoder.is_valid_characters("abc123") is False
+        assert AlphanumericEncoder.is_valid_characters("📌") is False

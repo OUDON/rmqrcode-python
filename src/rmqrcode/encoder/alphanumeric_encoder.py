@@ -84,5 +84,9 @@ class AlphanumericEncoder(EncoderBase):
         )
 
     @classmethod
+    def characters_num(cls, data):
+        return len(data)
+
+    @classmethod
     def is_valid_characters(cls, data):
         return bool(re.match(r"^[0-9A-Z\s\$\%\*\+\-\.\/\:]*$", data))

@@ -40,5 +40,9 @@ class NumericEncoder(EncoderBase):
         return len(cls.mode_indicator()) + character_count_indicator_length + 10 * (len(data) // 3) + r
 
     @classmethod
+    def characters_num(cls, data):
+        return len(data)
+
+    @classmethod
     def is_valid_characters(cls, data):
         return bool(re.match(r"^[0-9]*$", data))

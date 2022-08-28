@@ -36,7 +36,7 @@ class EncoderBase(ABC):
             raise IllegalCharacterError
 
         res = cls.mode_indicator()
-        res += bin(len(data))[2:].zfill(character_count_indicator_length)
+        res += bin(cls.characters_num(data))[2:].zfill(character_count_indicator_length)
         res += cls._encoded_bits(data)
         return res
 
@@ -69,6 +69,11 @@ class EncoderBase(ABC):
             int: The length of the encoded bits.
 
         """
+        raise NotImplementedError()
+
+    @classmethod
+    @abstractmethod
+    def characters_num(cls, data):
         raise NotImplementedError()
 
     @classmethod

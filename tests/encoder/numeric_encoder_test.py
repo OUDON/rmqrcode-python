@@ -19,3 +19,4 @@ class TestNumericEncoder:
     def test_is_valid_characters(self):
         assert NumericEncoder.is_valid_characters("0123456789") is True
         assert NumericEncoder.is_valid_characters("A1234!678@") is False
+        assert NumericEncoder.is_valid_characters("📌") is False

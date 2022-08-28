@@ -31,6 +31,10 @@ class KanjiEncoder(EncoderBase):
         return len(cls.mode_indicator()) + character_count_indicator_length + 13 * len(data)
 
     @classmethod
+    def characters_num(cls, data):
+        return len(data.encode("shift_jis"))//2
+
+    @classmethod
     def is_valid_characters(cls, data):
         for c in data:
             try:
