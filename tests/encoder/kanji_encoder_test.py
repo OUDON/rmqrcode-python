@@ -19,3 +19,4 @@ class TestKanjiEncoder:
     def test_is_valid_characters(self):
         assert KanjiEncoder.is_valid_characters("点茗") is True
         assert KanjiEncoder.is_valid_characters("abc") is False
+        assert KanjiEncoder.is_valid_characters("📌") is False
