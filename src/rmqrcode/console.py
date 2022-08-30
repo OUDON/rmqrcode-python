@@ -25,8 +25,8 @@ def _make_qr(data, ecc, version, fit_strategy):
             qr = rMQR(version, ecc)
         except IllegalVersionError:
             _show_error_and_exit("Error: Illegal version.")
-        qr.make(data)
-
+        qr.add_segment(data)
+        qr.make()
     return qr
 
 

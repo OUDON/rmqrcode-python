@@ -2,6 +2,7 @@ from rmqrcode import rMQR
 from rmqrcode import ErrorCorrectionLevel
 from rmqrcode import QRImage
 from rmqrcode import FitStrategy
+from rmqrcode import encoder
 
 import logging
 
@@ -24,9 +25,11 @@ def main():
     print(qr)
 
     # Determine rMQR version manually
-    # version = 'R13x99'
+    # version = 'R7x43'
     # qr = rMQR(version, error_correction_level)
-    # qr.make(data)
+    # qr.add_segment("123", encoder_class=encoder.NumericEncoder)
+    # qr.add_segment("Abc", encoder_class=encoder.ByteEncoder)
+    # qr.make()
     # print(qr)
 
     # Save as png

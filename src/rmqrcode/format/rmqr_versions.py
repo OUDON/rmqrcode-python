@@ -1,3 +1,4 @@
+from ..encoder import AlphanumericEncoder, ByteEncoder, KanjiEncoder, NumericEncoder
 from .error_correction_level import ErrorCorrectionLevel
 
 rMQRVersions = {
@@ -6,7 +7,12 @@ rMQRVersions = {
         "height": 7,
         "width": 43,
         "remainder_bits": 0,
-        "character_count_length": 3,
+        "character_count_indicator_length": {
+            NumericEncoder: 4,
+            AlphanumericEncoder: 3,
+            ByteEncoder: 3,
+            KanjiEncoder: 2,
+        },
         "codewords_total": 13,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -30,7 +36,12 @@ rMQRVersions = {
         "height": 7,
         "width": 59,
         "remainder_bits": 3,
-        "character_count_length": 4,
+        "character_count_indicator_length": {
+            NumericEncoder: 5,
+            AlphanumericEncoder: 5,
+            ByteEncoder: 4,
+            KanjiEncoder: 3,
+        },
         "codewords_total": 21,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -54,7 +65,12 @@ rMQRVersions = {
         "height": 7,
         "width": 77,
         "remainder_bits": 5,
-        "character_count_length": 5,
+        "character_count_indicator_length": {
+            NumericEncoder: 6,
+            AlphanumericEncoder: 5,
+            ByteEncoder: 5,
+            KanjiEncoder: 4,
+        },
         "codewords_total": 32,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -78,7 +94,12 @@ rMQRVersions = {
         "height": 7,
         "width": 99,
         "remainder_bits": 6,
-        "character_count_length": 5,
+        "character_count_indicator_length": {
+            NumericEncoder: 7,
+            AlphanumericEncoder: 6,
+            ByteEncoder: 5,
+            KanjiEncoder: 5,
+        },
         "codewords_total": 44,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -102,7 +123,12 @@ rMQRVersions = {
         "height": 7,
         "width": 139,
         "remainder_bits": 1,
-        "character_count_length": 6,
+        "character_count_indicator_length": {
+            NumericEncoder: 7,
+            AlphanumericEncoder: 6,
+            ByteEncoder: 6,
+            KanjiEncoder: 5,
+        },
         "codewords_total": 68,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -126,7 +152,12 @@ rMQRVersions = {
         "height": 9,
         "width": 43,
         "remainder_bits": 2,
-        "character_count_length": 4,
+        "character_count_indicator_length": {
+            NumericEncoder: 5,
+            AlphanumericEncoder: 5,
+            ByteEncoder: 4,
+            KanjiEncoder: 3,
+        },
         "codewords_total": 21,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -150,7 +181,12 @@ rMQRVersions = {
         "height": 9,
         "width": 59,
         "remainder_bits": 3,
-        "character_count_length": 5,
+        "character_count_indicator_length": {
+            NumericEncoder: 6,
+            AlphanumericEncoder: 5,
+            ByteEncoder: 5,
+            KanjiEncoder: 4,
+        },
         "codewords_total": 33,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -174,7 +210,12 @@ rMQRVersions = {
         "height": 9,
         "width": 77,
         "remainder_bits": 1,
-        "character_count_length": 5,
+        "character_count_indicator_length": {
+            NumericEncoder: 7,
+            AlphanumericEncoder: 6,
+            ByteEncoder: 5,
+            KanjiEncoder: 5,
+        },
         "codewords_total": 49,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -203,7 +244,12 @@ rMQRVersions = {
         "height": 9,
         "width": 99,
         "remainder_bits": 4,
-        "character_count_length": 6,
+        "character_count_indicator_length": {
+            NumericEncoder: 7,
+            AlphanumericEncoder: 6,
+            ByteEncoder: 6,
+            KanjiEncoder: 5,
+        },
         "codewords_total": 66,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -227,7 +273,12 @@ rMQRVersions = {
         "height": 9,
         "width": 139,
         "remainder_bits": 5,
-        "character_count_length": 6,
+        "character_count_indicator_length": {
+            NumericEncoder: 8,
+            AlphanumericEncoder: 7,
+            ByteEncoder: 6,
+            KanjiEncoder: 6,
+        },
         "codewords_total": 99,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -256,7 +307,12 @@ rMQRVersions = {
         "height": 11,
         "width": 27,
         "remainder_bits": 2,
-        "character_count_length": 3,
+        "character_count_indicator_length": {
+            NumericEncoder: 4,
+            AlphanumericEncoder: 4,
+            ByteEncoder: 3,
+            KanjiEncoder: 2,
+        },
         "codewords_total": 15,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -280,7 +336,12 @@ rMQRVersions = {
         "height": 11,
         "width": 43,
         "remainder_bits": 1,
-        "character_count_length": 5,
+        "character_count_indicator_length": {
+            NumericEncoder: 6,
+            AlphanumericEncoder: 5,
+            ByteEncoder: 5,
+            KanjiEncoder: 4,
+        },
         "codewords_total": 31,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -304,7 +365,12 @@ rMQRVersions = {
         "height": 11,
         "width": 59,
         "remainder_bits": 0,
-        "character_count_length": 5,
+        "character_count_indicator_length": {
+            NumericEncoder: 7,
+            AlphanumericEncoder: 6,
+            ByteEncoder: 5,
+            KanjiEncoder: 5,
+        },
         "codewords_total": 47,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -333,7 +399,12 @@ rMQRVersions = {
         "height": 11,
         "width": 77,
         "remainder_bits": 2,
-        "character_count_length": 6,
+        "character_count_indicator_length": {
+            NumericEncoder: 7,
+            AlphanumericEncoder: 6,
+            ByteEncoder: 6,
+            KanjiEncoder: 5,
+        },
         "codewords_total": 67,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -362,7 +433,12 @@ rMQRVersions = {
         "height": 11,
         "width": 99,
         "remainder_bits": 7,
-        "character_count_length": 6,
+        "character_count_indicator_length": {
+            NumericEncoder: 8,
+            AlphanumericEncoder: 7,
+            ByteEncoder: 6,
+            KanjiEncoder: 6,
+        },
         "codewords_total": 89,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -396,7 +472,12 @@ rMQRVersions = {
         "height": 11,
         "width": 139,
         "remainder_bits": 6,
-        "character_count_length": 7,
+        "character_count_indicator_length": {
+            NumericEncoder: 8,
+            AlphanumericEncoder: 7,
+            ByteEncoder: 7,
+            KanjiEncoder: 6,
+        },
         "codewords_total": 132,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -419,7 +500,12 @@ rMQRVersions = {
         "version_indicator": 0b10000,
         "height": 13,
         "width": 27,
-        "character_count_length": 4,
+        "character_count_indicator_length": {
+            NumericEncoder: 5,
+            AlphanumericEncoder: 5,
+            ByteEncoder: 4,
+            KanjiEncoder: 3,
+        },
         "remainder_bits": 4,
         "codewords_total": 21,
         "blocks": {
@@ -444,7 +530,12 @@ rMQRVersions = {
         "height": 13,
         "width": 43,
         "remainder_bits": 1,
-        "character_count_length": 5,
+        "character_count_indicator_length": {
+            NumericEncoder: 6,
+            AlphanumericEncoder: 6,
+            ByteEncoder: 5,
+            KanjiEncoder: 5,
+        },
         "codewords_total": 41,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -468,7 +559,12 @@ rMQRVersions = {
         "height": 13,
         "width": 59,
         "remainder_bits": 6,
-        "character_count_length": 6,
+        "character_count_indicator_length": {
+            NumericEncoder: 7,
+            AlphanumericEncoder: 6,
+            ByteEncoder: 6,
+            KanjiEncoder: 5,
+        },
         "codewords_total": 60,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -492,7 +588,12 @@ rMQRVersions = {
         "height": 13,
         "width": 77,
         "remainder_bits": 4,
-        "character_count_length": 6,
+        "character_count_indicator_length": {
+            NumericEncoder: 7,
+            AlphanumericEncoder: 7,
+            ByteEncoder: 6,
+            KanjiEncoder: 6,
+        },
         "codewords_total": 85,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -526,7 +627,12 @@ rMQRVersions = {
         "height": 13,
         "width": 99,
         "remainder_bits": 3,
-        "character_count_length": 7,
+        "character_count_indicator_length": {
+            NumericEncoder: 8,
+            AlphanumericEncoder: 7,
+            ByteEncoder: 7,
+            KanjiEncoder: 6,
+        },
         "codewords_total": 113,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -560,7 +666,12 @@ rMQRVersions = {
         "height": 13,
         "width": 139,
         "remainder_bits": 0,
-        "character_count_length": 7,
+        "character_count_indicator_length": {
+            NumericEncoder: 8,
+            AlphanumericEncoder: 8,
+            ByteEncoder: 7,
+            KanjiEncoder: 7,
+        },
         "codewords_total": 166,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -594,7 +705,12 @@ rMQRVersions = {
         "height": 15,
         "width": 43,
         "remainder_bits": 1,
-        "character_count_length": 6,
+        "character_count_indicator_length": {
+            NumericEncoder: 7,
+            AlphanumericEncoder: 6,
+            ByteEncoder: 6,
+            KanjiEncoder: 5,
+        },
         "codewords_total": 51,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -623,7 +739,12 @@ rMQRVersions = {
         "height": 15,
         "width": 59,
         "remainder_bits": 4,
-        "character_count_length": 6,
+        "character_count_indicator_length": {
+            NumericEncoder: 7,
+            AlphanumericEncoder: 7,
+            ByteEncoder: 6,
+            KanjiEncoder: 5,
+        },
         "codewords_total": 74,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -647,7 +768,12 @@ rMQRVersions = {
         "height": 15,
         "width": 77,
         "remainder_bits": 6,
-        "character_count_length": 7,
+        "character_count_indicator_length": {
+            NumericEncoder: 8,
+            AlphanumericEncoder: 7,
+            ByteEncoder: 7,
+            KanjiEncoder: 6,
+        },
         "codewords_total": 103,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -681,7 +807,12 @@ rMQRVersions = {
         "height": 15,
         "width": 99,
         "remainder_bits": 7,
-        "character_count_length": 7,
+        "character_count_indicator_length": {
+            NumericEncoder: 8,
+            AlphanumericEncoder: 7,
+            ByteEncoder: 7,
+            KanjiEncoder: 6,
+        },
         "codewords_total": 136,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -705,7 +836,12 @@ rMQRVersions = {
         "height": 15,
         "width": 139,
         "remainder_bits": 2,
-        "character_count_length": 7,
+        "character_count_indicator_length": {
+            NumericEncoder: 9,
+            AlphanumericEncoder: 8,
+            ByteEncoder: 7,
+            KanjiEncoder: 7,
+        },
         "codewords_total": 199,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -739,7 +875,12 @@ rMQRVersions = {
         "height": 17,
         "width": 43,
         "remainder_bits": 1,
-        "character_count_length": 6,
+        "character_count_indicator_length": {
+            NumericEncoder: 7,
+            AlphanumericEncoder: 6,
+            ByteEncoder: 6,
+            KanjiEncoder: 5,
+        },
         "codewords_total": 61,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -768,7 +909,12 @@ rMQRVersions = {
         "height": 17,
         "width": 59,
         "remainder_bits": 2,
-        "character_count_length": 6,
+        "character_count_indicator_length": {
+            NumericEncoder: 8,
+            AlphanumericEncoder: 7,
+            ByteEncoder: 6,
+            KanjiEncoder: 6,
+        },
         "codewords_total": 88,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -792,7 +938,12 @@ rMQRVersions = {
         "height": 17,
         "width": 77,
         "remainder_bits": 0,
-        "character_count_length": 7,
+        "character_count_indicator_length": {
+            NumericEncoder: 8,
+            AlphanumericEncoder: 7,
+            ByteEncoder: 7,
+            KanjiEncoder: 6,
+        },
         "codewords_total": 122,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -821,7 +972,12 @@ rMQRVersions = {
         "height": 17,
         "width": 99,
         "remainder_bits": 3,
-        "character_count_length": 7,
+        "character_count_indicator_length": {
+            NumericEncoder: 8,
+            AlphanumericEncoder: 8,
+            ByteEncoder: 7,
+            KanjiEncoder: 6,
+        },
         "codewords_total": 160,
         "blocks": {
             ErrorCorrectionLevel.M: [
@@ -850,7 +1006,12 @@ rMQRVersions = {
         "height": 17,
         "width": 139,
         "remainder_bits": 4,
-        "character_count_length": 8,
+        "character_count_indicator_length": {
+            NumericEncoder: 9,
+            AlphanumericEncoder: 8,
+            ByteEncoder: 8,
+            KanjiEncoder: 7,
+        },
         "codewords_total": 232,
         "blocks": {
             ErrorCorrectionLevel.M: [
