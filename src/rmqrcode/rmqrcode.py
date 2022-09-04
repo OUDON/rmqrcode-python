@@ -24,7 +24,6 @@ from .enums.color import Color
 from .enums.fit_strategy import FitStrategy
 from .errors import DataTooLongError, IllegalVersionError, NoSegmentError
 from .format.alignment_pattern_coordinates import AlignmentPatternCoordinates
-from .format.data_capacities import DataCapacities
 from .format.error_correction_level import ErrorCorrectionLevel
 from .format.generator_polynomials import GeneratorPolynomials
 from .format.mask import mask
@@ -80,7 +79,7 @@ class rMQR:
         determined_height = set()
 
         logger.debug("Select rMQR Code version")
-        for version_name, qr_version in DataCapacities.items():
+        for version_name, qr_version in rMQRVersions.items():
             optimizer = qr_segments.SegmentOptimizer()
             try:
                 optimized_segments = optimizer.compute(data, version_name, ecc)
@@ -204,7 +203,7 @@ class rMQR:
 
         """
         qr_version = rMQRVersions[self.version_name()]
-        data_bits_max = DataCapacities[self.version_name()]["number_of_data_bits"][self._error_correction_level]
+        data_bits_max = qr_version["number_of_data_bits"][self._error_correction_level]
 
         res = ""
         for segment in self._segments:
