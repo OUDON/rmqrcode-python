@@ -116,8 +116,7 @@ class SegmentOptimizer:
                                 cost = 6 if unfilled_length == 0 else 5
                             elif encoder_class == encoder.ByteEncoder:
                                 new_length = 0
-                                cost = 8 * len(data[n].encode('utf-8'))
-                                print(data[n].encode('utf-8'))
+                                cost = 8 * len(data[n].encode("utf-8"))
                             elif encoder_class == encoder.KanjiEncoder:
                                 new_length = 0
                                 cost = 13
