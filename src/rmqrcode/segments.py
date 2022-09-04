@@ -121,7 +121,7 @@ class SegmentOptimizer:
                             self.parents[n + 1][new_mode][new_length] = (n, mode, unfilled_length)
 
     def _compute_new_state_without_mode_changing(self, character, new_mode, unfilled_length):
-        """Computes the new state without mode changing.
+        """Computes the new state values without mode changing.
 
         Args:
             character (str): The current character. Assume this as one length string.
@@ -148,7 +148,7 @@ class SegmentOptimizer:
         return (cost, new_length)
 
     def _compute_new_state_with_mode_changing(self, character, new_mode, unfilled_length):
-        """Computes the new state with mode changing.
+        """Computes the new state values with mode changing.
 
         Args:
             character (str): The current character. Assume this as one length string.
