@@ -1,5 +1,6 @@
 from . import encoder
 from .errors import DataTooLongError
+from .format.data_capacities import DataCapacities
 from .format.rmqr_versions import rMQRVersions
 
 encoders = [
@@ -47,12 +48,13 @@ class SegmentOptimizer:
         self.dp = [[[self.INF for n in range(3)] for mode in range(4)] for length in range(self.MAX_CHARACTER + 1)]
         self.parents = [[[-1 for n in range(3)] for mode in range(4)] for length in range(self.MAX_CHARACTER + 1)]
 
-    def compute(self, data, version):
+    def compute(self, data, version, ecc):
         """Computes the optimize segmentation for the given data.
 
         Args:
             data (str): The data to encode.
             version (str): The version name.
+            ecc (rmqrcode.ErrorCorrectionLevel): The error correction level.
 
         Returns:
             list: The list of segments.
@@ -66,8 +68,11 @@ class SegmentOptimizer:
 
         self.qr_version = rMQRVersions[version]
         self._compute_costs(data)
-        best_index = self._find_best(data)
-        path = self._reconstruct_path(best_index)
+        best = self._find_best(data)
+        if best["cost"] > DataCapacities[version]["number_of_data_bits"][ecc]:
+            raise DataTooLongError
+
+        path = self._reconstruct_path(best["index"])
         segments = self._compute_segments(path, data)
         return segments
 
@@ -102,35 +107,66 @@ class SegmentOptimizer:
                         if not encoders[new_mode].is_valid_characters(data[n]):
                             continue
 
-                        encoder_class = encoders[new_mode]
-                        character_count_indicator_length = self.qr_version["character_count_indicator_length"][
-                            encoder_class
-                        ]
                         if new_mode == mode:
-                            # Keep the mode
-                            if encoder_class == encoder.NumericEncoder:
-                                new_length = (unfilled_length + 1) % 3
-                                cost = 4 if unfilled_length == 0 else 3
-                            elif encoder_class == encoder.AlphanumericEncoder:
-                                new_length = (unfilled_length + 1) % 2
-                                cost = 6 if unfilled_length == 0 else 5
-                            elif encoder_class == encoder.ByteEncoder:
-                                new_length = 0
-                                cost = 8
-                            elif encoder_class == encoder.KanjiEncoder:
-                                new_length = 0
-                                cost = 13
+                            cost, new_length = self._compute_new_state_without_mode_changing(
+                                data[n], new_mode, unfilled_length
+                            )
                         else:
-                            # Change the mode
-                            if encoder_class in [encoder.NumericEncoder, encoder.AlphanumericEncoder]:
-                                new_length = 1
-                            elif encoder_class in [encoder.ByteEncoder, encoder.KanjiEncoder]:
-                                new_length = 0
-                            cost = encoders[new_mode].length(data[n], character_count_indicator_length)
+                            cost, new_length = self._compute_new_state_with_mode_changing(
+                                data[n], new_mode, unfilled_length
+                            )
 
                         if self.dp[n][mode][unfilled_length] + cost < self.dp[n + 1][new_mode][new_length]:
                             self.dp[n + 1][new_mode][new_length] = self.dp[n][mode][unfilled_length] + cost
                             self.parents[n + 1][new_mode][new_length] = (n, mode, unfilled_length)
+
+    def _compute_new_state_without_mode_changing(self, character, new_mode, unfilled_length):
+        """Computes the new state values without mode changing.
+
+        Args:
+            character (str): The current character. Assume this as one length string.
+            new_mode (int): The state of the new mode.
+            unfilled_length (int): The state of the current unfilled_length.
+
+        Returns:
+            tuple: (cost, new_length).
+
+        """
+        encoder_class = encoders[new_mode]
+        if encoder_class == encoder.NumericEncoder:
+            new_length = (unfilled_length + 1) % 3
+            cost = 4 if unfilled_length == 0 else 3
+        elif encoder_class == encoder.AlphanumericEncoder:
+            new_length = (unfilled_length + 1) % 2
+            cost = 6 if unfilled_length == 0 else 5
+        elif encoder_class == encoder.ByteEncoder:
+            new_length = 0
+            cost = 8 * len(character.encode("utf-8"))
+        elif encoder_class == encoder.KanjiEncoder:
+            new_length = 0
+            cost = 13
+        return (cost, new_length)
+
+    def _compute_new_state_with_mode_changing(self, character, new_mode, unfilled_length):
+        """Computes the new state values with mode changing.
+
+        Args:
+            character (str): The current character. Assume this as one length string.
+            new_mode (int): The state of the new mode.
+            unfilled_length (int): The state of the current unfilled_length.
+
+        Returns:
+            tuple: (cost, new_length).
+
+        """
+        encoder_class = encoders[new_mode]
+        character_count_indicator_length = self.qr_version["character_count_indicator_length"][encoder_class]
+        if encoder_class in [encoder.NumericEncoder, encoder.AlphanumericEncoder]:
+            new_length = 1
+        elif encoder_class in [encoder.ByteEncoder, encoder.KanjiEncoder]:
+            new_length = 0
+        cost = encoder_class.length(character, character_count_indicator_length)
+        return (cost, new_length)
 
     def _find_best(self, data):
         """Find the index which has the minimum costs.
@@ -139,7 +175,8 @@ class SegmentOptimizer:
             data (str): The data to encode.
 
         Returns:
-            tuple: The best index as tuple (n, mode, unfilled_length).
+            dict: The dict object includes "cost" and "index". The "cost" is the value of minimum cost.
+                The "index" is the index of the dp table as a tuple (n, mode, unfilled_length).
 
         """
         best = self.INF
@@ -149,7 +186,7 @@ class SegmentOptimizer:
                 if self.dp[len(data)][mode][unfilled_length] < best:
                     best = self.dp[len(data)][mode][unfilled_length]
                     best_index = (len(data), mode, unfilled_length)
-        return best_index
+        return {"cost": best, "index": best_index}
 
     def _reconstruct_path(self, best_index):
         """Reconstructs the path.

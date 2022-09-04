@@ -82,23 +82,24 @@ class rMQR:
         logger.debug("Select rMQR Code version")
         for version_name, qr_version in DataCapacities.items():
             optimizer = qr_segments.SegmentOptimizer()
-            optimized_segments = optimizer.compute(data, version_name)
-            data_length = qr_segments.compute_length(optimized_segments, version_name)
+            try:
+                optimized_segments = optimizer.compute(data, version_name, ecc)
+            except DataTooLongError:
+                continue
 
-            if data_length <= qr_version["number_of_data_bits"][ecc]:
-                width, height = qr_version["width"], qr_version["height"]
-                if width not in determined_width and height not in determined_height:
-                    determined_width.add(width)
-                    determined_height.add(height)
-                    ok_versions.append(
-                        {
-                            "version": version_name,
-                            "width": width,
-                            "height": height,
-                            "segments": optimized_segments,
-                        }
-                    )
-                    logger.debug(f"ok: {version_name}")
+            width, height = qr_version["width"], qr_version["height"]
+            if width not in determined_width and height not in determined_height:
+                determined_width.add(width)
+                determined_height.add(height)
+                ok_versions.append(
+                    {
+                        "version": version_name,
+                        "width": width,
+                        "height": height,
+                        "segments": optimized_segments,
+                    }
+                )
+                logger.debug(f"ok: {version_name}")
 
         if len(ok_versions) == 0:
             raise DataTooLongError("The data is too long.")
@@ -128,7 +129,7 @@ class rMQR:
 
     def _optimized_segments(self, data):
         optimizer = qr_segments.SegmentOptimizer()
-        return optimizer.compute(data, self.version_name())
+        return optimizer.compute(data, self.version_name(), self._error_correction_level)
 
     def __init__(self, version, ecc, with_quiet_zone=True, logger=None):
         self._logger = logger or rMQR._init_logger()
