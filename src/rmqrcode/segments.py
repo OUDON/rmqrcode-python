@@ -108,9 +108,13 @@ class SegmentOptimizer:
                             continue
 
                         if new_mode == mode:
-                            cost, new_length = self._compute_new_state_without_mode_changing(data[n], new_mode, unfilled_length)
+                            cost, new_length = self._compute_new_state_without_mode_changing(
+                                data[n], new_mode, unfilled_length
+                            )
                         else:
-                            cost, new_length = self._compute_new_state_with_mode_changing(data[n], new_mode, unfilled_length)
+                            cost, new_length = self._compute_new_state_with_mode_changing(
+                                data[n], new_mode, unfilled_length
+                            )
 
                         if self.dp[n][mode][unfilled_length] + cost < self.dp[n + 1][new_mode][new_length]:
                             self.dp[n + 1][new_mode][new_length] = self.dp[n][mode][unfilled_length] + cost
