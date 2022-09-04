@@ -1,6 +1,7 @@
 from . import encoder
 from .errors import DataTooLongError
 from .format.rmqr_versions import rMQRVersions
+from .format.data_capacities import DataCapacities
 
 encoders = [
     encoder.NumericEncoder,
@@ -47,12 +48,13 @@ class SegmentOptimizer:
         self.dp = [[[self.INF for n in range(3)] for mode in range(4)] for length in range(self.MAX_CHARACTER + 1)]
         self.parents = [[[-1 for n in range(3)] for mode in range(4)] for length in range(self.MAX_CHARACTER + 1)]
 
-    def compute(self, data, version):
+    def compute(self, data, version, ecc):
         """Computes the optimize segmentation for the given data.
 
         Args:
             data (str): The data to encode.
             version (str): The version name.
+            ecc (rmqrcode.ErrorCorrectionLevel): The error correction level.
 
         Returns:
             list: The list of segments.
@@ -66,8 +68,11 @@ class SegmentOptimizer:
 
         self.qr_version = rMQRVersions[version]
         self._compute_costs(data)
-        best_index = self._find_best(data)
-        path = self._reconstruct_path(best_index)
+        best = self._find_best(data)
+        if best["cost"] > DataCapacities[version]["number_of_data_bits"][ecc]:
+            raise DataTooLongError
+
+        path = self._reconstruct_path(best["index"])
         segments = self._compute_segments(path, data)
         return segments
 
@@ -139,7 +144,8 @@ class SegmentOptimizer:
             data (str): The data to encode.
 
         Returns:
-            tuple: The best index as tuple (n, mode, unfilled_length).
+            dict: The dict object includes "cost" and "index". The "cost" is the value of minimum cost.
+                The "index" is the index of the dp table as a tuple (n, mode, unfilled_length).
 
         """
         best = self.INF
@@ -149,7 +155,10 @@ class SegmentOptimizer:
                 if self.dp[len(data)][mode][unfilled_length] < best:
                     best = self.dp[len(data)][mode][unfilled_length]
                     best_index = (len(data), mode, unfilled_length)
-        return best_index
+        return {
+            "cost": best,
+            "index": best_index
+        }
 
     def _reconstruct_path(self, best_index):
         """Reconstructs the path.
