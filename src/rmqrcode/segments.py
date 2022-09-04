@@ -1,7 +1,7 @@
 from . import encoder
 from .errors import DataTooLongError
-from .format.rmqr_versions import rMQRVersions
 from .format.data_capacities import DataCapacities
+from .format.rmqr_versions import rMQRVersions
 
 encoders = [
     encoder.NumericEncoder,
@@ -155,10 +155,7 @@ class SegmentOptimizer:
                 if self.dp[len(data)][mode][unfilled_length] < best:
                     best = self.dp[len(data)][mode][unfilled_length]
                     best_index = (len(data), mode, unfilled_length)
-        return {
-            "cost": best,
-            "index": best_index
-        }
+        return {"cost": best, "index": best_index}
 
     def _reconstruct_path(self, best_index):
         """Reconstructs the path.
