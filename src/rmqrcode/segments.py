@@ -1,6 +1,5 @@
 from . import encoder
 from .errors import DataTooLongError
-from .format.data_capacities import DataCapacities
 from .format.rmqr_versions import rMQRVersions
 
 encoders = [
@@ -69,7 +68,7 @@ class SegmentOptimizer:
         self.qr_version = rMQRVersions[version]
         self._compute_costs(data)
         best = self._find_best(data)
-        if best["cost"] > DataCapacities[version]["number_of_data_bits"][ecc]:
+        if best["cost"] > self.qr_version["number_of_data_bits"][ecc]:
             raise DataTooLongError
 
         path = self._reconstruct_path(best["index"])

@@ -30,6 +30,10 @@ rMQRVersions = {
                 },
             ],
         },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 48,
+            ErrorCorrectionLevel.H: 24,
+        },
     },
     "R7x59": {
         "version_indicator": 0b00001,
@@ -58,6 +62,10 @@ rMQRVersions = {
                     "k": 7,
                 },
             ],
+        },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 96,
+            ErrorCorrectionLevel.H: 56,
         },
     },
     "R7x77": {
@@ -88,6 +96,10 @@ rMQRVersions = {
                 },
             ],
         },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 160,
+            ErrorCorrectionLevel.H: 80,
+        },
     },
     "R7x99": {
         "version_indicator": 0b00011,
@@ -116,6 +128,10 @@ rMQRVersions = {
                     "k": 14,
                 },
             ],
+        },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 224,
+            ErrorCorrectionLevel.H: 112,
         },
     },
     "R7x139": {
@@ -146,6 +162,10 @@ rMQRVersions = {
                 },
             ],
         },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 352,
+            ErrorCorrectionLevel.H: 192,
+        },
     },
     "R9x43": {
         "version_indicator": 0b00101,
@@ -175,6 +195,10 @@ rMQRVersions = {
                 },
             ],
         },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 96,
+            ErrorCorrectionLevel.H: 56,
+        },
     },
     "R9x59": {
         "version_indicator": 0b00110,
@@ -203,6 +227,10 @@ rMQRVersions = {
                     "k": 11,
                 },
             ],
+        },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 168,
+            ErrorCorrectionLevel.H: 88,
         },
     },
     "R9x77": {
@@ -238,6 +266,10 @@ rMQRVersions = {
                 },
             ],
         },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 248,
+            ErrorCorrectionLevel.H: 136,
+        },
     },
     "R9x99": {
         "version_indicator": 0b01000,
@@ -266,6 +298,10 @@ rMQRVersions = {
                     "k": 11,
                 },
             ],
+        },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 336,
+            ErrorCorrectionLevel.H: 176,
         },
     },
     "R9x139": {
@@ -301,6 +337,10 @@ rMQRVersions = {
                 }
             ],
         },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 504,
+            ErrorCorrectionLevel.H: 264,
+        },
     },
     "R11x27": {
         "version_indicator": 0b01010,
@@ -330,6 +370,10 @@ rMQRVersions = {
                 }
             ],
         },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 56,
+            ErrorCorrectionLevel.H: 40,
+        },
     },
     "R11x43": {
         "version_indicator": 0b01011,
@@ -358,6 +402,10 @@ rMQRVersions = {
                     "k": 11,
                 }
             ],
+        },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 152,
+            ErrorCorrectionLevel.H: 88,
         },
     },
     "R11x59": {
@@ -393,6 +441,10 @@ rMQRVersions = {
                 },
             ],
         },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 248,
+            ErrorCorrectionLevel.H: 120,
+        },
     },
     "R11x77": {
         "version_indicator": 0b01101,
@@ -426,6 +478,10 @@ rMQRVersions = {
                     "k": 12,
                 },
             ],
+        },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 344,
+            ErrorCorrectionLevel.H: 184,
         },
     },
     "R11x99": {
@@ -466,6 +522,10 @@ rMQRVersions = {
                 },
             ],
         },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 456,
+            ErrorCorrectionLevel.H: 232,
+        },
     },
     "R11x139": {
         "version_indicator": 0b01111,
@@ -494,6 +554,10 @@ rMQRVersions = {
                     "k": 14,
                 }
             ],
+        },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 672,
+            ErrorCorrectionLevel.H: 336,
         },
     },
     "R13x27": {
@@ -524,6 +588,10 @@ rMQRVersions = {
                 }
             ],
         },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 96,
+            ErrorCorrectionLevel.H: 56,
+        },
     },
     "R13x43": {
         "version_indicator": 0b10001,
@@ -553,6 +621,10 @@ rMQRVersions = {
                 }
             ],
         },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 216,
+            ErrorCorrectionLevel.H: 104,
+        },
     },
     "R13x59": {
         "version_indicator": 0b10010,
@@ -581,6 +653,10 @@ rMQRVersions = {
                     "k": 10,
                 }
             ],
+        },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 304,
+            ErrorCorrectionLevel.H: 160,
         },
     },
     "R13x77": {
@@ -621,6 +697,10 @@ rMQRVersions = {
                 },
             ],
         },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 424,
+            ErrorCorrectionLevel.H: 232,
+        },
     },
     "R13x99": {
         "version_indicator": 0b10100,
@@ -659,6 +739,10 @@ rMQRVersions = {
                     "k": 12,
                 },
             ],
+        },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 584,
+            ErrorCorrectionLevel.H: 280,
         },
     },
     "R13x139": {
@@ -699,6 +783,10 @@ rMQRVersions = {
                 },
             ],
         },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 848,
+            ErrorCorrectionLevel.H: 432,
+        },
     },
     "R15x43": {
         "version_indicator": 0b10110,
@@ -733,6 +821,10 @@ rMQRVersions = {
                 },
             ],
         },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 264,
+            ErrorCorrectionLevel.H: 120,
+        },
     },
     "R15x59": {
         "version_indicator": 0b10111,
@@ -761,6 +853,10 @@ rMQRVersions = {
                     "k": 13,
                 }
             ],
+        },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 384,
+            ErrorCorrectionLevel.H: 208,
         },
     },
     "R15x77": {
@@ -801,6 +897,10 @@ rMQRVersions = {
                 },
             ],
         },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 536,
+            ErrorCorrectionLevel.H: 248,
+        },
     },
     "R15x99": {
         "version_indicator": 0b11001,
@@ -829,6 +929,10 @@ rMQRVersions = {
                     "k": 12,
                 },
             ],
+        },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 704,
+            ErrorCorrectionLevel.H: 384,
         },
     },
     "R15x139": {
@@ -869,6 +973,10 @@ rMQRVersions = {
                 },
             ],
         },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 1016,
+            ErrorCorrectionLevel.H: 552,
+        },
     },
     "R17x43": {
         "version_indicator": 0b11011,
@@ -903,6 +1011,10 @@ rMQRVersions = {
                 },
             ],
         },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 312,
+            ErrorCorrectionLevel.H: 168,
+        },
     },
     "R17x59": {
         "version_indicator": 0b11100,
@@ -931,6 +1043,10 @@ rMQRVersions = {
                     "k": 14,
                 }
             ],
+        },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 448,
+            ErrorCorrectionLevel.H: 224,
         },
     },
     "R17x77": {
@@ -966,6 +1082,10 @@ rMQRVersions = {
                 },
             ],
         },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 624,
+            ErrorCorrectionLevel.H: 304,
+        },
     },
     "R17x99": {
         "version_indicator": 0b11110,
@@ -1000,6 +1120,10 @@ rMQRVersions = {
                 },
             ],
         },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 800,
+            ErrorCorrectionLevel.H: 448,
+        },
     },
     "R17x139": {
         "version_indicator": 0b11111,
@@ -1033,6 +1157,10 @@ rMQRVersions = {
                     "k": 13,
                 },
             ],
+        },
+        "number_of_data_bits": {
+            ErrorCorrectionLevel.M: 1216,
+            ErrorCorrectionLevel.H: 608,
         },
     },
 }
