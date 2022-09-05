@@ -525,27 +525,32 @@ class rMQR:
                 break
             codewords.append("00010001")
 
-        data_codewords_per_block, rs_codewords_per_block = self._split_into_blocks(
-            codewords, qr_version["blocks"][self._error_correction_level]
-        )
+        blocks = self._split_into_blocks(codewords, qr_version["blocks"][self._error_correction_level])
+        print(blocks)
 
         # Construct the final message codeword sequence
         # Data codewords
         final_codewords = []
-        for i in range(len(data_codewords_per_block[-1])):
-            for data_codewords in data_codewords_per_block:
-                if i >= len(data_codewords):
-                    continue
-                final_codewords.append(data_codewords[i])
-                self._logger.debug(f"Put QR data codeword {i} : {data_codewords[i]}")
+        for i in range(blocks[-1].data_length()):
+            for block in blocks:
+                try:
+                    data_codeword = block.get_data_at(i)
+                except IndexError:
+                    break
+                else:
+                    final_codewords.append(data_codeword)
+                    self._logger.debug(f"Put QR data codeword {i} : {data_codeword}")
 
-        # RS Codewords
-        for i in range(len(rs_codewords_per_block[-1])):
-            for rs_codewords in rs_codewords_per_block:
-                if i >= len(rs_codewords):
-                    continue
-                final_codewords.append(rs_codewords[i])
-                self._logger.debug(f"Put RS data codewords {i} : {rs_codewords[i]}")
+        # Ecc Codewords
+        for i in range(blocks[-1].ecc_length()):
+            for block in blocks:
+                try:
+                    ecc_codeword = block.get_ecc_at(i)
+                except IndexError:
+                    break
+                else:
+                    final_codewords.append(ecc_codeword)
+                    self._logger.debug(f"Put RS data codewords {i} : {ecc_codeword}")
 
         # Codeword placement
         dy = -1  # Up
@@ -597,24 +602,18 @@ class rMQR:
 
     def _split_into_blocks(self, codewords, blocks_definition):
         data_idx, error_idx = 0, 0
-        data_codewords_per_block = []
-        rs_codewords_per_block = []
+        blocks = []
         for block_definition in blocks_definition:
             for i in range(block_definition["num"]):
                 data_codewords_num = block_definition["k"]
-                rs_codewords_num = block_definition["c"] - block_definition["k"]
-                g = GeneratorPolynomials[rs_codewords_num]
-
+                ecc_codewords_num = block_definition["c"] - block_definition["k"]
                 codewords_in_block = codewords[data_idx : data_idx + data_codewords_num]
-                rs_codewords_in_block = compute_reed_solomon(codewords_in_block, g, rs_codewords_num)
-
-                data_codewords_per_block.append(codewords_in_block)
-                rs_codewords_per_block.append(rs_codewords_in_block)
-
+                block = Block(data_codewords_num, ecc_codewords_num)
+                block.set_data_and_compute_ecc(codewords_in_block)
+                blocks.append(block)
                 data_idx += data_codewords_num
-                error_idx += rs_codewords_num
 
-        return data_codewords_per_block, rs_codewords_per_block
+        return blocks
 
     def _apply_mask(self, mask_area):
         """Data masking.
@@ -661,3 +660,31 @@ class rMQR:
 
         """
         return version_name in rMQRVersions
+
+
+class Block:
+    def __init__(self, data_codewords_num, ecc_codewords_num):
+        self._data_codewords_num = data_codewords_num
+        self._data_codewords = []
+        self._ecc_codewords_num = ecc_codewords_num
+        self._ecc_codewords = []
+
+    def set_data_and_compute_ecc(self, data_codewords):
+        self._data_codewords = data_codewords
+        self._compute_ecc_codewords()
+
+    def get_data_at(self, index):
+        return self._data_codewords[index]
+
+    def get_ecc_at(self, index):
+        return self._ecc_codewords[index]
+
+    def data_length(self):
+        return len(self._data_codewords)
+
+    def ecc_length(self):
+        return len(self._ecc_codewords)
+
+    def _compute_ecc_codewords(self):
+        g = GeneratorPolynomials[self._ecc_codewords_num]
+        self._ecc_codewords = compute_reed_solomon(self._data_codewords, g, self._ecc_codewords_num)
