@@ -526,31 +526,7 @@ class rMQR:
             codewords.append("00010001")
 
         blocks = self._split_into_blocks(codewords, qr_version["blocks"][self._error_correction_level])
-        print(blocks)
-
-        # Construct the final message codeword sequence
-        # Data codewords
-        final_codewords = []
-        for i in range(blocks[-1].data_length()):
-            for block in blocks:
-                try:
-                    data_codeword = block.get_data_at(i)
-                except IndexError:
-                    break
-                else:
-                    final_codewords.append(data_codeword)
-                    self._logger.debug(f"Put QR data codeword {i} : {data_codeword}")
-
-        # Ecc Codewords
-        for i in range(blocks[-1].ecc_length()):
-            for block in blocks:
-                try:
-                    ecc_codeword = block.get_ecc_at(i)
-                except IndexError:
-                    break
-                else:
-                    final_codewords.append(ecc_codeword)
-                    self._logger.debug(f"Put RS data codewords {i} : {ecc_codeword}")
+        final_codewords = self._make_final_codewords(blocks)
 
         # Codeword placement
         dy = -1  # Up
@@ -612,8 +588,56 @@ class rMQR:
                 block.set_data_and_compute_ecc(codewords_in_block)
                 blocks.append(block)
                 data_idx += data_codewords_num
-
         return blocks
+
+    def _make_final_codewords(self, blocks):
+        """Makes the final message codeword sequence.
+
+        This method computes the final codeword sequence from the given blocks. For example,
+        we consider the following blocks. The blocks consists of three blocks. Block1 contains
+        two data blocks and three ecc blocks. Block2 contains three data blocks and three ecc blocks.
+        Block3 contains three data blocks and three ecc blocks.
+
+            Block1: Data#1 Data#2 ------ Ecc#1 Ecc#2 Ecc#3
+            Block2: Data#3 Data#4 Data#5 Ecc#4 Ecc#5 Ecc#6
+            Block3: Data#6 Data#7 Data#8 Ecc#7 Ecc#8 Ecc#9
+
+        The final codeword sequence for this example is placed in the following order.
+
+            Data#1 Data#3 Data#6 Data#2 Data#4 Data#7 Data#5 Data#8 Ecc#1 Ecc#4 Ecc#7 Ecc#2 Ecc#5 Ecc#8 Ecc#3 Ecc#6 Ecc#9
+
+        Args:
+            blocks (list): The list of Block objects.
+
+        Returns:
+            list: The list of codeword strings.
+
+        """
+        final_codewords = []
+        # Add data codewords
+        # The last block always has the most codewords.
+        for i in range(blocks[-1].data_length()):
+            for block in blocks:
+                try:
+                    data_codeword = block.get_data_at(i)
+                except IndexError:
+                    break
+                else:
+                    final_codewords.append(data_codeword)
+                    self._logger.debug(f"Put QR data codeword {i} : {data_codeword}")
+
+        # Add ecc codewords
+        # The last block always has the most codewords.
+        for i in range(blocks[-1].ecc_length()):
+            for block in blocks:
+                try:
+                    ecc_codeword = block.get_ecc_at(i)
+                except IndexError:
+                    break
+                else:
+                    final_codewords.append(ecc_codeword)
+                    self._logger.debug(f"Put RS data codewords {i} : {ecc_codeword}")
+        return final_codewords
 
     def _apply_mask(self, mask_area):
         """Data masking.
