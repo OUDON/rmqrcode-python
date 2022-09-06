@@ -518,54 +518,8 @@ class rMQR:
         codewords = self._make_codewords(encoded_data, codewords_num)
         blocks = self._split_into_blocks(codewords, qr_version["blocks"][self._error_correction_level])
         final_codewords = self._make_final_codewords(blocks)
-
-        # Codeword placement
-        dy = -1  # Up
-        current_codeword_idx = 0
-        current_bit_idx = 0
-        cx, cy = self._width - 2, self._height - 6
-        remainder_bits = qr_version["remainder_bits"]
-        mask_area = [[False for i in range(self._width)] for j in range(self._height)]
-
-        while True:
-            for x in [cx, cx - 1]:
-                if self._qr[cy][x] == Color.UNDEFINED:
-                    # Process only empty cell
-                    if current_codeword_idx == len(final_codewords):
-                        # Remainder bits
-                        self._qr[cy][x] = Color.WHITE
-                        mask_area[cy][x] = True
-                        remainder_bits -= 1
-                    else:
-                        # Codewords
-                        self._qr[cy][x] = (
-                            Color.BLACK
-                            if final_codewords[current_codeword_idx][current_bit_idx] == "1"
-                            else Color.WHITE
-                        )
-                        mask_area[cy][x] = True
-                        current_bit_idx += 1
-                        if current_bit_idx == 8:
-                            current_bit_idx = 0
-                            current_codeword_idx += 1
-
-                    if current_codeword_idx == len(final_codewords) and remainder_bits == 0:
-                        break
-
-            if current_codeword_idx == len(final_codewords) and remainder_bits == 0:
-                break
-
-            # Update current coordinates
-            if dy < 0 and cy == 1:
-                cx -= 2
-                dy = 1
-            elif dy > 0 and cy == self._height - 1 - 1:
-                cx -= 2
-                dy = -1
-            else:
-                cy += dy
-
-        return mask_area
+        mask = self._put_final_codewords(final_codewords, qr_version["remainder_bits"])
+        return mask
 
     def _make_codewords(self, encoded_data, codewords_num):
         """Makes codeword sequence from encoded data.
@@ -664,6 +618,69 @@ class rMQR:
                     final_codewords.append(ecc_codeword)
                     self._logger.debug(f"Put RS data codewords {i} : {ecc_codeword}")
         return final_codewords
+
+    def _put_final_codewords(self, final_codewords, reminder_bits_num):
+        """Puts the final codeword sequence.
+
+        This method puts the final codeword sequence into the encoding region of the rMQR Code.
+        The `final_codewords` is computed by self._make_final_codewords method. Also, this method
+        computes a two-dimensional list shows where encoding region at the same time.
+        And returns the list.
+
+        Args:
+            final_codewords (list): The list of the final codeword strings.
+            reminder_bits_num (int): The number of modules without data.
+
+        Returns:
+            list: A two-dimensional list shows where encoding region.
+
+        """
+        dy = -1  # Up
+        current_codeword_idx = 0
+        current_bit_idx = 0
+        cx, cy = self._width - 2, self._height - 6
+        remaining_remainder_bits = reminder_bits_num
+        mask_area = [[False for i in range(self._width)] for j in range(self._height)]
+
+        while True:
+            for x in [cx, cx - 1]:
+                if self._qr[cy][x] == Color.UNDEFINED:
+                    # Process only empty cell
+                    if current_codeword_idx == len(final_codewords):
+                        # Remainder bits
+                        self._qr[cy][x] = Color.WHITE
+                        mask_area[cy][x] = True
+                        remaining_remainder_bits -= 1
+                    else:
+                        # Codewords
+                        self._qr[cy][x] = (
+                            Color.BLACK
+                            if final_codewords[current_codeword_idx][current_bit_idx] == "1"
+                            else Color.WHITE
+                        )
+                        mask_area[cy][x] = True
+                        current_bit_idx += 1
+                        if current_bit_idx == 8:
+                            current_bit_idx = 0
+                            current_codeword_idx += 1
+
+                    if current_codeword_idx == len(final_codewords) and remaining_remainder_bits == 0:
+                        break
+
+            if current_codeword_idx == len(final_codewords) and remaining_remainder_bits == 0:
+                break
+
+            # Update current coordinates
+            if dy < 0 and cy == 1:
+                cx -= 2
+                dy = 1
+            elif dy > 0 and cy == self._height - 1 - 1:
+                cx -= 2
+                dy = -1
+            else:
+                cy += dy
+
+        return mask_area
 
     def _apply_mask(self, mask_area):
         """Data masking.
