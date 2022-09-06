@@ -454,11 +454,24 @@ class rMQR:
                     self._qr[i][j] = color
 
     def _put_version_information(self):
+        """Version information placement."""
         version_information = self._compute_version_info()
         self._put_version_information_finder_pattern_side(version_information)
         self._put_version_information_finder_sub_pattern_side(version_information)
 
     def _put_version_information_finder_pattern_side(self, version_information):
+        """Version information placement (finder pattern side).
+
+        This method computes masked version information data and puts it. The mask
+        pattern is 011111101010110010.
+
+        Args:
+            version_information (int): The version information.
+
+        Returns:
+            void
+
+        """
         mask = 0b011111101010110010
         version_information ^= mask
 
@@ -469,6 +482,18 @@ class rMQR:
             self._qr[si + di][sj + dj] = Color.BLACK if version_information >> n & 1 else Color.WHITE
 
     def _put_version_information_finder_sub_pattern_side(self, version_information):
+        """Version information placement (finder sub pattern side).
+
+        This method computes masked version information data and puts it. The mask
+        pattern is 100000101001111011.
+
+        Args:
+            version_information (int): The version information.
+
+        Returns:
+            void
+
+        """
         mask = 0b100000101001111011
         version_information ^= mask
 
@@ -488,6 +513,7 @@ class rMQR:
         )
 
     def _compute_version_info(self):
+        """Computes version information with BCH code."""
         qr_version = rMQRVersions[self.version_name()]
         version_information_data = qr_version["version_indicator"]
         if self._error_correction_level == ErrorCorrectionLevel.H:
