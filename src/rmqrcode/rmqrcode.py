@@ -512,19 +512,10 @@ class rMQR:
             list: A two-dimensional list shows where encoding region.
 
         """
-        codewords = split_into_8bits(encoded_data)
-
-        # Add the remainder codewords
         qr_version = rMQRVersions[self.version_name()]
-        codewords_total = qr_version["codewords_total"]
-        while True:
-            if len(codewords) >= codewords_total:
-                break
-            codewords.append("11101100")
-            if len(codewords) >= codewords_total:
-                break
-            codewords.append("00010001")
+        codewords_num = qr_version["codewords_total"]
 
+        codewords = self._make_codewords(encoded_data, codewords_num)
         blocks = self._split_into_blocks(codewords, qr_version["blocks"][self._error_correction_level])
         final_codewords = self._make_final_codewords(blocks)
 
@@ -576,8 +567,43 @@ class rMQR:
 
         return mask_area
 
+    def _make_codewords(self, encoded_data, codewords_num):
+        """Makes codeword sequence from encoded data.
+
+        If the length of generated codeword sequence is less than the `codewords_num`,
+        appends the reminder codewords 11101100 and 00010001 alternately to meet the
+        requirements of number of codewords.
+
+        Args:
+            encoded_data (str): The encoded data.
+            codewords_num (int): The number of codewords.
+
+        Returns:
+            list: The list of codeword strings.
+
+        """
+        codewords = split_into_8bits(encoded_data)
+        while True:
+            if len(codewords) >= codewords_num:
+                break
+            codewords.append("11101100")
+            if len(codewords) >= codewords_num:
+                break
+            codewords.append("00010001")
+        return codewords
+
     def _split_into_blocks(self, codewords, blocks_definition):
-        data_idx, error_idx = 0, 0
+        """Splits codewords into several blocks.
+
+        Args:
+            codewords (list): The list of codeword strings.
+            blocks_definition: The list of dict.
+
+        Returns:
+            list: The list of Block object.
+
+        """
+        data_idx = 0
         blocks = []
         for block_definition in blocks_definition:
             for i in range(block_definition["num"]):
