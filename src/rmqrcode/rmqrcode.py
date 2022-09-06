@@ -145,10 +145,10 @@ class rMQR:
         if not rMQR.validate_version(version):
             raise IllegalVersionError("The rMQR version is illegal.")
 
-        qr_version = rMQRVersions[version]
-        self._version = version
-        self._height = qr_version["height"]
-        self._width = qr_version["width"]
+        self._version_name = version
+        self._qr_version = rMQRVersions[version]
+        self._height = self._qr_version["height"]
+        self._width = self._qr_version["width"]
         self._error_correction_level = ecc
         self._qr = [[Color.UNDEFINED for x in range(self._width)] for y in range(self._height)]
         self._segments = []
@@ -220,12 +220,11 @@ class rMQR:
             str: The encoded data.
 
         """
-        qr_version = rMQRVersions[self.version_name()]
-        data_bits_max = qr_version["number_of_data_bits"][self._error_correction_level]
+        data_bits_max = self._qr_version["number_of_data_bits"][self._error_correction_level]
 
         res = ""
         for segment in self._segments:
-            character_count_indicator_length = qr_version["character_count_indicator_length"][segment["encoder_class"]]
+            character_count_indicator_length = self._qr_version["character_count_indicator_length"][segment["encoder_class"]]
             res += segment["encoder_class"].encode(segment["data"], character_count_indicator_length)
         res = self._append_terminator_if_possible(res, data_bits_max)
 
@@ -532,8 +531,7 @@ class rMQR:
 
     def _compute_version_info(self):
         """Computes version information with BCH code."""
-        qr_version = rMQRVersions[self.version_name()]
-        version_information_data = qr_version["version_indicator"]
+        version_information_data = self._qr_version["version_indicator"]
         if self._error_correction_level == ErrorCorrectionLevel.H:
             version_information_data |= 1 << 6
         reminder_polynomial = compute_bch(version_information_data)
@@ -556,13 +554,12 @@ class rMQR:
             list: A two-dimensional list shows where encoding region.
 
         """
-        qr_version = rMQRVersions[self.version_name()]
-        codewords_num = qr_version["codewords_total"]
+        codewords_num = self._qr_version["codewords_total"]
 
         codewords = self._make_codewords(encoded_data, codewords_num)
-        blocks = self._split_into_blocks(codewords, qr_version["blocks"][self._error_correction_level])
+        blocks = self._split_into_blocks(codewords, self._qr_version["blocks"][self._error_correction_level])
         final_codewords = self._make_final_codewords(blocks)
-        mask = self._put_final_codewords(final_codewords, qr_version["remainder_bits"])
+        mask = self._put_final_codewords(final_codewords, self._qr_version["remainder_bits"])
         return mask
 
     def _make_codewords(self, encoded_data, codewords_num):
