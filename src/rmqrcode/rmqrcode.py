@@ -584,7 +584,8 @@ class rMQR:
 
         The final codeword sequence for this example is placed in the following order.
 
-            Data#1 Data#3 Data#6 Data#2 Data#4 Data#7 Data#5 Data#8 Ecc#1 Ecc#4 Ecc#7 Ecc#2 Ecc#5 Ecc#8 Ecc#3 Ecc#6 Ecc#9
+            [Data#1, Data#3, Data#6, Data#2, Data#4, Data#7, Data#5, Data#8,
+                Ecc#1, Ecc#4, Ecc#7, Ecc#2, Ecc#5, Ecc#8, Ecc#3, Ecc#6, Ecc#9]
 
         Args:
             blocks (list): The list of Block objects.
