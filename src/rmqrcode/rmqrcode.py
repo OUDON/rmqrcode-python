@@ -713,6 +713,13 @@ class rMQR:
 
 
 class Block:
+    """A class represents data block.
+
+    This class represents data block. A block consists data part and error correction
+    code (ecc) part.
+
+    """
+
     def __init__(self, data_codewords_num, ecc_codewords_num):
         self._data_codewords_num = data_codewords_num
         self._data_codewords = []
@@ -720,21 +727,51 @@ class Block:
         self._ecc_codewords = []
 
     def set_data_and_compute_ecc(self, data_codewords):
+        """Set data and compute ecc.
+
+        Args:
+            data_codewords (list): The list of codeword strings.
+
+        Returns:
+            void
+
+        """
         self._data_codewords = data_codewords
         self._compute_ecc_codewords()
 
     def get_data_at(self, index):
+        """Get data codeword at the index.
+
+        Args:
+            index (int): The index.
+
+        Return:
+            str: The data codeword.
+
+        """
         return self._data_codewords[index]
 
     def get_ecc_at(self, index):
+        """Get ecc codeword at the index.
+
+        Args:
+            index (int): The index.
+
+        Return:
+            str: The ecc codeword.
+
+        """
         return self._ecc_codewords[index]
 
     def data_length(self):
+        """Get the number of data codewords"""
         return len(self._data_codewords)
 
     def ecc_length(self):
+        """Get the number of ecc codewords"""
         return len(self._ecc_codewords)
 
     def _compute_ecc_codewords(self):
+        """Computes the ecc codewords with the data codewords."""
         g = GeneratorPolynomials[self._ecc_codewords_num]
         self._ecc_codewords = compute_reed_solomon(self._data_codewords, g, self._ecc_codewords_num)
