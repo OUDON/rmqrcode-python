@@ -127,6 +127,15 @@ class rMQR:
         return qr
 
     def _optimized_segments(self, data):
+        """Returns optimized segments computed by SegmentOptimizer.
+
+        Args:
+            data (str): The data to encode.
+
+        Returns:
+            list: The list of segments.
+
+        """
         optimizer = qr_segments.SegmentOptimizer()
         return optimizer.compute(data, self.version_name(), self._error_correction_level)
 
@@ -161,6 +170,15 @@ class rMQR:
         self._segments.append({"data": data, "encoder_class": encoder_class})
 
     def add_segments(self, segments):
+        """Add the segments.
+
+        Args:
+            segments (list): The list of segments.
+
+        Returns:
+            void
+
+        """
         for segment in segments:
             self.add_segment(segment["data"], segment["encoder_class"])
 
@@ -454,11 +472,24 @@ class rMQR:
                     self._qr[i][j] = color
 
     def _put_version_information(self):
+        """Version information placement."""
         version_information = self._compute_version_info()
         self._put_version_information_finder_pattern_side(version_information)
         self._put_version_information_finder_sub_pattern_side(version_information)
 
     def _put_version_information_finder_pattern_side(self, version_information):
+        """Version information placement (finder pattern side).
+
+        This method computes masked version information data and puts it. The mask
+        pattern is 011111101010110010.
+
+        Args:
+            version_information (int): The version information.
+
+        Returns:
+            void
+
+        """
         mask = 0b011111101010110010
         version_information ^= mask
 
@@ -469,6 +500,18 @@ class rMQR:
             self._qr[si + di][sj + dj] = Color.BLACK if version_information >> n & 1 else Color.WHITE
 
     def _put_version_information_finder_sub_pattern_side(self, version_information):
+        """Version information placement (finder sub pattern side).
+
+        This method computes masked version information data and puts it. The mask
+        pattern is 100000101001111011.
+
+        Args:
+            version_information (int): The version information.
+
+        Returns:
+            void
+
+        """
         mask = 0b100000101001111011
         version_information ^= mask
 
@@ -488,6 +531,7 @@ class rMQR:
         )
 
     def _compute_version_info(self):
+        """Computes version information with BCH code."""
         qr_version = rMQRVersions[self.version_name()]
         version_information_data = qr_version["version_indicator"]
         if self._error_correction_level == ErrorCorrectionLevel.H:
@@ -512,47 +556,135 @@ class rMQR:
             list: A two-dimensional list shows where encoding region.
 
         """
-        codewords = split_into_8bits(encoded_data)
-
-        # Add the remainder codewords
         qr_version = rMQRVersions[self.version_name()]
-        codewords_total = qr_version["codewords_total"]
+        codewords_num = qr_version["codewords_total"]
+
+        codewords = self._make_codewords(encoded_data, codewords_num)
+        blocks = self._split_into_blocks(codewords, qr_version["blocks"][self._error_correction_level])
+        final_codewords = self._make_final_codewords(blocks)
+        mask = self._put_final_codewords(final_codewords, qr_version["remainder_bits"])
+        return mask
+
+    def _make_codewords(self, encoded_data, codewords_num):
+        """Makes codeword sequence from encoded data.
+
+        If the length of generated codeword sequence is less than the `codewords_num`,
+        appends the reminder codewords 11101100 and 00010001 alternately to meet the
+        requirements of number of codewords.
+
+        Args:
+            encoded_data (str): The encoded data.
+            codewords_num (int): The number of codewords.
+
+        Returns:
+            list: The list of codeword strings.
+
+        """
+        codewords = split_into_8bits(encoded_data)
         while True:
-            if len(codewords) >= codewords_total:
+            if len(codewords) >= codewords_num:
                 break
             codewords.append("11101100")
-            if len(codewords) >= codewords_total:
+            if len(codewords) >= codewords_num:
                 break
             codewords.append("00010001")
+        return codewords
 
-        data_codewords_per_block, rs_codewords_per_block = self._split_into_blocks(
-            codewords, qr_version["blocks"][self._error_correction_level]
-        )
+    def _split_into_blocks(self, codewords, blocks_definition):
+        """Splits codewords into several blocks.
 
-        # Construct the final message codeword sequence
-        # Data codewords
+        Args:
+            codewords (list): The list of codeword strings.
+            blocks_definition: The list of dict.
+
+        Returns:
+            list: The list of Block object.
+
+        """
+        data_idx = 0
+        blocks = []
+        for block_definition in blocks_definition:
+            for i in range(block_definition["num"]):
+                data_codewords_num = block_definition["k"]
+                ecc_codewords_num = block_definition["c"] - block_definition["k"]
+                codewords_in_block = codewords[data_idx : data_idx + data_codewords_num]
+                block = Block(data_codewords_num, ecc_codewords_num)
+                block.set_data_and_compute_ecc(codewords_in_block)
+                blocks.append(block)
+                data_idx += data_codewords_num
+        return blocks
+
+    def _make_final_codewords(self, blocks):
+        """Makes the final message codeword sequence.
+
+        This method computes the final codeword sequence from the given blocks. For example,
+        we consider the following blocks. The blocks consists of three blocks. Block1 contains
+        two data blocks and three ecc blocks. Block2 contains three data blocks and three ecc blocks.
+        Block3 contains three data blocks and three ecc blocks.
+
+            Block1: Data#1 Data#2 ------ Ecc#1 Ecc#2 Ecc#3
+            Block2: Data#3 Data#4 Data#5 Ecc#4 Ecc#5 Ecc#6
+            Block3: Data#6 Data#7 Data#8 Ecc#7 Ecc#8 Ecc#9
+
+        The final codeword sequence for this example is placed in the following order.
+
+            [Data#1, Data#3, Data#6, Data#2, Data#4, Data#7, Data#5, Data#8,
+                Ecc#1, Ecc#4, Ecc#7, Ecc#2, Ecc#5, Ecc#8, Ecc#3, Ecc#6, Ecc#9]
+
+        Args:
+            blocks (list): The list of Block objects.
+
+        Returns:
+            list: The list of codeword strings.
+
+        """
         final_codewords = []
-        for i in range(len(data_codewords_per_block[-1])):
-            for data_codewords in data_codewords_per_block:
-                if i >= len(data_codewords):
-                    continue
-                final_codewords.append(data_codewords[i])
-                self._logger.debug(f"Put QR data codeword {i} : {data_codewords[i]}")
+        # Add data codewords
+        # The last block always has the most codewords.
+        for i in range(blocks[-1].data_length()):
+            for block in blocks:
+                try:
+                    data_codeword = block.get_data_at(i)
+                except IndexError:
+                    break
+                else:
+                    final_codewords.append(data_codeword)
+                    self._logger.debug(f"Put QR data codeword {i} : {data_codeword}")
 
-        # RS Codewords
-        for i in range(len(rs_codewords_per_block[-1])):
-            for rs_codewords in rs_codewords_per_block:
-                if i >= len(rs_codewords):
-                    continue
-                final_codewords.append(rs_codewords[i])
-                self._logger.debug(f"Put RS data codewords {i} : {rs_codewords[i]}")
+        # Add ecc codewords
+        # The last block always has the most codewords.
+        for i in range(blocks[-1].ecc_length()):
+            for block in blocks:
+                try:
+                    ecc_codeword = block.get_ecc_at(i)
+                except IndexError:
+                    break
+                else:
+                    final_codewords.append(ecc_codeword)
+                    self._logger.debug(f"Put RS data codewords {i} : {ecc_codeword}")
+        return final_codewords
 
-        # Codeword placement
+    def _put_final_codewords(self, final_codewords, reminder_bits_num):
+        """Puts the final codeword sequence.
+
+        This method puts the final codeword sequence into the encoding region of the rMQR Code.
+        The `final_codewords` is computed by self._make_final_codewords method. Also, this method
+        computes a two-dimensional list shows where encoding region at the same time.
+        And returns the list.
+
+        Args:
+            final_codewords (list): The list of the final codeword strings.
+            reminder_bits_num (int): The number of modules without data.
+
+        Returns:
+            list: A two-dimensional list shows where encoding region.
+
+        """
         dy = -1  # Up
         current_codeword_idx = 0
         current_bit_idx = 0
         cx, cy = self._width - 2, self._height - 6
-        remainder_bits = qr_version["remainder_bits"]
+        remaining_remainder_bits = reminder_bits_num
         mask_area = [[False for i in range(self._width)] for j in range(self._height)]
 
         while True:
@@ -563,7 +695,7 @@ class rMQR:
                         # Remainder bits
                         self._qr[cy][x] = Color.WHITE
                         mask_area[cy][x] = True
-                        remainder_bits -= 1
+                        remaining_remainder_bits -= 1
                     else:
                         # Codewords
                         self._qr[cy][x] = (
@@ -577,10 +709,10 @@ class rMQR:
                             current_bit_idx = 0
                             current_codeword_idx += 1
 
-                    if current_codeword_idx == len(final_codewords) and remainder_bits == 0:
+                    if current_codeword_idx == len(final_codewords) and remaining_remainder_bits == 0:
                         break
 
-            if current_codeword_idx == len(final_codewords) and remainder_bits == 0:
+            if current_codeword_idx == len(final_codewords) and remaining_remainder_bits == 0:
                 break
 
             # Update current coordinates
@@ -594,27 +726,6 @@ class rMQR:
                 cy += dy
 
         return mask_area
-
-    def _split_into_blocks(self, codewords, blocks_definition):
-        data_idx, error_idx = 0, 0
-        data_codewords_per_block = []
-        rs_codewords_per_block = []
-        for block_definition in blocks_definition:
-            for i in range(block_definition["num"]):
-                data_codewords_num = block_definition["k"]
-                rs_codewords_num = block_definition["c"] - block_definition["k"]
-                g = GeneratorPolynomials[rs_codewords_num]
-
-                codewords_in_block = codewords[data_idx : data_idx + data_codewords_num]
-                rs_codewords_in_block = compute_reed_solomon(codewords_in_block, g, rs_codewords_num)
-
-                data_codewords_per_block.append(codewords_in_block)
-                rs_codewords_per_block.append(rs_codewords_in_block)
-
-                data_idx += data_codewords_num
-                error_idx += rs_codewords_num
-
-        return data_codewords_per_block, rs_codewords_per_block
 
     def _apply_mask(self, mask_area):
         """Data masking.
@@ -661,3 +772,68 @@ class rMQR:
 
         """
         return version_name in rMQRVersions
+
+
+class Block:
+    """A class represents data block.
+
+    This class represents data block. A block consists data part and error correction
+    code (ecc) part.
+
+    """
+
+    def __init__(self, data_codewords_num, ecc_codewords_num):
+        self._data_codewords_num = data_codewords_num
+        self._data_codewords = []
+        self._ecc_codewords_num = ecc_codewords_num
+        self._ecc_codewords = []
+
+    def set_data_and_compute_ecc(self, data_codewords):
+        """Set data and compute ecc.
+
+        Args:
+            data_codewords (list): The list of codeword strings.
+
+        Returns:
+            void
+
+        """
+        self._data_codewords = data_codewords
+        self._compute_ecc_codewords()
+
+    def get_data_at(self, index):
+        """Get data codeword at the index.
+
+        Args:
+            index (int): The index.
+
+        Return:
+            str: The data codeword.
+
+        """
+        return self._data_codewords[index]
+
+    def get_ecc_at(self, index):
+        """Get ecc codeword at the index.
+
+        Args:
+            index (int): The index.
+
+        Return:
+            str: The ecc codeword.
+
+        """
+        return self._ecc_codewords[index]
+
+    def data_length(self):
+        """Get the number of data codewords"""
+        return len(self._data_codewords)
+
+    def ecc_length(self):
+        """Get the number of ecc codewords"""
+        return len(self._ecc_codewords)
+
+    def _compute_ecc_codewords(self):
+        """Computes the ecc codewords with the data codewords."""
+        g = GeneratorPolynomials[self._ecc_codewords_num]
+        self._ecc_codewords = compute_reed_solomon(self._data_codewords, g, self._ecc_codewords_num)
