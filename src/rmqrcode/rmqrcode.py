@@ -127,6 +127,15 @@ class rMQR:
         return qr
 
     def _optimized_segments(self, data):
+        """Returns optimized segments computed by SegmentOptimizer.
+
+        Args:
+            data (str): The data to encode.
+
+        Returns:
+            list: The list of segments.
+
+        """
         optimizer = qr_segments.SegmentOptimizer()
         return optimizer.compute(data, self.version_name(), self._error_correction_level)
 
@@ -161,6 +170,15 @@ class rMQR:
         self._segments.append({"data": data, "encoder_class": encoder_class})
 
     def add_segments(self, segments):
+        """Add the segments.
+
+        Args:
+            segments (list): The list of segments.
+
+        Returns:
+            void
+
+        """
         for segment in segments:
             self.add_segment(segment["data"], segment["encoder_class"])
 
