@@ -224,7 +224,9 @@ class rMQR:
 
         res = ""
         for segment in self._segments:
-            character_count_indicator_length = self._qr_version["character_count_indicator_length"][segment["encoder_class"]]
+            character_count_indicator_length = self._qr_version["character_count_indicator_length"][
+                segment["encoder_class"]
+            ]
             res += segment["encoder_class"].encode(segment["data"], character_count_indicator_length)
         res = self._append_terminator_if_possible(res, data_bits_max)
 
