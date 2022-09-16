@@ -312,15 +312,15 @@ class rMQR:
         if with_quiet_zone:
             res += (show[False] * (self.width() + self.QUIET_ZONE_MODULES * 2) + "\n") * self.QUIET_ZONE_MODULES
 
-        for i in range(self.height()):
+        for y in range(self.height()):
             if with_quiet_zone:
                 res += show[False] * self.QUIET_ZONE_MODULES
 
-            for j in range(self.width()):
-                if self._qr[i][j] in show:
-                    res += show[self._qr[i][j]]
+            for x in range(self.width()):
+                if self._qr.get_data(x, y) in show:
+                    res += show[self._qr.get_data(x, y)]
                 else:
-                    res += self._qr[i][j]
+                    res += self._qr.get_data(x, y)
 
             if with_quiet_zone:
                 res += show[False] * self.QUIET_ZONE_MODULES
@@ -537,6 +537,26 @@ class rMQRCore:
         self._width = width
         self._height = height
         self._qr = [[Color.UNDEFINED for x in range(self._width)] for y in range(self._height)]
+
+    def get_data(self, x, y):
+        """Returns the module value at x-th column and y-th row.
+
+        Args:
+            x (int): The index of x.
+            y (int): The index of y.
+
+        Returns:
+            rmqrcode.Color: The module value.
+
+        Raises:
+            IndexError: If the index is invalid.
+
+        """
+        if 0 > x or self._width < x:
+            raise IndexError("x index out of range")
+        if 0 > y or self._height < y:
+            raise IndexError("y index out of range")
+        return self._qr[y][x]
 
     def to_binary_list(self):
         """Converts to two-dimensional list and returns it.
