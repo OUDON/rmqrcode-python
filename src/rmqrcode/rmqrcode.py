@@ -14,6 +14,9 @@ Example:
         qr = rMQR("R11x139", ErrorCorrectionLevel.H)
         qr.make("https://oudon.xyz")
 
+Attributes:
+    QUIET_ZONE_MODULES (int): The width of the quiet zone.
+
 """
 
 import logging
@@ -31,16 +34,10 @@ from .format.rmqr_versions import rMQRVersions
 from .util.error_correction import compute_bch, compute_reed_solomon
 from .util.utilities import split_into_8bits
 
+QUIET_ZONE_MODULES = 2
 
 class rMQR:
-    """A class to make an rMQR Code.
-
-    Attributes:
-        QUIET_ZONE_MODULES (int): The width of the quiet zone.
-
-    """
-
-    QUIET_ZONE_MODULES = 2
+    """A class to make an rMQR Code."""
 
     @staticmethod
     def _init_logger():
@@ -288,46 +285,19 @@ class rMQR:
         """
         res = []
         if with_quiet_zone:
-            for y in range(self.QUIET_ZONE_MODULES):
-                res.append([0] * (self.width() + self.QUIET_ZONE_MODULES * 2))
+            for y in range(QUIET_ZONE_MODULES):
+                res.append([0] * (self.width() + QUIET_ZONE_MODULES * 2))
             for row in self._qr.to_binary_list():
-                res.append([0] * self.QUIET_ZONE_MODULES + row + [0] * self.QUIET_ZONE_MODULES)
-            for y in range(self.QUIET_ZONE_MODULES):
-                res.append([0] * (self.width() + self.QUIET_ZONE_MODULES * 2))
+                res.append([0] * QUIET_ZONE_MODULES + row + [0] * QUIET_ZONE_MODULES)
+            for y in range(QUIET_ZONE_MODULES):
+                res.append([0] * (self.width() + QUIET_ZONE_MODULES * 2))
         else:
             res = self._qr.to_binary_list()
         return res
 
     def __str__(self, with_quiet_zone=True):
-        res = ""
-
-        show = {}
-        show[Color.WHITE] = "_"
-        show[Color.BLACK] = "X"
-        show[Color.UNDEFINED] = "?"
-        show[True] = "X"
-        show[False] = "_"
-
-        res += f"rMQR Version R{self._height}x{self._width}:\n"
-        if with_quiet_zone:
-            res += (show[False] * (self.width() + self.QUIET_ZONE_MODULES * 2) + "\n") * self.QUIET_ZONE_MODULES
-
-        for y in range(self.height()):
-            if with_quiet_zone:
-                res += show[False] * self.QUIET_ZONE_MODULES
-
-            for x in range(self.width()):
-                if self._qr.get_data(x, y) in show:
-                    res += show[self._qr.get_data(x, y)]
-                else:
-                    res += self._qr.get_data(x, y)
-
-            if with_quiet_zone:
-                res += show[False] * self.QUIET_ZONE_MODULES
-            res += "\n"
-
-        if with_quiet_zone:
-            res += (show[False] * (self.width() + self.QUIET_ZONE_MODULES * 2) + "\n") * self.QUIET_ZONE_MODULES
+        res = f"rMQR Version R{self._height}x{self._width}:\n"
+        res += self._qr.__str__(with_quiet_zone)
         return res
 
     def _compute_format_info(self):
@@ -829,6 +799,37 @@ class rMQRCore:
                         self._qr[y][x] = Color.WHITE
                     elif self._qr[y][x] == Color.WHITE:
                         self._qr[y][x] = Color.BLACK
+
+    def __str__(self, with_quiet_zone=True):
+        show = {
+            Color.WHITE: "_",
+            Color.BLACK: "X",
+            Color.UNDEFINED: "?",
+            True: "X",
+            False: "_",
+        }
+
+        res = ""
+        if with_quiet_zone:
+            res += (show[False] * (self._width + QUIET_ZONE_MODULES * 2) + "\n") * QUIET_ZONE_MODULES
+
+        for y in range(self._height):
+            if with_quiet_zone:
+                res += show[False] * QUIET_ZONE_MODULES
+
+            for x in range(self._width):
+                if self._qr[y][x] in show:
+                    res += show[self._qr[y][x]]
+                else:
+                    res += self._qr.get_data[y][x]
+
+            if with_quiet_zone:
+                res += show[False] * QUIET_ZONE_MODULES
+            res += "\n"
+
+        if with_quiet_zone:
+            res += (show[False] * (self._width + QUIET_ZONE_MODULES * 2) + "\n") * QUIET_ZONE_MODULES
+        return res
 
 
 class Block:
