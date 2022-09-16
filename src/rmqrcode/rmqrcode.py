@@ -685,7 +685,7 @@ class rMQRCore:
             Color.BLACK if format_information >> 17 & 1 else Color.WHITE
         )
 
-    def put_data(self, final_codewords, remainder_bits):
+    def put_data(self, final_codewords, remainder_bits_num):
         """Symbol character placement.
 
         This method puts data into the encoding region of the rMQR Code. The data
@@ -696,12 +696,13 @@ class rMQRCore:
 
         Args:
             encoded_data (str): The data after encoding. Expected all segments are joined.
+            reminder_bits_num (int): The number of modules without data.
 
         Returns:
             list: A two-dimensional list shows where encoding region.
 
         """
-        mask_area = self._put_final_codewords(final_codewords, remainder_bits)
+        mask_area = self._put_final_codewords(final_codewords, remainder_bits_num)
         self._apply_mask(mask_area)
 
     def _put_final_codewords(self, final_codewords, reminder_bits_num):
