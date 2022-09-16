@@ -207,8 +207,8 @@ class rMQR:
         self._qr.put_alignment_pattern()
         self._qr.put_timing_pattern()
 
-        version_information = self._compute_version_info()
-        self._qr.put_version_information(version_information)
+        format_information = self._compute_format_info()
+        self._qr.put_format_information(format_information)
 
         codewords_num = self._qr_version["codewords_total"]
         codewords = self._make_codewords(encoded_data, codewords_num)
@@ -382,14 +382,14 @@ class rMQR:
             res += (show[False] * (self.width() + self.QUIET_ZONE_MODULES * 2) + "\n") * self.QUIET_ZONE_MODULES
         return res
 
-    def _compute_version_info(self):
-        """Computes version information with BCH code."""
-        version_information_data = self._qr_version["version_indicator"]
+    def _compute_format_info(self):
+        """Computes format information with BCH code."""
+        format_information_data = self._qr_version["version_indicator"]
         if self._error_correction_level == ErrorCorrectionLevel.H:
-            version_information_data |= 1 << 6
-        reminder_polynomial = compute_bch(version_information_data)
-        version_information_data = version_information_data << 12 | reminder_polynomial
-        return version_information_data
+            format_information_data |= 1 << 6
+        reminder_polynomial = compute_bch(format_information_data)
+        format_information_data = format_information_data << 12 | reminder_polynomial
+        return format_information_data
 
     def _make_codewords(self, encoded_data, codewords_num):
         """Makes codeword sequence from encoded data.
@@ -619,62 +619,70 @@ class rMQRCore:
                 if self._qr[i][j] == Color.UNDEFINED:
                     self._qr[i][j] = color
 
-    def put_version_information(self, version_information):
-        """Version information placement."""
-        self._put_version_information_finder_pattern_side(version_information)
-        self._put_version_information_finder_sub_pattern_side(version_information)
+    def put_format_information(self, format_information):
+        """Format information placement.
 
-    def _put_version_information_finder_pattern_side(self, version_information):
-        """Version information placement (finder pattern side).
+        Args:
+            format_information (int): The format information.
 
-        This method computes masked version information data and puts it. The mask
+        Returns:
+            void
+
+        """
+        self._put_format_information_finder_pattern_side(format_information)
+        self._put_format_information_finder_sub_pattern_side(format_information)
+
+    def _put_format_information_finder_pattern_side(self, format_information):
+        """Format information placement (finder pattern side).
+
+        This method computes masked format information data and puts it. The mask
         pattern is 011111101010110010.
 
         Args:
-            version_information (int): The version information.
+            format_information (int): The format information.
 
         Returns:
             void
 
         """
         mask = 0b011111101010110010
-        version_information ^= mask
+        format_information ^= mask
 
         si, sj = 1, 8
         for n in range(18):
             di = n % 5
             dj = n // 5
-            self._qr[si + di][sj + dj] = Color.BLACK if version_information >> n & 1 else Color.WHITE
+            self._qr[si + di][sj + dj] = Color.BLACK if format_information >> n & 1 else Color.WHITE
 
-    def _put_version_information_finder_sub_pattern_side(self, version_information):
-        """Version information placement (finder sub pattern side).
+    def _put_format_information_finder_sub_pattern_side(self, format_information):
+        """Format information placement (finder sub pattern side).
 
-        This method computes masked version information data and puts it. The mask
+        This method computes masked format information data and puts it. The mask
         pattern is 100000101001111011.
 
         Args:
-            version_information (int): The version information.
+            format_information (int): The format information.
 
         Returns:
             void
 
         """
         mask = 0b100000101001111011
-        version_information ^= mask
+        format_information ^= mask
 
         si, sj = self._height - 1 - 5, self._width - 1 - 7
         for n in range(15):
             di = n % 5
             dj = n // 5
-            self._qr[si + di][sj + dj] = Color.BLACK if version_information >> n & 1 else Color.WHITE
+            self._qr[si + di][sj + dj] = Color.BLACK if format_information >> n & 1 else Color.WHITE
         self._qr[self._height - 1 - 5][self._width - 1 - 4] = (
-            Color.BLACK if version_information >> 15 & 1 else Color.WHITE
+            Color.BLACK if format_information >> 15 & 1 else Color.WHITE
         )
         self._qr[self._height - 1 - 5][self._width - 1 - 3] = (
-            Color.BLACK if version_information >> 16 & 1 else Color.WHITE
+            Color.BLACK if format_information >> 16 & 1 else Color.WHITE
         )
         self._qr[self._height - 1 - 5][self._width - 1 - 2] = (
-            Color.BLACK if version_information >> 17 & 1 else Color.WHITE
+            Color.BLACK if format_information >> 17 & 1 else Color.WHITE
         )
 
     def put_data(self, final_codewords, remainder_bits):
