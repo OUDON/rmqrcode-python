@@ -150,7 +150,7 @@ class rMQR:
         except DataTooLongError:
             raise DataTooLongError()
 
-        self._qr.put_finder_pattern()
+        self._qr.put_finder_patterns()
         self._qr.put_corner_finder_pattern()
         self._qr.put_alignment_pattern()
         self._qr.put_timing_pattern()
@@ -554,8 +554,11 @@ class rMQRCore:
         """
         return [list(map(lambda x: 1 if x == Color.BLACK else 0, column)) for column in self._qr]
 
-    def put_finder_pattern(self):
-        # Finder pattern
+    def put_finder_patterns(self):
+        self._put_finder_pattern()
+        self._put_finder_sub_pattern()
+
+    def _put_finder_pattern(self):
         # Outer square
         for i in range(7):
             for j in range(7):
@@ -577,7 +580,7 @@ class rMQRCore:
             if self._height >= 9:
                 self._qr[7][n] = Color.WHITE
 
-        # Finder sub pattern
+    def _put_finder_sub_pattern(self):
         # Outer square
         for i in range(5):
             for j in range(5):
@@ -605,7 +608,6 @@ class rMQRCore:
         self._qr[1][self._width - 2] = Color.WHITE
 
     def put_alignment_pattern(self):
-        # Alignment pattern
         center_xs = AlignmentPatternCoordinates[self._width]
         for center_x in center_xs:
             for i in range(3):
@@ -617,15 +619,17 @@ class rMQRCore:
                     self._qr[self._height - 1 - i][center_x + j - 1] = color
 
     def put_timing_pattern(self):
-        # Timing pattern
-        # Horizontal
+        self._put_timing_pattern_horizontal()
+        self._put_timing_pattern_vertical()
+
+    def _put_timing_pattern_horizontal(self):
         for j in range(self._width):
             color = Color.BLACK if (j + 1) % 2 else Color.WHITE
             for i in [0, self._height - 1]:
                 if self._qr[i][j] == Color.UNDEFINED:
                     self._qr[i][j] = color
 
-        # Vertical
+    def _put_timing_pattern_vertical(self):
         center_xs = [0, self._width - 1]
         center_xs.extend(AlignmentPatternCoordinates[self._width])
         for i in range(self._height):
