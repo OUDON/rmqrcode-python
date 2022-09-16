@@ -58,7 +58,7 @@ class rMQR:
 
     @staticmethod
     def fit(data, ecc=ErrorCorrectionLevel.M, fit_strategy=FitStrategy.BALANCED):
-        """Attempts to make an rMQR have optimized version for given data.
+        """Compute optimized rMQR code with the rMQROptimizer class.
 
         Args:
             data (str): Data string to encode.
@@ -72,59 +72,7 @@ class rMQR:
             rmqrcode.DataTooLongError: If the data is too long to encode.
 
         """
-        logger = rMQR._init_logger()
-
-        ok_versions = []
-        determined_width = set()
-        determined_height = set()
-
-        logger.debug("Select rMQR Code version")
-        for version_name, qr_version in rMQRVersions.items():
-            optimizer = qr_segments.SegmentOptimizer()
-            try:
-                optimized_segments = optimizer.compute(data, version_name, ecc)
-            except DataTooLongError:
-                continue
-
-            width, height = qr_version["width"], qr_version["height"]
-            if width not in determined_width and height not in determined_height:
-                determined_width.add(width)
-                determined_height.add(height)
-                ok_versions.append(
-                    {
-                        "version": version_name,
-                        "width": width,
-                        "height": height,
-                        "segments": optimized_segments,
-                    }
-                )
-                logger.debug(f"ok: {version_name}")
-
-        if len(ok_versions) == 0:
-            raise DataTooLongError("The data is too long.")
-
-        if fit_strategy == FitStrategy.MINIMIZE_WIDTH:
-
-            def sort_key(x):
-                return x["width"]
-
-        elif fit_strategy == FitStrategy.MINIMIZE_HEIGHT:
-
-            def sort_key(x):
-                return x["height"]
-
-        elif fit_strategy == FitStrategy.BALANCED:
-
-            def sort_key(x):
-                return x["height"] * 9 + x["width"]
-
-        selected = sorted(ok_versions, key=sort_key)[0]
-        logger.debug(f"selected: {selected}")
-
-        qr = rMQR(selected["version"], ecc)
-        qr.add_segments(selected["segments"])
-        qr.make()
-        return qr
+        return rMQROptimizer.compute(data, ecc, fit_strategy)
 
     def _optimized_segments(self, data):
         """Returns optimized segments computed by SegmentOptimizer.
@@ -515,7 +463,69 @@ class rMQR:
 
 
 class rMQROptimizer:
-    pass
+    @staticmethod
+    def compute(data, ecc, fit_strategy):
+        """Attempts to make an rMQR have optimized version for given data.
+
+        Args:
+            data (str): Data string to encode.
+            ecc (rmqrcode.ErrorCorrectionLevel): Error correction level.
+            fit_strategy (rmqrcode.FitStrategy): Strategy how determine rMQR Code version.
+
+        Returns:
+            rmqrcode.rMQR: Optimized rMQR Code.
+
+        Raises:
+            rmqrcode.DataTooLongError: If the data is too long to encode.
+
+        """
+        ok_versions = []
+        determined_width = set()
+        determined_height = set()
+
+        for version_name, qr_version in rMQRVersions.items():
+            optimizer = qr_segments.SegmentOptimizer()
+            try:
+                optimized_segments = optimizer.compute(data, version_name, ecc)
+            except DataTooLongError:
+                continue
+
+            width, height = qr_version["width"], qr_version["height"]
+            if width not in determined_width and height not in determined_height:
+                determined_width.add(width)
+                determined_height.add(height)
+                ok_versions.append(
+                    {
+                        "version": version_name,
+                        "width": width,
+                        "height": height,
+                        "segments": optimized_segments,
+                    }
+                )
+
+        if len(ok_versions) == 0:
+            raise DataTooLongError("The data is too long.")
+
+        if fit_strategy == FitStrategy.MINIMIZE_WIDTH:
+
+            def sort_key(x):
+                return x["width"]
+
+        elif fit_strategy == FitStrategy.MINIMIZE_HEIGHT:
+
+            def sort_key(x):
+                return x["height"]
+
+        elif fit_strategy == FitStrategy.BALANCED:
+
+            def sort_key(x):
+                return x["height"] * 9 + x["width"]
+
+        selected = sorted(ok_versions, key=sort_key)[0]
+        qr = rMQR(selected["version"], ecc)
+        qr.add_segments(selected["segments"])
+        qr.make()
+        return qr
 
 class rMQRCore:
     def __init__(self, width, height):
