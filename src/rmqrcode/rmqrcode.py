@@ -463,6 +463,8 @@ class rMQR:
 
 
 class rMQROptimizer:
+    """A class to compute optimized rMQR code for input data."""
+
     @staticmethod
     def compute(data, ecc, fit_strategy):
         """Attempts to make an rMQR have optimized version for given data.
@@ -527,7 +529,10 @@ class rMQROptimizer:
         qr.make()
         return qr
 
+
 class rMQRCore:
+    "A class correspond to a grid of modules of rMQR code."
+
     def __init__(self, width, height):
         self._width = width
         self._height = height
@@ -800,6 +805,7 @@ class rMQRCore:
                         self._qr[y][x] = Color.WHITE
                     elif self._qr[y][x] == Color.WHITE:
                         self._qr[y][x] = Color.BLACK
+
 
 class Block:
     """A class represents data block.
