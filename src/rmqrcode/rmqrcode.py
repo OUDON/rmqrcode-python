@@ -150,7 +150,7 @@ class rMQR:
         self._height = self._qr_version["height"]
         self._width = self._qr_version["width"]
         self._error_correction_level = ecc
-        self._qr = [[Color.UNDEFINED for x in range(self._width)] for y in range(self._height)]
+        self._qr = rMQRCore(self._width, self._height)
         self._segments = []
 
     def add_segment(self, data, encoder_class=encoder.ByteEncoder):
@@ -202,13 +202,19 @@ class rMQR:
         except DataTooLongError:
             raise DataTooLongError()
 
-        self._put_finder_pattern()
-        self._put_corner_finder_pattern()
-        self._put_alignment_pattern()
-        self._put_timing_pattern()
-        self._put_version_information()
-        mask_area = self._put_data(encoded_data)
-        self._apply_mask(mask_area)
+        self._qr.put_finder_pattern()
+        self._qr.put_corner_finder_pattern()
+        self._qr.put_alignment_pattern()
+        self._qr.put_timing_pattern()
+
+        version_information = self._compute_version_info()
+        self._qr.put_version_information(version_information)
+
+        codewords_num = self._qr_version["codewords_total"]
+        codewords = self._make_codewords(encoded_data, codewords_num)
+        blocks = self._split_into_blocks(codewords, self._qr_version["blocks"][self._error_correction_level])
+        final_codewords = self._make_final_codewords(blocks)
+        self._qr.put_data(final_codewords, self._qr_version["remainder_bits"])
 
     def _encode_data(self):
         """Encodes the data.
@@ -336,29 +342,13 @@ class rMQR:
         if with_quiet_zone:
             for y in range(self.QUIET_ZONE_MODULES):
                 res.append([0] * (self.width() + self.QUIET_ZONE_MODULES * 2))
-            for row in self._to_binary_list():
+            for row in self._qr.to_binary_list():
                 res.append([0] * self.QUIET_ZONE_MODULES + row + [0] * self.QUIET_ZONE_MODULES)
             for y in range(self.QUIET_ZONE_MODULES):
                 res.append([0] * (self.width() + self.QUIET_ZONE_MODULES * 2))
         else:
-            res = self._to_binary_list()
+            res = self._qr.to_binary_list()
         return res
-
-    def _to_binary_list(self):
-        """Converts to two-dimensional list and returns it.
-
-        The value is 1 for the dark module and 0 for the light module.
-
-        Args:
-            with_quiet_zone (bool): Flag to select whether include the quiet zone.
-
-        Returns:
-            list: Converted list.
-
-        Note:
-            This not includes the quiet zone.
-        """
-        return [list(map(lambda x: 1 if x == Color.BLACK else 0, column)) for column in self._qr]
 
     def __str__(self, with_quiet_zone=True):
         res = ""
@@ -392,145 +382,6 @@ class rMQR:
             res += (show[False] * (self.width() + self.QUIET_ZONE_MODULES * 2) + "\n") * self.QUIET_ZONE_MODULES
         return res
 
-    def _put_finder_pattern(self):
-        # Finder pattern
-        # Outer square
-        for i in range(7):
-            for j in range(7):
-                if i == 0 or i == 6 or j == 0 or j == 6:
-                    self._qr[i][j] = Color.BLACK
-                else:
-                    self._qr[i][j] = Color.WHITE
-
-        # Inner square
-        for i in range(3):
-            for j in range(3):
-                self._qr[2 + i][2 + j] = Color.BLACK
-
-        # Separator
-        for n in range(8):
-            if n < self._height:
-                self._qr[n][7] = Color.WHITE
-
-            if self._height >= 9:
-                self._qr[7][n] = Color.WHITE
-
-        # Finder sub pattern
-        # Outer square
-        for i in range(5):
-            for j in range(5):
-                color = Color.BLACK if i == 0 or i == 4 or j == 0 or j == 4 else Color.WHITE
-                self._qr[self._height - i - 1][self._width - j - 1] = color
-
-        # Inner square
-        self._qr[self._height - 1 - 2][self._width - 1 - 2] = Color.BLACK
-
-    def _put_corner_finder_pattern(self):
-        # Corner finder pattern
-        # Bottom left
-        self._qr[self._height - 1][0] = Color.BLACK
-        self._qr[self._height - 1][1] = Color.BLACK
-        self._qr[self._height - 1][2] = Color.BLACK
-
-        if self._height >= 11:
-            self._qr[self._height - 2][0] = Color.BLACK
-            self._qr[self._height - 2][1] = Color.WHITE
-
-        # Top right
-        self._qr[0][self._width - 1] = Color.BLACK
-        self._qr[0][self._width - 2] = Color.BLACK
-        self._qr[1][self._width - 1] = Color.BLACK
-        self._qr[1][self._width - 2] = Color.WHITE
-
-    def _put_alignment_pattern(self):
-        # Alignment pattern
-        center_xs = AlignmentPatternCoordinates[self._width]
-        for center_x in center_xs:
-            for i in range(3):
-                for j in range(3):
-                    color = Color.BLACK if i == 0 or i == 2 or j == 0 or j == 2 else Color.WHITE
-                    # Top side
-                    self._qr[i][center_x + j - 1] = color
-                    # Bottom side
-                    self._qr[self._height - 1 - i][center_x + j - 1] = color
-
-    def _put_timing_pattern(self):
-        # Timing pattern
-        # Horizontal
-        for j in range(self._width):
-            color = Color.BLACK if (j + 1) % 2 else Color.WHITE
-            for i in [0, self._height - 1]:
-                if self._qr[i][j] == Color.UNDEFINED:
-                    self._qr[i][j] = color
-
-        # Vertical
-        center_xs = [0, self._width - 1]
-        center_xs.extend(AlignmentPatternCoordinates[self._width])
-        for i in range(self._height):
-            color = Color.BLACK if (i + 1) % 2 else Color.WHITE
-            for j in center_xs:
-                if self._qr[i][j] == Color.UNDEFINED:
-                    self._qr[i][j] = color
-
-    def _put_version_information(self):
-        """Version information placement."""
-        version_information = self._compute_version_info()
-        self._put_version_information_finder_pattern_side(version_information)
-        self._put_version_information_finder_sub_pattern_side(version_information)
-
-    def _put_version_information_finder_pattern_side(self, version_information):
-        """Version information placement (finder pattern side).
-
-        This method computes masked version information data and puts it. The mask
-        pattern is 011111101010110010.
-
-        Args:
-            version_information (int): The version information.
-
-        Returns:
-            void
-
-        """
-        mask = 0b011111101010110010
-        version_information ^= mask
-
-        si, sj = 1, 8
-        for n in range(18):
-            di = n % 5
-            dj = n // 5
-            self._qr[si + di][sj + dj] = Color.BLACK if version_information >> n & 1 else Color.WHITE
-
-    def _put_version_information_finder_sub_pattern_side(self, version_information):
-        """Version information placement (finder sub pattern side).
-
-        This method computes masked version information data and puts it. The mask
-        pattern is 100000101001111011.
-
-        Args:
-            version_information (int): The version information.
-
-        Returns:
-            void
-
-        """
-        mask = 0b100000101001111011
-        version_information ^= mask
-
-        si, sj = self._height - 1 - 5, self._width - 1 - 7
-        for n in range(15):
-            di = n % 5
-            dj = n // 5
-            self._qr[si + di][sj + dj] = Color.BLACK if version_information >> n & 1 else Color.WHITE
-        self._qr[self._height - 1 - 5][self._width - 1 - 4] = (
-            Color.BLACK if version_information >> 15 & 1 else Color.WHITE
-        )
-        self._qr[self._height - 1 - 5][self._width - 1 - 3] = (
-            Color.BLACK if version_information >> 16 & 1 else Color.WHITE
-        )
-        self._qr[self._height - 1 - 5][self._width - 1 - 2] = (
-            Color.BLACK if version_information >> 17 & 1 else Color.WHITE
-        )
-
     def _compute_version_info(self):
         """Computes version information with BCH code."""
         version_information_data = self._qr_version["version_indicator"]
@@ -539,30 +390,6 @@ class rMQR:
         reminder_polynomial = compute_bch(version_information_data)
         version_information_data = version_information_data << 12 | reminder_polynomial
         return version_information_data
-
-    def _put_data(self, encoded_data):
-        """Symbol character placement.
-
-        This method puts data into the encoding region of the rMQR Code. The data
-        should be encoded by NumericEncoder, AlphanumericEncoder, ByteEncoder or KanjiEncoder.
-        Also this method computes a two-dimensional list shows where encoding region at the
-        same time. And returns the list.
-        See: "7.7.3 Symbol character placement" in the ISO/IEC 23941.
-
-        Args:
-            encoded_data (str): The data after encoding. Expected all segments are joined.
-
-        Returns:
-            list: A two-dimensional list shows where encoding region.
-
-        """
-        codewords_num = self._qr_version["codewords_total"]
-
-        codewords = self._make_codewords(encoded_data, codewords_num)
-        blocks = self._split_into_blocks(codewords, self._qr_version["blocks"][self._error_correction_level])
-        final_codewords = self._make_final_codewords(blocks)
-        mask = self._put_final_codewords(final_codewords, self._qr_version["remainder_bits"])
-        return mask
 
     def _make_codewords(self, encoded_data, codewords_num):
         """Makes codeword sequence from encoded data.
@@ -663,6 +490,212 @@ class rMQR:
                     self._logger.debug(f"Put RS data codewords {i} : {ecc_codeword}")
         return final_codewords
 
+    @staticmethod
+    def validate_version(version_name):
+        """Check if the given version_name is valid
+
+        Args:
+            version_name (str): Version name.
+
+        Returns:
+            bool: Validation result.
+
+        Example:
+            >>> rMQR.validate_version("R13x77")
+                True
+
+            >>> rMQR.validate_version("R14x55")
+                False
+
+            >>> rMQR.validate_version("13, 77")
+                False
+
+        """
+        return version_name in rMQRVersions
+
+
+class rMQROptimizer:
+    pass
+
+class rMQRCore:
+    def __init__(self, width, height):
+        self._width = width
+        self._height = height
+        self._qr = [[Color.UNDEFINED for x in range(self._width)] for y in range(self._height)]
+
+    def to_binary_list(self):
+        """Converts to two-dimensional list and returns it.
+
+        The value is 1 for the dark module and 0 for the light module.
+
+        Args:
+            with_quiet_zone (bool): Flag to select whether include the quiet zone.
+
+        Returns:
+            list: Converted list.
+
+        Note:
+            This not includes the quiet zone.
+        """
+        return [list(map(lambda x: 1 if x == Color.BLACK else 0, column)) for column in self._qr]
+
+    def put_finder_pattern(self):
+        # Finder pattern
+        # Outer square
+        for i in range(7):
+            for j in range(7):
+                if i == 0 or i == 6 or j == 0 or j == 6:
+                    self._qr[i][j] = Color.BLACK
+                else:
+                    self._qr[i][j] = Color.WHITE
+
+        # Inner square
+        for i in range(3):
+            for j in range(3):
+                self._qr[2 + i][2 + j] = Color.BLACK
+
+        # Separator
+        for n in range(8):
+            if n < self._height:
+                self._qr[n][7] = Color.WHITE
+
+            if self._height >= 9:
+                self._qr[7][n] = Color.WHITE
+
+        # Finder sub pattern
+        # Outer square
+        for i in range(5):
+            for j in range(5):
+                color = Color.BLACK if i == 0 or i == 4 or j == 0 or j == 4 else Color.WHITE
+                self._qr[self._height - i - 1][self._width - j - 1] = color
+
+        # Inner square
+        self._qr[self._height - 1 - 2][self._width - 1 - 2] = Color.BLACK
+
+    def put_corner_finder_pattern(self):
+        # Corner finder pattern
+        # Bottom left
+        self._qr[self._height - 1][0] = Color.BLACK
+        self._qr[self._height - 1][1] = Color.BLACK
+        self._qr[self._height - 1][2] = Color.BLACK
+
+        if self._height >= 11:
+            self._qr[self._height - 2][0] = Color.BLACK
+            self._qr[self._height - 2][1] = Color.WHITE
+
+        # Top right
+        self._qr[0][self._width - 1] = Color.BLACK
+        self._qr[0][self._width - 2] = Color.BLACK
+        self._qr[1][self._width - 1] = Color.BLACK
+        self._qr[1][self._width - 2] = Color.WHITE
+
+    def put_alignment_pattern(self):
+        # Alignment pattern
+        center_xs = AlignmentPatternCoordinates[self._width]
+        for center_x in center_xs:
+            for i in range(3):
+                for j in range(3):
+                    color = Color.BLACK if i == 0 or i == 2 or j == 0 or j == 2 else Color.WHITE
+                    # Top side
+                    self._qr[i][center_x + j - 1] = color
+                    # Bottom side
+                    self._qr[self._height - 1 - i][center_x + j - 1] = color
+
+    def put_timing_pattern(self):
+        # Timing pattern
+        # Horizontal
+        for j in range(self._width):
+            color = Color.BLACK if (j + 1) % 2 else Color.WHITE
+            for i in [0, self._height - 1]:
+                if self._qr[i][j] == Color.UNDEFINED:
+                    self._qr[i][j] = color
+
+        # Vertical
+        center_xs = [0, self._width - 1]
+        center_xs.extend(AlignmentPatternCoordinates[self._width])
+        for i in range(self._height):
+            color = Color.BLACK if (i + 1) % 2 else Color.WHITE
+            for j in center_xs:
+                if self._qr[i][j] == Color.UNDEFINED:
+                    self._qr[i][j] = color
+
+    def put_version_information(self, version_information):
+        """Version information placement."""
+        self._put_version_information_finder_pattern_side(version_information)
+        self._put_version_information_finder_sub_pattern_side(version_information)
+
+    def _put_version_information_finder_pattern_side(self, version_information):
+        """Version information placement (finder pattern side).
+
+        This method computes masked version information data and puts it. The mask
+        pattern is 011111101010110010.
+
+        Args:
+            version_information (int): The version information.
+
+        Returns:
+            void
+
+        """
+        mask = 0b011111101010110010
+        version_information ^= mask
+
+        si, sj = 1, 8
+        for n in range(18):
+            di = n % 5
+            dj = n // 5
+            self._qr[si + di][sj + dj] = Color.BLACK if version_information >> n & 1 else Color.WHITE
+
+    def _put_version_information_finder_sub_pattern_side(self, version_information):
+        """Version information placement (finder sub pattern side).
+
+        This method computes masked version information data and puts it. The mask
+        pattern is 100000101001111011.
+
+        Args:
+            version_information (int): The version information.
+
+        Returns:
+            void
+
+        """
+        mask = 0b100000101001111011
+        version_information ^= mask
+
+        si, sj = self._height - 1 - 5, self._width - 1 - 7
+        for n in range(15):
+            di = n % 5
+            dj = n // 5
+            self._qr[si + di][sj + dj] = Color.BLACK if version_information >> n & 1 else Color.WHITE
+        self._qr[self._height - 1 - 5][self._width - 1 - 4] = (
+            Color.BLACK if version_information >> 15 & 1 else Color.WHITE
+        )
+        self._qr[self._height - 1 - 5][self._width - 1 - 3] = (
+            Color.BLACK if version_information >> 16 & 1 else Color.WHITE
+        )
+        self._qr[self._height - 1 - 5][self._width - 1 - 2] = (
+            Color.BLACK if version_information >> 17 & 1 else Color.WHITE
+        )
+
+    def put_data(self, final_codewords, remainder_bits):
+        """Symbol character placement.
+
+        This method puts data into the encoding region of the rMQR Code. The data
+        should be encoded by NumericEncoder, AlphanumericEncoder, ByteEncoder or KanjiEncoder.
+        Also this method computes a two-dimensional list shows where encoding region at the
+        same time. And returns the list.
+        See: "7.7.3 Symbol character placement" in the ISO/IEC 23941.
+
+        Args:
+            encoded_data (str): The data after encoding. Expected all segments are joined.
+
+        Returns:
+            list: A two-dimensional list shows where encoding region.
+
+        """
+        mask_area = self._put_final_codewords(final_codewords, remainder_bits)
+        self._apply_mask(mask_area)
+
     def _put_final_codewords(self, final_codewords, reminder_bits_num):
         """Puts the final codeword sequence.
 
@@ -748,30 +781,6 @@ class rMQR:
                         self._qr[y][x] = Color.WHITE
                     elif self._qr[y][x] == Color.WHITE:
                         self._qr[y][x] = Color.BLACK
-
-    @staticmethod
-    def validate_version(version_name):
-        """Check if the given version_name is valid
-
-        Args:
-            version_name (str): Version name.
-
-        Returns:
-            bool: Validation result.
-
-        Example:
-            >>> rMQR.validate_version("R13x77")
-                True
-
-            >>> rMQR.validate_version("R14x55")
-                False
-
-            >>> rMQR.validate_version("13, 77")
-                False
-
-        """
-        return version_name in rMQRVersions
-
 
 class Block:
     """A class represents data block.
