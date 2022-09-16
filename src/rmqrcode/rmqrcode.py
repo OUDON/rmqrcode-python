@@ -36,6 +36,7 @@ from .util.utilities import split_into_8bits
 
 QUIET_ZONE_MODULES = 2
 
+
 class rMQR:
     """A class to make an rMQR Code."""
 
