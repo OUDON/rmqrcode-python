@@ -88,7 +88,7 @@ class EncoderBase(ABC):
     @classmethod
     @abstractmethod
     def is_valid_characters(cls, data):
-        """Checks wether the data does not include invalid character.
+        """Checks whether the data does not include invalid character.
 
         Args:
             data (str): Data to validate.
