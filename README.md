@@ -27,7 +27,7 @@ pip install rmqrcode
 ### CLI
 Generate an rMQR Code image from your command line, use `rmqr` command:
 ```sh
-rmqr 'Text data' 'my_qr.png'
+rmqr "Text data" "my_qr.png"
 ```
 
 See the help to list the options:
