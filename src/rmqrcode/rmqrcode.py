@@ -305,7 +305,7 @@ class rMQR:
         """Computes format information with BCH code."""
         format_information_data = self._qr_version["version_indicator"]
         if self._error_correction_level == ErrorCorrectionLevel.H:
-            format_information_data |= 1 << 6
+            format_information_data |= 1 << 5
         reminder_polynomial = compute_bch(format_information_data)
         format_information_data = format_information_data << 12 | reminder_polynomial
         return format_information_data
