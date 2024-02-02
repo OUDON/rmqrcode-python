@@ -1,5 +1,5 @@
 # Rectangular Micro QR Code (rMQR Code) Generator
-![reop-url](https://user-images.githubusercontent.com/14174940/172978619-accbf9d0-9dd8-4b19-b47e-ad139a68dcc9.png)
+![repo-url-rmqr-code](https://github.com/OUDON/rmqrcode-python/assets/14174940/c81c30cf-dd11-4e7e-a403-18cb300e68f1)
 
 
 The rMQR Code is a rectangular two-dimensional barcode. This is easy to print in narrow space compared to conventional QR Code. This package can generate an rMQR Code image. This is implemented based on [ISO/IEC 23941: Rectangular Micro QR Code (rMQR) bar code symbology specification](https://www.iso.org/standard/77404.html).
