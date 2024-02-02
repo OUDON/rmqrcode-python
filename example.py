@@ -16,7 +16,7 @@ except ImportError:
 
 
 def main():
-    data = "https://oudon.xyz"
+    data = "https://github.com/OUDON/rmqrcode-python"
     error_correction_level = ErrorCorrectionLevel.M
     fit_strategy = FitStrategy.BALANCED
 
