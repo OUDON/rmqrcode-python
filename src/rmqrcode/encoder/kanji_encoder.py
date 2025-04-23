@@ -13,9 +13,9 @@ class KanjiEncoder(EncoderBase):
             shift_jis = c.encode("shift-jis")
             hex_value = shift_jis[0] * 256 + shift_jis[1]
 
-            if hex_value >= 0x8140 and hex_value <= 0x9FFC:
+            if 0x8140 <= hex_value <= 0x9FFC:
                 sub = 0x8140
-            elif hex_value >= 0xE040 and hex_value <= 0xEBBF:
+            elif 0xE040 <= hex_value <= 0xEBBF:
                 sub = 0xC140
             else:
                 raise IllegalCharacterError()
@@ -44,6 +44,6 @@ class KanjiEncoder(EncoderBase):
             if len(shift_jis) < 2:
                 return False
             hex_value = shift_jis[0] * 256 + shift_jis[1]
-            if (0x8140 > hex_value and 0x9FFC < hex_value) or (0xE040 > hex_value and 0xEBBF < hex_value):
+            if hex_value < 0x8140 or 0x9FFC < hex_value < 0xE040 or 0xEBBF < hex_value:
                 return False
         return True

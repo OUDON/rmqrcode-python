@@ -45,4 +45,4 @@ class NumericEncoder(EncoderBase):
 
     @classmethod
     def is_valid_characters(cls, data):
-        return bool(re.match(r"^[0-9]*$", data))
+        return all((char in "0123456789" for char in data))
