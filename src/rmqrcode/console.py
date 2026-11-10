@@ -7,6 +7,7 @@ from rmqrcode import (
     ErrorCorrectionLevel,
     FitStrategy,
     IllegalVersionError,
+    NoSegmentError,
     QRImage,
     rMQR,
 )
@@ -57,6 +58,8 @@ def main():
         qr = _make_qr(args.DATA, ecc=ecc, version=args.version, fit_strategy=fit_strategy)
     except DataTooLongError:
         _show_error_and_exit("Error: The data is too long.")
+    except NoSegmentError:
+        _show_error_and_exit("Error: No data to encode.")
 
     _save_image(qr, args.OUTPUT)
 
